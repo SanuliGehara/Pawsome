@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 //import 'search.dart';
 //import 'chatbot.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,6 +13,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+
+
+
   int _selectedIndex = 0; // Tracks the selected icon index
 
   // Function to handle icon selection
@@ -18,13 +25,15 @@ class _HomePageState extends State<HomePage> {
       _selectedIndex = index; // Updates the selected index
     });
 
-    // if (index == 2) {
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => Aibot()),
-    //   );
-    // }
+    if (index == 2) {
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => Aibot()),
+      // );
+    }
   }
+
+
 
 
 
@@ -140,7 +149,94 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Story bar
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(
+                  7,
+                      (index) => Container(
+                    margin: EdgeInsets.symmetric(horizontal: 8),
+                    // Adds margin around each avatar
+                    child: CircleAvatar(
+                      radius: 30, // Makes the circle avatar bigger
+                      backgroundImage: AssetImage(profileImages[index]),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Divider(),
+            Column(
+              children: List.generate(
+                  8,
+                      (index) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Header Post
+                      Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            child: CircleAvatar(
+                              radius: 15, // Makes the circle avatar bigger
+                              backgroundImage:
+                              AssetImage(profileImages[index]),
+                            ),
+                          ),
+                          Text("Profile Name"),
+                          Spacer(),
+                          IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.more_vert)),
+                        ],
+                      ),
+                      //Image Posts
+                      Image.asset(posts[index]),
+                      // image footer
+                      Row(
+                        children: [
+                          IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.favorite_border)),
+                          IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.message_outlined)),
+                          IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.ios_share_outlined)),
+                        ],
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                style: TextStyle(color: Colors.black),
+                                children: [
+                                  TextSpan(text: "Liked by "),
+                                  TextSpan(
+                                      text: "Profile Name",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  TextSpan(text: "  and Others "),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  )),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

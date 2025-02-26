@@ -103,6 +103,43 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+      appBar: AppBar(
+        backgroundColor: Colors.white70, // Sets the app bar color
+        title: Row(
+          children: [
+            Text(
+              "Pawsome",
+              style: TextStyle(
+                color: Colors.deepOrange, // Sets the font color
+                fontWeight: FontWeight.bold, // Makes the text bold
+                fontSize: 34, // Sets the font size
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search, color: Colors.black54),
+            onPressed: null, // This makes it non-clickable
+          ),
+
+          // IconButton(
+          //   icon: Icon(Icons.search, color: Colors.black54),
+          //   onPressed: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => Search()),
+          //     ); // Navigates to the Search page
+          //   },
+          // ),
+          IconButton(
+            icon: Icon(Icons.settings, color: Colors.black54),
+            onPressed: () {
+              // Action for settings button
+            },
+          ),
+        ],
+      ),
 
     );
   }

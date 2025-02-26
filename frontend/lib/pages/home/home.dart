@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-//import 'search.dart';
-//import 'chatbot.dart';
+import 'search.dart';
+import 'chatbot.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -14,9 +14,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-
-
-
   int _selectedIndex = 0; // Tracks the selected icon index
 
   // Function to handle icon selection
@@ -26,16 +23,12 @@ class _HomePageState extends State<HomePage> {
     });
 
     if (index == 2) {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => Aibot()),
-      // );
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Aibot()),
+      );
     }
   }
-
-
-
-
 
   List<String> profileImages = [
     "images/s1.jpg",

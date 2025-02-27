@@ -33,8 +33,8 @@ class _SignupPageState extends State<SignupPage> {
           height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
-                hexStringToColor('FF6D00'), // ff6600 CB2B93
-                hexStringToColor('ffa31a'), //  9546C4
+                hexStringToColor('FF6D00'),
+                hexStringToColor('ffa31a'),
                 hexStringToColor('ffb84d')
               ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
           child: SingleChildScrollView(
@@ -69,7 +69,7 @@ class _SignupPageState extends State<SignupPage> {
                       //     .then((value) {
                         print("Created New Account");
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => LoginPage())); // **** should go to HomePage ***
+                            MaterialPageRoute(builder: (context) => LoginPage()));
                       // }).onError((error, stackTrace) {
                       //   print("Error ${error.toString()}");
                       // });

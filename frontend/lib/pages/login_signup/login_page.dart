@@ -1,8 +1,7 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:pawsome/pages/chats/Chat.dart';
-// import 'package:pawsome/pages/login_signup/signup_page.dart';
-// import 'package:login_signup/pages/home_page.dart';
+import 'package:pawsome/pages/home/home.dart';
+import 'package:pawsome/pages/login_signup/signup_page.dart';
 import 'package:pawsome/reusable_widgets/reusable_widget.dart';
 import 'package:pawsome/utils/color_utils.dart';
 
@@ -25,9 +24,9 @@ class _LoginPageState extends State<LoginPage> {
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
             gradient: LinearGradient(colors: [
-              hexStringToColor('FF6D00'), // ff6600 CB2B93
-              hexStringToColor('ffa31a'), //  9546C4
-              hexStringToColor('ffb84d')  // ffd633  ffa31a 5E61F4
+              hexStringToColor('FF6D00'),
+              hexStringToColor('ffa31a'),
+              hexStringToColor('ffb84d')
             ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
       child: SingleChildScrollView(
         child: Padding(
@@ -54,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                 //     email: _emailTextControler.text,
                 //     password: _passwordTextControler.text).then((value) {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Chat()));  // *** HomePage  - BUT Still No Homepage ****
+                      MaterialPageRoute(builder: (context) => HomePage()));
                 // })
                 // .onError((error, stackTrace) {
                 //   print("Error ${error.toString()}");
@@ -79,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
           onTap: () {
             style: TextStyle(color: Colors.black);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Chat())); // *** Should go to HomePage****
+                MaterialPageRoute(builder: (context) => SignupPage()));
           },
           child: const Text(
             " Sign Up",

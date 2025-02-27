@@ -122,18 +122,13 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: Icon(Icons.search, color: Colors.black54),
-            onPressed: null, // This makes it non-clickable
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Search()),
+              ); // Navigates to the Search page
+            },
           ),
-
-          // IconButton(
-          //   icon: Icon(Icons.search, color: Colors.black54),
-          //   onPressed: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => Search()),
-          //     ); // Navigates to the Search page
-          //   },
-          // ),
           IconButton(
             icon: Icon(Icons.settings, color: Colors.black54),
             onPressed: () {

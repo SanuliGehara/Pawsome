@@ -154,6 +154,9 @@ class CustomBottomNavBar extends StatelessWidget {
         BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: ""),
       ],
       onTap: (index) {
+        if (index == 2) {
+          Navigator.pushNamed(context, "/bot");
+        }
         if (index == 3) {
           Navigator.pushNamed(context, "/adopt");
         }

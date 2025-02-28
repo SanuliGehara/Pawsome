@@ -91,6 +91,9 @@ Widget buildBottomNavigationBar(BuildContext context, int currentIndex) {
       if (index == 1) {
         Navigator.pushNamed(context, "/chat");
       }
+      if (index == 2) {
+        Navigator.pushNamed(context, "/bot");
+      }
     },
   );
 }

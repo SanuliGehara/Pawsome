@@ -72,7 +72,7 @@ class _LocateState extends State<Locate> {
               children: [
                 buildPetCard(
                   "Lost Labrador Retriever near Downtown",
-                  "assets/puppy.jpg",
+                  "assets/images/puppy.jpg",
                   likedStates[0],
                       () {
                     setState(() {
@@ -83,7 +83,7 @@ class _LocateState extends State<Locate> {
                 ),
                 buildPetCard(
                   "Missing Cat last seen at Park Avenue",
-                  "assets/kitten.jpg",
+                  "assets/images/kitten.jpg",
                   likedStates[1],
                       () {
                     setState(() {

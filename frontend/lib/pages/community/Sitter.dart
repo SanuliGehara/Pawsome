@@ -100,7 +100,7 @@ class _SitterState extends State<Sitter> {
           children: [
             CircleAvatar(
               radius: 40,
-              backgroundImage: AssetImage("assets/avatar3.png"),
+              backgroundImage: AssetImage("assets/images/avatar3.png"),
             ),
             const SizedBox(height: 10),
             Text(

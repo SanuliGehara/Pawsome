@@ -73,7 +73,7 @@ class _AdoptState extends State<Adopt> {
               children: [
                 buildPetCard(
                   "Adorable 6-month street kitten vaccinated and dewormed",
-                  "assets/kitten.jpg",
+                  "assets/images/kitten.jpg",
                   likedStates[0],
                       () {
                     setState(() {
@@ -83,7 +83,7 @@ class _AdoptState extends State<Adopt> {
                 ),
                 buildPetCard(
                   "Adorable 6-month puppy vaccinated and dewormed",
-                  "assets/puppy.jpg",
+                  "assets/images/puppy.jpg",
                   likedStates[1],
                       () {
                     setState(() {
@@ -98,7 +98,7 @@ class _AdoptState extends State<Adopt> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          buildPetCard("New Post", "assets/kitten.jpg", false, () {}); // Placeholder
+          buildPetCard("New Post", "assets/images/kitten.jpg", false, () {}); // Placeholder
         },
         child: const Icon(Icons.add, color: Colors.black),
         backgroundColor: Colors.amber[700],

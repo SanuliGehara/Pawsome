@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'chat_screen.dart';
+import 'post_detail_screen.dart';
 
 
 void main() {
@@ -179,6 +180,18 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
         return Material(
             color: Colors.transparent,
             child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PostDetailPage(
+                      imageUrl: images[index],
+                      username: widget.username, // Pass the username
+                      profileImage: profilePicture,),
+                  ),
+                );
+
+              },
 
           child: Image.network(images[index], fit: BoxFit.cover),
         ),

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pawsome/pages/chatbot/AiBot.dart';
+import 'package:pawsome/pages/chats/Chat.dart';
+import 'package:pawsome/pages/community/Adopt.dart';
 import 'search.dart';
 //import 'chatbot.dart';
 import 'package:http/http.dart' as http;
@@ -22,12 +25,24 @@ class _HomePageState extends State<HomePage> {
       _selectedIndex = index; // Updates the selected index
     });
 
-    // if (index == 2) {
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => ()),
-    //   );
-    // }
+    if (index == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Chat()),
+      );
+    }
+    if (index == 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => AiBot()),
+      );
+    }
+    if (index == 3) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Adopt()),
+      );
+    }
   }
 
   List<String> profileImages = [

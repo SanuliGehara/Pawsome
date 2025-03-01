@@ -37,7 +37,7 @@ class _AiBotState extends State<AiBot> {
         title: Row(
           children: [
             CircleAvatar(
-              backgroundImage: AssetImage('assets/chatbot.png'), // Chatbot icon
+              backgroundImage: AssetImage('assets/images/chatbot.png'), // Chatbot icon
               radius: 20,
             ),
             const SizedBox(width: 10),
@@ -55,7 +55,7 @@ class _AiBotState extends State<AiBot> {
             child: Opacity(
               opacity: 0.3, // Transparency level
               child: Image.asset(
-                "assets/background.png", // Ensure this file exists
+                "assets/images/background.png", // Ensure this file exists
                 fit: BoxFit.cover,
               ),
             ),

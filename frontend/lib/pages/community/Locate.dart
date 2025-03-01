@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawsome/services/database_service.dart';
 import 'Adopt.dart';
 import 'Sitter.dart';
 import '../../reusable_widgets/CommunityWidgets.dart';
@@ -12,7 +13,6 @@ class Locate extends StatefulWidget {
 
 class _LocateState extends State<Locate> {
   List<bool> likedStates = List.generate(2, (index) => false);
-
   void _showCommentBox(BuildContext context) {
     TextEditingController commentController = TextEditingController();
 

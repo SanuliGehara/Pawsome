@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawsome/services/database_service.dart';
 import 'Adopt.dart';
 import 'Sitter.dart';
 import '../../reusable_widgets/CommunityWidgets.dart';
@@ -12,7 +13,6 @@ class Locate extends StatefulWidget {
 
 class _LocateState extends State<Locate> {
   List<bool> likedStates = List.generate(2, (index) => false);
-
   void _showCommentBox(BuildContext context) {
     TextEditingController commentController = TextEditingController();
 
@@ -72,7 +72,7 @@ class _LocateState extends State<Locate> {
               children: [
                 buildPetCard(
                   "Lost Labrador Retriever near Downtown",
-                  "assets/puppy.jpg",
+                  "assets/images/puppy.jpg",
                   likedStates[0],
                       () {
                     setState(() {
@@ -83,7 +83,7 @@ class _LocateState extends State<Locate> {
                 ),
                 buildPetCard(
                   "Missing Cat last seen at Park Avenue",
-                  "assets/kitten.jpg",
+                  "assets/images/kitten.jpg",
                   likedStates[1],
                       () {
                     setState(() {

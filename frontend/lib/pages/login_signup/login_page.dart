@@ -1,6 +1,7 @@
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/home/home.dart';
+import 'package:pawsome/pages/login_signup/reset_password.dart';
 import 'package:pawsome/pages/login_signup/signup_page.dart';
 import 'package:pawsome/reusable_widgets/reusable_widget.dart';
 import 'package:pawsome/utils/color_utils.dart';
@@ -35,29 +36,29 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: <Widget>[
               logoWidget('assets/images/pawsome_logo.jpeg'),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               reusableTextField('Enter Username', Icons.person_outline, false, _emailTextControler),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               reusableTextField('Enter Password', Icons.lock_outline, true, _passwordTextControler),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
-
+              forgetPassword(context),
               // login using firebase auth
               firebaseUIButton(context, 'LOGIN' , () {
-                // FirebaseAuth.instance.signInWithEmailAndPassword(
-                //     email: _emailTextControler.text,
-                //     password: _passwordTextControler.text).then((value) {
+                FirebaseAuth.instance.signInWithEmailAndPassword(
+                    email: _emailTextControler.text,
+                    password: _passwordTextControler.text).then((value) {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => HomePage()));
-                // })
-                // .onError((error, stackTrace) {
-                //   print("Error ${error.toString()}");
-                // });
+                })
+                .onError((error, stackTrace) {
+                  print("Error ${error.toString()}");
+                });
               }),
               signUpOption()
             ],
@@ -86,6 +87,22 @@ class _LoginPageState extends State<LoginPage> {
           ),
         )
       ],
+    );
+  }
+  Widget forgetPassword(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 35,
+      alignment: Alignment.bottomRight,
+      child: TextButton(
+        child: const Text(
+          "Forgot Password?",
+          style: TextStyle(color: Colors.white70),
+          textAlign: TextAlign.right,
+        ),
+        onPressed: () => Navigator.push(
+            context, MaterialPageRoute(builder: (context) => ResetPassword())),
+      ),
     );
   }
 }

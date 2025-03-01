@@ -1,7 +1,7 @@
 import openai
 
 # Set your API key
-openai.api_key = "your_openai_api_key_here"  # Replace with your actual API key
+openai.api_key = "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"  # Replace with your actual API key
 
 # Example function to generate text
 def generate_text(prompt):

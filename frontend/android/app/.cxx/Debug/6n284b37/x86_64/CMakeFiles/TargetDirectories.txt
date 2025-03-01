@@ -1,0 +1,2 @@
+C:/Users/Oshadha Fernando/Desktop/Pawsome/frontend/android/app/.cxx/Debug/6n284b37/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/Oshadha Fernando/Desktop/Pawsome/frontend/android/app/.cxx/Debug/6n284b37/x86_64/CMakeFiles/rebuild_cache.dir

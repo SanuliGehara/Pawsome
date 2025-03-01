@@ -1,4 +1,4 @@
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/login_signup/login_page.dart';
 import 'package:pawsome/reusable_widgets/reusable_widget.dart';
@@ -62,22 +62,24 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                     firebaseUIButton(context, "Sign Up", () {
                       // Create user account
-                      // FirebaseAuth.instance
-                      //     .createUserWithEmailAndPassword(
-                      //     email: _emailTextController.text,
-                      //     password: _passwordTextController.text)
-                      //     .then((value) {
+                      FirebaseAuth.instance
+                          .createUserWithEmailAndPassword(
+                          email: _emailTextController.text,
+                          password: _passwordTextController.text)
+                          .then((value) {
                         print("Created New Account");
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => LoginPage()));
-                      // }).onError((error, stackTrace) {
-                      //   print("Error ${error.toString()}");
-                      // });
+                      }).onError((error, stackTrace) {
+                        print("Error ${error.toString()}");
+                      });
                     })
                   ],
                 ),
               ))),
     );
   }
+
+
 }
 

@@ -4,6 +4,7 @@ import 'package:pawsome/pages/home/home.dart';
 import 'package:pawsome/pages/login_signup/reset_password.dart';
 import 'package:pawsome/pages/login_signup/signup_page.dart';
 import 'package:pawsome/reusable_widgets/reusable_widget.dart';
+import 'package:pawsome/services/firebase_service.dart';
 import 'package:pawsome/utils/color_utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -60,10 +61,37 @@ class _LoginPageState extends State<LoginPage> {
                   print("Error ${error.toString()}");
                 });
               }),
+              // google login
+              const SizedBox(
+                height: 20,
+              ),
+          ElevatedButton(
+            onPressed: () async {
+              await FirebaseServices().signInWithGoogle();
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()));
+            },
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.pressed)) {
+                    return Colors.black26;
+                  }
+                  return Colors.white;
+                })),
+            child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  Image.asset(
+                  "assets/images/google.png",
+                  height: 40,
+                  width: 40,
+                ),
               signUpOption()
             ],
           ),
-        )
+        ),
       ),
       ),
     );

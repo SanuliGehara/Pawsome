@@ -8,11 +8,11 @@ class Chat extends StatefulWidget {
 
 class _ChatState extends State<Chat> {
   List<Map<String, String>> chatData = [
-    {"name": "Ron", "time": "14.23 PM", "messages": "2", "avatar": "assets/avatar5.png"},
-    {"name": "Cho", "time": "12.30 PM", "messages": "8", "avatar": "assets/avatar2.jpg"},
-    {"name": "Cedric", "time": "11.00 AM", "messages": "", "avatar": "assets/avatar4.png"},
-    {"name": "Emma", "time": "10.58 AM", "messages": "", "avatar": "assets/avatar1.jpg"},
-    {"name": "Harry", "time": "01.25 AM", "messages": "4", "avatar": "assets/avatar3.png"},
+    {"name": "Ron", "time": "14.23 PM", "messages": "2", "avatar": "assets/images/avatar5.png"},
+    {"name": "Cho", "time": "12.30 PM", "messages": "8", "avatar": "assets/images/avatar2.jpg"},
+    {"name": "Cedric", "time": "11.00 AM", "messages": "", "avatar": "assets/images/avatar4.png"},
+    {"name": "Emma", "time": "10.58 AM", "messages": "", "avatar": "assets/images/avatar1.jpg"},
+    {"name": "Harry", "time": "01.25 AM", "messages": "4", "avatar": "assets/images/avatar3.png"},
   ];
 
   bool _isSearching = false;
@@ -123,7 +123,7 @@ class _ChatState extends State<Chat> {
       bottomNavigationBar: CustomBottomNavBar(currentIndex: 1), // Custom bottom nav bar
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          addChat("New User", "03.45 PM", "5", "assets/avatar3.png");
+          addChat("New User", "03.45 PM", "5", "assets/images/avatar3.png");
         },
         child: const Icon(Icons.add, color: Colors.black), // ✅ Black color for the plus sign
         backgroundColor: Colors.amber[700],
@@ -154,6 +154,9 @@ class CustomBottomNavBar extends StatelessWidget {
         BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: ""),
       ],
       onTap: (index) {
+        if (index == 2) {
+          Navigator.pushNamed(context, "/bot");
+        }
         if (index == 3) {
           Navigator.pushNamed(context, "/adopt");
         }

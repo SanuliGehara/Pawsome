@@ -1,26 +1,44 @@
 {
   "project_info": {
-    "project_number": "751895956409",
-    "project_id": "pawsome-sdgp",
-    "storage_bucket": "pawsome-sdgp.firebasestorage.app"
+    "project_number": "614954016941",
+    "project_id": "pawsome-app-1903c",
+    "storage_bucket": "pawsome-app-1903c.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:751895956409:android:ca574cca918956f2498468",
+        "mobilesdk_app_id": "1:614954016941:android:fdc9b4b9b4ddb106c02624",
         "android_client_info": {
           "package_name": "com.example.pawsome"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "614954016941-fuiuablsr8n9o1qtn5npku7m1l410q4m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pawsome",
+            "certificate_hash": "c955639e021338449ad014ddc7cbf0ed92ab12f6"
+          }
+        },
+        {
+          "client_id": "614954016941-m78nn9temtvnpg9o2t8pi4lpt96h1mcn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyCg01cdXsS6QK2r6YKrsk3lXddvpsMUp38"
+          "current_key": "AIzaSyCCrorKeNUXI5SSnYuJC8-cTo1j9rDX2iE"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "614954016941-m78nn9temtvnpg9o2t8pi4lpt96h1mcn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

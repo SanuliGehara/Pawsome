@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'search.dart';
-import 'chatbot.dart';
+//import 'chatbot.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -22,34 +22,34 @@ class _HomePageState extends State<HomePage> {
       _selectedIndex = index; // Updates the selected index
     });
 
-    if (index == 2) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Aibot()),
-      );
-    }
+    // if (index == 2) {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => ()),
+    //   );
+    // }
   }
 
   List<String> profileImages = [
-    "images/s1.jpg",
-    "images/s2.jpg",
-    "images/s3.jpg",
-    "images/s4.jpg",
-    "images/s5.jpg",
-    "images/s6.jpg",
-    "images/s7.jpg",
-    "images/s8.jpg",
+    "assets/images/s1.jpg",
+    "assets/images/s2.jpg",
+    "assets/images/s3.jpg",
+    "assets/images/s4.jpg",
+    "assets/images/s5.jpg",
+    "assets/images/s6.jpg",
+    "assets/images/s7.jpg",
+    "assets/images/s8.jpg",
   ];
 
   List<String> posts = [
-    "images/p1.jpg",
-    "images/p2.png",
-    "images/p3.jpg",
-    "images/p4.jpg",
-    "images/p5.png",
-    "images/p6.jpg",
-    "images/p7.jpg",
-    "images/p8.jpg"
+    "assetsimages/p1.jpg",
+    "assets/images/p2.png",
+    "assets/images/p3.jpg",
+    "assets/images/p4.jpg",
+    "assets/images/p5.png",
+    "assets/images/p6.jpg",
+    "assets/images/p7.jpg",
+    "assets/images/p8.jpg"
   ];
 
   @override

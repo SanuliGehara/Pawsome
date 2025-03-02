@@ -1,17 +1,15 @@
-import openai
+import google.generativeai as genai
 
 # Set your API key
-openai.api_key = "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"  # Replace with your actual API key
+api_key="AIzaSyAUwy7cyVdTHtx8xN6vFx9ocaKTUkzxjh0"
 
-# Example function to generate text
-def generate_text(prompt):
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",  # Use "gpt-4" for better results if available
-        messages=[{"role": "system", "content": "You are a helpful assistant."},
-                  {"role": "user", "content": prompt}]
-    )
-    return response["choices"][0]["message"]["content"]
+genai.configure(api_key=api_key)
 
-# Example usage
-user_input = "Explain the concept of recursion in simple terms."
-print(generate_text(user_input))
+# Initialize the model
+model = genai.GenerativeModel(model_name="gemini-2.0-flash")
+
+# Generate a response
+response = model.generate_content("Tell me a fun fact about AI")
+
+# Print the output
+print(response.text)

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawsome/pages/home/home.dart';
 import '../chats/Chat.dart';
 import 'post_detail_screen.dart';
 
@@ -32,9 +33,9 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStateMixin {
   bool isFollowing = false;
-  String username = "Hafsa";
+  String username = "Profile Name";
   String bio = "sample bio............................................................................................................................................................................................................................................................................................................................................";
-  String profilePicture = "https://via.placeholder.com/150";
+  String profilePicture = "assets/images/avatar1.jpg";
   List<String> posts = List.generate(15, (index) => "https://via.placeholder.com/100");
   List<String> savedPosts = List.generate(5, (index) => "https://via.placeholder.com/100");
 
@@ -66,6 +67,29 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
     );
   }
 
+  void showProfilePicture() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: InteractiveViewer(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.asset(
+                  profilePicture,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,7 +99,10 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+
+            );
           },
         ),
       ),
@@ -85,9 +112,12 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundImage: NetworkImage(profilePicture),
+                InkWell(
+                  onTap: showProfilePicture,
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundImage: AssetImage(profilePicture),
+                  ),
                 ),
                 SizedBox(height: 10),
                 Text(

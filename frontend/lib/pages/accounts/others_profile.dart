@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'chat_screen.dart';
+import '../chats/Chat.dart';
 import 'post_detail_screen.dart';
 
 
@@ -62,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   void openChat() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ChatScreen()),
+      MaterialPageRoute(builder: (context) => Chat()),
     );
   }
 

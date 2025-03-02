@@ -12,6 +12,7 @@ class PetSitterProfilePage extends StatefulWidget {
 class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
   int likes = 40; // Initial like count
   double rating = 4; // Default rating
+  String profilePicture = "assets/images/default_user.jfif";
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +33,14 @@ class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
       ),
       body: Stack(
         children: [
-          // Full-Screen Background Image
+          // Full-Screen Background Image with Reduced Opacity
           Positioned.fill(
-            child: Image.asset(
-              "assets/images/background.png", // Paw print background
-              fit: BoxFit.cover, // ✅ Ensures full-screen coverage
+            child: ColorFiltered(
+              colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.5), BlendMode.dstATop), // ✅ Reduced Opacity
+              child: Image.asset(
+                "assets/images/background.png", // Paw print background
+                fit: BoxFit.cover,
+              ),
             ),
           ),
 
@@ -58,10 +62,13 @@ class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.orange, width: 4),
                           ),
-                          child: const CircleAvatar(
-                            radius: 50,
-                            backgroundColor: Colors.white,
-                            backgroundImage: AssetImage("assets/images/default_user.jfif"), // Profile Picture
+                          child: InkWell(
+                            onTap: showProfilePicture,
+                            child: const CircleAvatar(
+                              radius: 50,
+                              backgroundColor: Colors.white,
+                              backgroundImage: AssetImage("assets/images/default_user.jfif"), // Profile Picture
+                            ),
                           ),
                         ),
                         const SizedBox(height: 30),
@@ -172,6 +179,29 @@ class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
           Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
         ],
       ),
+    );
+  }
+
+  void showProfilePicture() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: InteractiveViewer(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.asset(
+                  profilePicture,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

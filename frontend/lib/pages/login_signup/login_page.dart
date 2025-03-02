@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
               hexStringToColor('ffa31a'),
               hexStringToColor('ffb84d')
             ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-      child: SingleChildScrollView(
+        child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.fromLTRB(
               20, MediaQuery.of(context).size.height * 0.2, 20, 0),
@@ -46,30 +46,33 @@ class _LoginPageState extends State<LoginPage> {
               ),
               reusableTextField('Enter Password', Icons.lock_outline, true, _passwordTextControler),
               const SizedBox(
-                height: 30,
+                height: 10,
               ),
               forgetPassword(context),
               // login using firebase auth
               firebaseUIButton(context, 'LOGIN' , () {
                 FirebaseAuth.instance.signInWithEmailAndPassword(
                     email: _emailTextControler.text,
-                    password: _passwordTextControler.text).then((value) {
+                    password: _passwordTextControler.text)
+                .then((value) {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
-                })
-                .onError((error, stackTrace) {
-                  print("Error ${error.toString()}");
+                      MaterialPageRoute(builder: (context) => HomePage()));})
+                    .catchError((error) {
+                  print("Error: ${error.toString()}");
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(error.toString())),
+                  );
                 });
               }),
-              // google login
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
+              // google login
           ElevatedButton(
             onPressed: () async {
               await FirebaseServices().signInWithGoogle();
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()));
+                  MaterialPageRoute(builder: (context) => HomePage()));
             },
             style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.resolveWith((states) {
@@ -79,20 +82,37 @@ class _LoginPageState extends State<LoginPage> {
                   return Colors.white;
                 })),
             child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
                   Image.asset(
-                  "assets/images/google.png",
-                  height: 40,
-                  width: 40,
-                ),
-              signUpOption()
-            ],
+                    "assets/images/google.png",
+                    height: 35,
+                    width: 35,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  const Text(
+                    "Login with Google",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87),
+                  ),
+                ],
+              ),
+            ),
           ),
+              const SizedBox(
+                height: 20,
+              ),
+              signUpOption(),
+          ]
         ),
-      ),
+        ),
+        ),
       ),
     );
   }

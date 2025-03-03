@@ -4,7 +4,6 @@ import 'package:pawsome/pages/home/home.dart';
 import '../chats/Chat.dart';
 import 'post_detail_screen.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -19,21 +18,22 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ProfilePage(username: "Hafsa"),
+      home: ProfilePage(username: "Hafsa", isOwnProfile: true),
     );
   }
 }
 
 class ProfilePage extends StatefulWidget {
   final String username;
-  const ProfilePage({super.key, required this.username});
+  final bool isOwnProfile;
+
+  const ProfilePage({super.key, required this.username, this.isOwnProfile = false});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStateMixin {
-  bool isFollowing = false;
   String username = "Profile Name";
   String bio = "sample bio............................................................................................................................................................................................................................................................................................................................................";
   String profilePicture = "assets/images/avatar1.jpg";
@@ -52,20 +52,6 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   void dispose() {
     _tabController.dispose();
     super.dispose();
-  }
-
-  void toggleFollow() {
-    setState(() {
-      isFollowing = !isFollowing;
-
-    });
-  }
-
-  void openChat() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Chat()),
-    );
   }
 
   void showProfilePicture() {
@@ -90,10 +76,15 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       },
     );
   }
+
+  void editProfile() {
+    // Implement the edit profile functionality
+  }
+
   void addPost() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => NewPostPage()), // Navigate to CreatePostPage
+      MaterialPageRoute(builder: (context) => NewPostPage()),
     );
   }
 
@@ -106,10 +97,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.push(context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-
-            );
+            Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
           },
         ),
       ),
@@ -141,30 +129,17 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                   ),
                 ),
                 SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: toggleFollow,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isFollowing ? Colors.red[300] :Colors.pink[100],
-                        padding: EdgeInsets.symmetric(horizontal: 35, vertical: 5),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      ),
-                      child: Text(isFollowing ? "Unfollow"  : "Follow"),
-                    ),
-                    SizedBox(width: 10),
-                    ElevatedButton(
-                      onPressed: openChat,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.pink[100],
-                        padding: EdgeInsets.symmetric(horizontal: 35, vertical: 5),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      ),
-                      child: Text("Chat"),
-                    ),
-                  ],
-                ),
+                widget.isOwnProfile
+                    ? ElevatedButton(
+                  onPressed: editProfile,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange[100],
+                    padding: EdgeInsets.symmetric(horizontal: 35, vertical: 5),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                  child: Text("Edit Profile"),
+                )
+                    : Container(),
                 SizedBox(height: 10),
                 TabBar(
                   controller: _tabController,
@@ -195,7 +170,8 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
         child: Icon(Icons.add),
       ),
       bottomNavigationBar: SafeArea(
-    child: CustomBottomNavBar(currentIndex: 4),   ),
+        child: CustomBottomNavBar(currentIndex: 4),
+      ),
     );
   }
 
@@ -212,9 +188,9 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       ),
     )
         : GridView.builder(
-      physics:const BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       itemCount: images.length,
-      gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         crossAxisSpacing: 5,
         mainAxisSpacing: 5,
@@ -222,26 +198,24 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       ),
       itemBuilder: (context, index) {
         return Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PostDetailPage(
-                      imageUrl: images[index],
-                      username: widget.username, // Pass the username
-                      profileImage: profilePicture,),
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PostDetailPage(
+                    imageUrl: images[index],
+                    username: widget.username,
+                    profileImage: profilePicture,
                   ),
-                );
-
-              },
-
-          child: Image.network(images[index], fit: BoxFit.cover),
-        ),
+                ),
+              );
+            },
+            child: Image.network(images[index], fit: BoxFit.cover),
+          ),
         );
       },
     );
   }
 }
-

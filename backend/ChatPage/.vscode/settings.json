@@ -1,8 +1,0 @@
-{
-    "python.analysis.extraPaths": [
-        "./chat_env/backend",
-        "./chat_env",
-        "./chat_env",
-        "./chat_env"
-    ]
-}

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pawsome/pages/community/new_post.dart';
 import 'package:pawsome/pages/home/home.dart';
 import '../chats/Chat.dart';
+import 'edit_profile.dart';
 import 'post_detail_screen.dart';
 
 void main() {
@@ -78,8 +79,25 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   }
 
   void editProfile() {
-    // Implement the edit profile functionality
-  }
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditProfilePage(
+            username: username,
+            bio: bio,
+            profilePicture: profilePicture,
+            onSave: (newUsername, newBio, newProfilePic) {
+              setState(() {
+                username = newUsername;
+                bio = newBio;
+                profilePicture = newProfilePic;
+              });
+            },
+          ),
+        ),
+      );
+    }
 
   void addPost() {
     Navigator.push(

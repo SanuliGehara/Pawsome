@@ -189,13 +189,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: addPost,
-        backgroundColor: Colors.orange[100],
-        child: Icon(Icons.add),
-      ),
-      bottomNavigationBar: SafeArea(
-    child: CustomBottomNavBar(currentIndex: 4),   ),
+
     );
   }
 

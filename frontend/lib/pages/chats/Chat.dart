@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pawsome/pages/chatbot/AiBot.dart';
+import 'package:pawsome/pages/community/Adopt.dart';
+import 'package:pawsome/pages/home/home.dart';
 import 'DM.dart'; // Import the DM.dart file
 
 class Chat extends StatefulWidget {
@@ -154,11 +157,23 @@ class CustomBottomNavBar extends StatelessWidget {
         BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: ""),
       ],
       onTap: (index) {
+        if (index == 0) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
+        }
         if (index == 2) {
-          Navigator.pushNamed(context, "/bot");
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AiBot()),
+          );
         }
         if (index == 3) {
-          Navigator.pushNamed(context, "/adopt");
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Adopt()),
+          );
         }
       },
     );

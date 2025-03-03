@@ -75,10 +75,6 @@ class _SitterState extends State<Sitter> {
         backgroundColor: Colors.amber[700],
       ),
       bottomNavigationBar: buildBottomNavigationBar(context, 3),
-      // bottomNavigationBar: SizedBox(
-      //   height: 10,
-      //   child: buildBottomNavigationBar(context, 3),
-      // ),
     );
   }
 

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pawsome/pages/chatbot/AiBot.dart';
+import 'package:pawsome/pages/chats/Chat.dart';
+import 'package:pawsome/pages/home/home.dart';
 
 AppBar buildAppBar(String title) {
   return AppBar(
@@ -88,11 +91,23 @@ Widget buildBottomNavigationBar(BuildContext context, int currentIndex) {
       BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: ""),
     ],
     onTap: (index) {
+      if (index == 0) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      }
       if (index == 1) {
-        Navigator.pushNamed(context, "/chat");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Chat()),
+        );
       }
       if (index == 2) {
-        Navigator.pushNamed(context, "/bot");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AiBot()),
+        );
       }
     },
   );

@@ -182,6 +182,8 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
           ),
         ],
       ),
+      bottomNavigationBar: SafeArea(
+    child: CustomBottomNavBar(currentIndex: 4),   ),
     );
   }
 

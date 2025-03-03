@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../services/websocket_service.dart';
+import '../../reusable_widgets/chat_bubble.dart';
 
 class DM extends StatefulWidget {
   final String userName;
@@ -11,22 +13,35 @@ class DM extends StatefulWidget {
 }
 
 class _DMState extends State<DM> {
-  List<Map<String, dynamic>> messages = [
-    {"isMe": true, "text": "Hey, I saw your profile. I am leaving out of town for two days, would you be able to sit my pets?"},
-    {"isMe": false, "text": "Sure! May I know about your pets?"},
-    {"isMe": true, "text": "I have one Scottish Fold cat and a Pomeranian dog. I will send you their diet plan to help you."},
-    {"isMe": false, "text": "May I know the dates you need me to sit your pets and your address?"},
-  ];
-
+  final WebSocketService _webSocketService = WebSocketService();
   final TextEditingController _messageController = TextEditingController();
+  List<Map<String, dynamic>> messages = [];
 
+  @override
+  void initState() {
+    super.initState();
+    _webSocketService.connect(widget.userName);
+    _webSocketService.stream.listen((data) {
+      setState(() {
+        messages.add({"isMe": false, "text": data});
+      });
+    });
+  }
+  
   void sendMessage() {
     if (_messageController.text.trim().isNotEmpty) {
+      _webSocketService.sendMessage(_messageController.text);
       setState(() {
         messages.add({"isMe": true, "text": _messageController.text.trim()});
       });
       _messageController.clear();
     }
+  }
+
+  @override
+  void dispose() {
+    _webSocketService.disconnect();
+    super.dispose();
   }
 
   @override

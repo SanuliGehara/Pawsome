@@ -76,7 +76,10 @@ class _SitterState extends State<Sitter> {
       // Floating action button to add a new sitter profile
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          NewPostPage(); // This should ideally use Navigator.push to open the page
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => NewPostPage()), // Creating new pet sitter profile
+          );
         },
         child: const Icon(Icons.add, color: Colors.black),
         backgroundColor: Colors.amber[700],

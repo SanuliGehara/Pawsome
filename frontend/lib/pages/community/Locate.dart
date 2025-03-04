@@ -171,8 +171,8 @@ class _LocateState extends State<Locate> {
 
               // Save button to toggle between marked and unmarked states
               IconButton(
-                icon: Icon( isSaved ? Icons.bookmark : Icons.bookmark_border, color : isSaved ? Colors.black : Colors.grey),
-                onPressed : () {},
+                icon: Icon( isSaved ? Icons.bookmark : Icons.bookmark_border, color : isSaved ? Colors.black : null),
+                onPressed : onSavePressed,
               ),
 
               // Share button (currently not functional)

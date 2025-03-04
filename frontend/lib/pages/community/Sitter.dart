@@ -20,7 +20,7 @@ class _SitterState extends State<Sitter> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],  // Light grey background
-      appBar: buildAppBar("Reliable Pet - Sitters"),  // Custom app bar with title
+      appBar: buildAppBar("Reliable Pet Sitters"),  // Custom app bar with title
       body: SafeArea(
         child: SingleChildScrollView( // Wrap the entire body in a SingleChildScrollView
           child: Column(  // Ensures smooth scrolling if content overflows vertically

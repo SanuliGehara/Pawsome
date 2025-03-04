@@ -15,6 +15,7 @@ class Locate extends StatefulWidget {
 class _LocateState extends State<Locate> {
   // List to track the like state of pet posts, initialized with false (unliked)
   List<bool> likedStates = List.generate(2, (index) => false);
+  // List to track the save state of pet posts, initialized with false (unsaved)
   List<bool> savedStates = List.generate(2, (index) => false);
 
   // Function to show a comment dialog box for user input

@@ -14,6 +14,8 @@ class Adopt extends StatefulWidget {
 class _AdoptState extends State<Adopt> {
   // List to track the liked state of each pet post. Initially, both are set to false (unliked).
   List<bool> likedStates = [false, false];
+  // List to track the save state of pet posts, initialized with false (unsaved)
+  List<bool> savedStates = List.generate(2, (index) => false);
 
   // Function to display a comment input dialog box
   void _showCommentBox(BuildContext context) {
@@ -93,6 +95,12 @@ class _AdoptState extends State<Adopt> {
                       likedStates[0] = !likedStates[0]; // Toggle like state
                     });
                   },
+                  savedStates[0],
+                      () {
+                    setState(() {
+                      savedStates[0] = !savedStates[0]; // Toggle save state
+                    });
+                  },
                 ),
                 buildPetCard(
                   "Adorable 6-month puppy vaccinated and dewormed", // Description text
@@ -101,6 +109,12 @@ class _AdoptState extends State<Adopt> {
                       () {
                     setState(() {
                       likedStates[1] = !likedStates[1]; // Toggle like state
+                    });
+                  },
+                  savedStates[1],
+                      () {
+                    setState(() {
+                      savedStates[1] = !savedStates[1]; // Toggle save state
                     });
                   },
                 ),
@@ -113,7 +127,7 @@ class _AdoptState extends State<Adopt> {
       // Floating action button to add a new pet adoption post
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          buildPetCard("New Post", "assets/images/kitten.jpg", false, () {}); // Placeholder action
+          buildPetCard("New Post", "assets/images/kitten.jpg", false, () {}, false, () {}); // Placeholder action
         },
         child: const Icon(Icons.add, color: Colors.black),
         backgroundColor: Colors.amber[700], // Sets the button color to amber
@@ -125,7 +139,7 @@ class _AdoptState extends State<Adopt> {
   }
 
   // Function to build a pet card widget for displaying lost pet posts
-  Widget buildPetCard(String description, String imagePath, bool isLiked, VoidCallback onLikePressed) {
+  Widget buildPetCard(String description, String imagePath, bool isLiked, VoidCallback onLikePressed, bool isSaved, VoidCallback onSavePressed) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 10), // Adds spacing between cards
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)), // Rounded corners
@@ -160,7 +174,12 @@ class _AdoptState extends State<Adopt> {
                 icon: const Icon(Icons.comment),
                 onPressed: () => _showCommentBox(context), // Opens comment input
               ),
-              IconButton(icon: const Icon(Icons.share), onPressed: () {}),
+
+              // Save button to toggle between marked and unmarked states
+              IconButton(
+                icon: Icon( isSaved ? Icons.bookmark : Icons.bookmark_border, color : isSaved ? Colors.black : null),
+                onPressed : onSavePressed,
+              ),
             ],
           ),
         ],

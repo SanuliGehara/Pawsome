@@ -127,14 +127,15 @@ class _ChatState extends State<Chat> {
       ),
 
       bottomNavigationBar: CustomBottomNavBar(currentIndex: 1), // Index for current page
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Adds a new chat when floating action button is pressed
-          addChat("New User", "03.45 PM", "5", "assets/images/avatar3.png");
-        },
-        child: const Icon(Icons.add, color: Colors.black), // Black plus sign icon
-        backgroundColor: Colors.amber[700], // Amber background color
-      ),
+
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     // Adds a new chat when floating action button is pressed
+      //     addChat("New User", "03.45 PM", "5", "assets/images/avatar3.png");
+      //   },
+      //   child: const Icon(Icons.add, color: Colors.black), // Black plus sign icon
+      //   backgroundColor: Colors.amber[700], // Amber background color
+      // ),
     );
   }
 }
@@ -155,10 +156,10 @@ class CustomBottomNavBar extends StatelessWidget {
       type: BottomNavigationBarType.fixed, // Ensures even spacing between tabs
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-        BottomNavigationBarItem(icon: Icon(Icons.chat), label: ""),
-        BottomNavigationBarItem(icon: Icon(Icons.emoji_emotions), label: ""),
+        BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: ""),
+        BottomNavigationBarItem(icon: Icon(Icons.smart_toy_outlined), label: ""),
         BottomNavigationBarItem(icon: Icon(Icons.people), label: ""),
-        BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: ""),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
       ],
       onTap: (index) {
         // Handles navigation to different pages based on index

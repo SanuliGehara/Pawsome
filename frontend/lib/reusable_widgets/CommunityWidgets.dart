@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/chatbot/AiBot.dart';
 import 'package:pawsome/pages/chats/Chat.dart';
@@ -85,10 +87,10 @@ Widget buildBottomNavigationBar(BuildContext context, int currentIndex) {
     type: BottomNavigationBarType.fixed,
     items: const [
       BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-      BottomNavigationBarItem(icon: Icon(Icons.chat), label: ""),
-      BottomNavigationBarItem(icon: Icon(Icons.emoji_emotions), label: ""),
+      BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: ""),
+      BottomNavigationBarItem(icon: Icon(Icons.smart_toy_outlined), label: ""),
       BottomNavigationBarItem(icon: Icon(Icons.people), label: ""),
-      BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: ""),
+      BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
     ],
     onTap: (index) {
       if (index == 0) {
@@ -109,6 +111,12 @@ Widget buildBottomNavigationBar(BuildContext context, int currentIndex) {
           MaterialPageRoute(builder: (context) => AiBot()),
         );
       }
+      // if (index == 4) {
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(builder: (context) => ProfilePage()),
+      //   );
+      // }
     },
   );
 }

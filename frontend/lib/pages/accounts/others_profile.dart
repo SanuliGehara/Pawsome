@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/community/new_post.dart';
 import 'package:pawsome/pages/home/home.dart';
@@ -5,7 +8,9 @@ import '../chats/Chat.dart';
 import 'post_detail_screen.dart';
 
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -19,46 +24,57 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ProfilePage(username: "Hafsa"),
+      home: ProfilePage(userId:"s1tJsaeEjKSHPNnq5efT"),
     );
   }
 }
-
 class ProfilePage extends StatefulWidget {
-  final String username;
-  const ProfilePage({super.key, required this.username});
+  final String userId;
+  const ProfilePage({super.key, required this.userId});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStateMixin {
+class _ProfilePageState extends State<ProfilePage>  {
   bool isFollowing = false;
-  String username = "Profile Name";
-  String bio = "sample bio............................................................................................................................................................................................................................................................................................................................................";
-  String profilePicture = "assets/images/avatar1.jpg";
-  List<String> posts = List.generate(15, (index) => "https://via.placeholder.com/100");
-  List<String> savedPosts = List.generate(5, (index) => "https://via.placeholder.com/100");
+  String username = "";
+  String bio = "";
+  String profilePicture = "";
+  List<String> posts =[];
 
-  late TabController _tabController;
+
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    fetchUserData();
   }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+  Future<void> fetchUserData() async {
+    try {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(widget.userId).get();
+
+      setState(() {
+        username = userDoc['name'];
+        bio = userDoc['bio'];
+        profilePicture = userDoc['profilePicture'];
+        posts = List<String>.from(userDoc['posts']);
+      });
+    } catch (e) {
+      print("Error fetching user data: $e");
+    }
   }
 
-  void toggleFollow() {
+
+
+  void toggleFollow() async {
+
+
     setState(() {
       isFollowing = !isFollowing;
-
     });
+
   }
 
   void openChat() {
@@ -79,7 +95,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             child: InteractiveViewer(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                child: Image.asset(
+                child: Image.network(
                   profilePicture,
                   fit: BoxFit.contain,
                 ),
@@ -106,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.push(context,
+            Navigator.pop(context,
               MaterialPageRoute(builder: (context) => HomePage()),
 
             );
@@ -123,7 +139,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                   onTap: showProfilePicture,
                   child: CircleAvatar(
                     radius: 60,
-                    backgroundImage: AssetImage(profilePicture),
+                    backgroundImage: NetworkImage(profilePicture),
                   ),
                 ),
                 SizedBox(height: 10),
@@ -166,31 +182,23 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                   ],
                 ),
                 SizedBox(height: 10),
-                TabBar(
-                  controller: _tabController,
-                  indicatorColor: Colors.yellow[200],
-                  labelColor: Colors.black,
-                  tabs: [
-                    Tab(text: "   Posts   "),
-                    Tab(text: "Saved Posts"),
-                  ],
+                Text(
+                  "Posts",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+
                 ),
               ],
             ),
           ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _buildGrid(posts),
-                _buildGrid(savedPosts),
-              ],
-            ),
-          ),
+          Expanded(child: _buildGrid(posts)),
+
         ],
       ),
-
     );
+
+
+
+
   }
 
   Widget _buildGrid(List<String> images) {
@@ -216,23 +224,23 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       ),
       itemBuilder: (context, index) {
         return Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PostDetailPage(
-                      imageUrl: images[index],
-                      username: widget.username, // Pass the username
-                      profileImage: profilePicture,),
-                  ),
-                );
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PostDetailPage(
+                    imageUrl: images[index],
+                    username: username, // Pass the username
+                    profileImage: profilePicture,),
+                ),
+              );
 
-              },
+            },
 
-          child: Image.network(images[index], fit: BoxFit.cover),
-        ),
+            child: Image.network(images[index], fit: BoxFit.cover),
+          ),
         );
       },
     );

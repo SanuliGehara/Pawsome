@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/community/new_post.dart';
 import 'package:pawsome/pages/home/home.dart';
+import '../../reusable_widgets/CommunityWidgets.dart';
 import '../chats/Chat.dart';
 import 'edit_profile.dart';
 import 'post_detail_screen.dart';
@@ -187,9 +188,8 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
         backgroundColor: Colors.orange[100],
         child: Icon(Icons.add),
       ),
-      bottomNavigationBar: SafeArea(
-        child: CustomBottomNavBar(currentIndex: 4),
-      ),
+
+
     );
   }
 

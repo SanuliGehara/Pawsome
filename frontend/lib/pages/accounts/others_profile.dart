@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/community/new_post.dart';
 import 'package:pawsome/pages/home/home.dart';
+import '../../reusable_widgets/CommunityWidgets.dart';
 import '../chats/Chat.dart';
 import 'post_detail_screen.dart';
 
@@ -58,7 +59,7 @@ class _ProfilePageState extends State<ProfilePage>  {
       setState(() {
         username = userDoc['name'];
         bio = userDoc['bio'];
-        profilePicture = userDoc['profilePicture'];
+        profilePicture = userDoc['profilePic'];
         posts = List<String>.from(userDoc['posts']);
       });
     } catch (e) {
@@ -95,8 +96,9 @@ class _ProfilePageState extends State<ProfilePage>  {
             child: InteractiveViewer(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                child: Image.network(
-                  profilePicture,
+                child: Image(image: profilePicture.startsWith('http')
+                    ? NetworkImage(profilePicture)
+                    : AssetImage ("assets/images/no_profile_pic.png") as ImageProvider,
                   fit: BoxFit.contain,
                 ),
               ),
@@ -138,14 +140,16 @@ class _ProfilePageState extends State<ProfilePage>  {
                 InkWell(
                   onTap: showProfilePicture,
                   child: CircleAvatar(
-                    radius: 60,
-                    backgroundImage: NetworkImage(profilePicture),
+                    radius: 50,
+                    backgroundImage: profilePicture.startsWith('http')
+                      ? NetworkImage(profilePicture)
+                    : AssetImage ("assets/images/no_profile_pic.png"),
                   ),
                 ),
                 SizedBox(height: 10),
                 Text(
                   username,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
                 Container(
                   width: 300,
@@ -156,15 +160,15 @@ class _ProfilePageState extends State<ProfilePage>  {
                     style: TextStyle(fontSize: 14),
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
                       onPressed: toggleFollow,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: isFollowing ? Colors.red[300] :Colors.pink[100],
-                        padding: EdgeInsets.symmetric(horizontal: 35, vertical: 5),
+                        backgroundColor: isFollowing ? Colors.pink[150] :Colors.pink[100],
+                        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 4),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       ),
                       child: Text(isFollowing ? "Unfollow"  : "Follow"),
@@ -174,26 +178,34 @@ class _ProfilePageState extends State<ProfilePage>  {
                       onPressed: openChat,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.pink[100],
-                        padding: EdgeInsets.symmetric(horizontal: 35, vertical: 5),
+                        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 4),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       ),
                       child: Text("Chat"),
                     ),
                   ],
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 30),
                 Text(
                   "Posts",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
 
                 ),
               ],
             ),
           ),
-          Expanded(child: _buildGrid(posts)),
+    Expanded(
+    child: Container(
+    color: Colors.grey[100],
+    child: _buildGrid(posts),
+    ),
+    ),
 
         ],
       ),
+      bottomNavigationBar: buildBottomNavigationBar(context, 4),
+
+
     );
 
 

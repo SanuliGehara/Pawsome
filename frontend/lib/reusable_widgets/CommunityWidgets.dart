@@ -3,7 +3,10 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/chatbot/AiBot.dart';
 import 'package:pawsome/pages/chats/Chat.dart';
+import 'package:pawsome/pages/community/Adopt.dart';
 import 'package:pawsome/pages/home/home.dart';
+
+import '../pages/accounts/own_profile.dart';
 
 AppBar buildAppBar(String title) {
   return AppBar(
@@ -111,12 +114,19 @@ Widget buildBottomNavigationBar(BuildContext context, int currentIndex) {
           MaterialPageRoute(builder: (context) => AiBot()),
         );
       }
-      // if (index == 4) {
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(builder: (context) => ProfilePage()),
-      //   );
-      // }
+      if (index == 4) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Adopt()),
+        );
+      }
+
+      if (index == 4) {
+       Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ProfilePage(username: '',)),
+         );
+       }
     },
   );
 }

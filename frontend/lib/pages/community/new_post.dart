@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/community/Adopt.dart';
 import 'package:pawsome/pages/community/Locate.dart';
+import 'package:pawsome/pages/community/Sitter.dart';
 import 'package:pawsome/reusable_widgets/CommunityWidgets.dart';
 import 'package:pawsome/reusable_widgets/reusable_widget.dart';
 import 'package:pawsome/services/database_service.dart';
@@ -87,7 +88,7 @@ class _NewPostPageState extends State<NewPostPage> {
               // Add Post logic (to be implemented later with firebase)
               _databaseService.createLocatePost();
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Locate()));  // SHOULD NAVIGATE TO Adopt OR Locate PAGE
+                  MaterialPageRoute(builder: (context) => Sitter()));  // SHOULD NAVIGATE TO Adopt OR Locate PAGE
             }),
           ],
         ),

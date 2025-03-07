@@ -120,6 +120,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+
       appBar: AppBar(
         backgroundColor: Colors.white70, // Sets the app bar color
         title: Row(

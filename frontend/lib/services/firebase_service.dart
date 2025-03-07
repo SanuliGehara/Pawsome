@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 5265089f47bee407fa2867d7692ec45d232da05e
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 

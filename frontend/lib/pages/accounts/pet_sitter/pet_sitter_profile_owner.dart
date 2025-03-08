@@ -18,7 +18,7 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   bool _isPasswordVisible = false;
-  String _profileImageUrl = "assets/images/no_profile_pic.png"; // Default image
+  String _profileImageUrl = "assets/images/default_user.jfif"; // Default image
   File? _selectedImage;
   final ImagePicker _picker = ImagePicker();
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -39,7 +39,7 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
       setState(() {
         _usernameController.text = userDoc['username'] ?? '';
         _descriptionController.text = userDoc['description'] ?? '';
-        _profileImageUrl = userDoc['profileImage'] ?? "assets/images/no_profile_pic.png";
+        _profileImageUrl = userDoc['profileImage'] ?? "assets/images/default_user.jfif";
       });
     }
   }
@@ -107,102 +107,105 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
       ),
       body: Stack(
         children: [
-          // Full-Screen Background Image with Reduced Opacity
+
           Positioned.fill(
-            child: Stack(
-              children: [
-                Image.asset(
-                  "assets/images/background.png",
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/background.png"), // Paw print background
                   fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: double.infinity,
                 ),
-                Container(
-                  color: Colors.white.withOpacity(0.5),
-                ),
-              ],
+              ),
+              child: Container(
+                color: Colors.white.withOpacity(0.4),
+              ),
             ),
           ),
 
           // Main Content
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 10),
+          Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 10),
 
-                  // Profile Image with Camera Icon
-                  Stack(
-                    alignment: Alignment.bottomRight,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.orange, width: 4),
-                        ),
-                        child: CircleAvatar(
-                          radius: 50,
-                          backgroundColor: Colors.white,
-                          backgroundImage: _selectedImage != null
-                              ? FileImage(_selectedImage!) as ImageProvider
-                              : (_profileImageUrl.startsWith("http")
-                              ? NetworkImage(_profileImageUrl)
-                              : AssetImage(_profileImageUrl)) as ImageProvider,
-                        ),
-                      ),
-                      // Camera Icon
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: _pickImage,
-                          child: Container(
-                            padding: const EdgeInsets.all(5),
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
+                        // Profile Image with Camera Icon
+                        Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Colors.orange, width: 4),
+                              ),
+                              child: CircleAvatar(
+                                radius: 50,
+                                backgroundColor: Colors.white,
+                                backgroundImage: _selectedImage != null
+                                    ? FileImage(_selectedImage!) as ImageProvider
+                                    : (_profileImageUrl.startsWith("http")
+                                    ? NetworkImage(_profileImageUrl)
+                                    : AssetImage(_profileImageUrl)) as ImageProvider,
+                              ),
                             ),
-                            child: const Icon(Icons.camera_alt, color: Colors.black, size: 20),
+                            // Camera Icon
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: _pickImage,
+                                child: Container(
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white,
+                                  ),
+                                  child: const Icon(Icons.camera_alt, color: Colors.black, size: 20),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 30),
+
+                        // Username Field
+                        inputField("pet sitter name", _usernameController),
+                        const SizedBox(height: 20),
+
+                        // Password Field with Show/Hide
+                        inputField("password", _passwordController, isPassword: true),
+                        const SizedBox(height: 20),
+
+                        // Description Box
+                        inputField("I am an experienced pet sitter with 4 years of experience.", _descriptionController),
+                        const SizedBox(height: 30),
+
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.orange,
+                              padding: const EdgeInsets.symmetric(vertical: 16), // ✅ Increased Padding
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            ),
+                            onPressed: _updateProfile,
+                            child: const Text(
+                              'Edit Profile',
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-
-                  // Username Field
-                  inputField("pet sitter name", _usernameController),
-                  const SizedBox(height: 20),
-
-                  // Password Field with Show/Hide
-                  inputField("password", _passwordController, isPassword: true),
-                  const SizedBox(height: 20),
-
-                  // Description Box
-                  inputField("I am an experienced pet sitter with 4 years of experience.", _descriptionController),
-                  const SizedBox(height: 30),
-
-                  // Edit Profile Button
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      ),
-                      onPressed: _updateProfile,
-                      child: const Text(
-                        'Edit Profile',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-                      ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         ],
       ),

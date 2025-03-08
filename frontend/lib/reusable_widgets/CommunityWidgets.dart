@@ -1,6 +1,8 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:pawsome/pages/accounts/pet_sitter/pet_sitter_profile.dart';
+import 'package:pawsome/pages/accounts/pet_sitter/pet_sitter_profile_owner.dart';
 import 'package:pawsome/pages/chatbot/AiBot.dart';
 import 'package:pawsome/pages/chats/Chat.dart';
 import 'package:pawsome/pages/community/Adopt.dart';
@@ -124,7 +126,7 @@ Widget buildBottomNavigationBar(BuildContext context, int currentIndex) {
       if (index == 4) {
        Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ProfilePage(username: '',)),
+          MaterialPageRoute(builder: (context) => PetSitterProfileOwnerPage()),
          );
        }
     },

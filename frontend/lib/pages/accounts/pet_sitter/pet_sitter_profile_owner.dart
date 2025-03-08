@@ -44,7 +44,7 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
     }
   }
 
-  // Pick Image from Gallery or Camera
+  // Pick Image from Gallery
   Future<void> _pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
@@ -76,7 +76,7 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
     // Update Firestore
     await _firestore.collection('pet_sitters').doc(userId).update({
       'username': _usernameController.text.trim(),
-      'password': _passwordController.text.trim(), // Hash password in a real app!
+      'password': _passwordController.text.trim(), // Hash password in real use!
       'description': _descriptionController.text.trim(),
       'profileImage': imageUrl,
     });
@@ -109,12 +109,18 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
         children: [
           // Full-Screen Background Image with Reduced Opacity
           Positioned.fill(
-            child: ColorFiltered(
-              colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.5), BlendMode.dstATop),
-              child: Image.asset(
-                "assets/images/background.png", // Paw print background
-                fit: BoxFit.cover,
-              ),
+            child: Stack(
+              children: [
+                Image.asset(
+                  "assets/images/background.png",
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
+                ),
+                Container(
+                  color: Colors.white.withOpacity(0.5),
+                ),
+              ],
             ),
           ),
 
@@ -184,6 +190,7 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange,
+                        padding: const EdgeInsets.symmetric(vertical: 15),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       ),
                       onPressed: _updateProfile,
@@ -201,7 +208,7 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
       ),
 
       // Bottom Navigation Bar
-      bottomNavigationBar: buildBottomNavigationBar(context, 3),
+      bottomNavigationBar: buildBottomNavigationBar(context, 4),
     );
   }
 
@@ -209,7 +216,7 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
   Widget inputField(String hint, TextEditingController controller, {bool isPassword = false}) {
     return Container(
       width: 280,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       decoration: BoxDecoration(
         color: const Color(0xFFFFD9A5),
         borderRadius: BorderRadius.circular(20),

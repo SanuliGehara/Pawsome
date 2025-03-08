@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawsome/pages/community/new_post.dart';
 import 'package:pawsome/services/database_service.dart';
 import 'Adopt.dart';
 import 'Sitter.dart';
@@ -126,6 +127,18 @@ class _LocateState extends State<Locate> {
             ),
           ),
         ],
+      ),
+
+      // Floating action button to add new post
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => NewPostPage()), // Creating new pet sitter profile
+          );
+        },
+        child: const Icon(Icons.add, color: Colors.black),
+        backgroundColor: Colors.amber[700],
       ),
 
       // Bottom navigation bar with highlighting on the Locate page (index 3)

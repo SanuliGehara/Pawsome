@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawsome/pages/accounts/pet_sitter/pet_sitter_profile.dart';
 import 'package:pawsome/pages/community/new_post.dart';
 import 'Adopt.dart';
 import 'Locate.dart';
@@ -63,7 +64,10 @@ class _SitterState extends State<Sitter> {
                       name: ["Oshadha", "Harry", "Sanjay", "Krish"][index],
                       location: ["Kandy", "Colombo", "Galle", "Colombo"][index],
                       rating: 5,
-                      onTap: () {}, // Placeholder for action when clicking on a sitter
+                      onTap: () {Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PetSitterProfilePage()),
+                      );}, // Navigate to pet sitter profile
                     );
                   },
                 ),
@@ -73,17 +77,6 @@ class _SitterState extends State<Sitter> {
         ),
       ),
 
-      // Floating action button to add a new sitter profile
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => NewPostPage()), // Creating new pet sitter profile
-          );
-        },
-        child: const Icon(Icons.add, color: Colors.black),
-        backgroundColor: Colors.amber[700],
-      ),
       bottomNavigationBar: buildBottomNavigationBar(context, 3),  // Custom bottom nav bar
     );
   }

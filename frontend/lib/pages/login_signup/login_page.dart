@@ -4,7 +4,7 @@ import 'package:pawsome/pages/home/home.dart';
 import 'package:pawsome/pages/login_signup/reset_password.dart';
 import 'package:pawsome/pages/login_signup/signup_page.dart';
 import 'package:pawsome/reusable_widgets/reusable_widget.dart';
-import 'package:pawsome/services/firebase_service.dart';
+import 'package:pawsome/services/firebaseAuth_service.dart';
 import 'package:pawsome/utils/color_utils.dart';
 
 class LoginPage extends StatefulWidget {

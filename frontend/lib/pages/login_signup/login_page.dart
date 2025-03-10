@@ -36,7 +36,13 @@ class _LoginPageState extends State<LoginPage> {
               20, MediaQuery.of(context).size.height * 0.2, 20, 0),
           child: Column(
             children: <Widget>[
-              logoWidget('assets/images/pawsome_logo.jpeg'),
+              SizedBox(
+              height: 200, // Adjust as needed to ensure full visibility
+              child: Image.asset(
+                'assets/images/pawsome_logo.png',
+                fit: BoxFit.contain, //
+              ),
+              ),
               const SizedBox(
                 height: 30,
               ),

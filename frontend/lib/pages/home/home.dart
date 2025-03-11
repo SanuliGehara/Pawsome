@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pawsome/pages/chatbot/AiBot.dart';
 import 'package:pawsome/pages/chats/Chat.dart';
 import 'package:pawsome/pages/community/Adopt.dart';
+import 'package:pawsome/pages/settings/Setting.dart';
 import 'search.dart';
 //import 'chatbot.dart';
 import 'package:http/http.dart' as http;
@@ -148,7 +149,10 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: Icon(Icons.settings, color: Colors.black54),
             onPressed: () {
-              // Action for settings button
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Setting()),
+              );
             },
           ),
         ],

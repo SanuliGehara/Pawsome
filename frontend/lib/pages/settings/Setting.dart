@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawsome/pages/settings/About.dart';
 
 class Setting extends StatefulWidget {
   @override
@@ -71,7 +72,14 @@ class _SettingState extends State<Setting> {
                         _selectedIndex = index;
                       });
 
-                      // implement on functionality
+                      if (items[index]['title'] == 'About') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => About(),
+                          ),
+                        );
+                      }
 
                     },
                   ),

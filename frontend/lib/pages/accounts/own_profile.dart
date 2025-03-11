@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:pawsome/pages/community/new_post.dart';
 import 'package:pawsome/pages/home/home.dart';
 import '../../reusable_widgets/CommunityWidgets.dart';
+import '../../reusable_widgets/reusable_widget.dart';
 import '../chats/Chat.dart';
 import 'edit_profile.dart';
 import 'post_detail_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -16,11 +20,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Pawsome',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: ProfilePage(username: "Hafsa", isOwnProfile: true),
+        title: 'Pawsome',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: HomePage()
     );
   }
 }
@@ -36,11 +40,11 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStateMixin {
-  String username = "Profile Name";
-  String bio = "sample bio............................................................................................................................................................................................................................................................................................................................................";
-  String profilePicture = "assets/images/avatar1.jpg";
-  List<String> posts = List.generate(15, (index) => "https://via.placeholder.com/100");
-  List<String> savedPosts = List.generate(5, (index) => "https://via.placeholder.com/100");
+  String username = "";
+  String bio = "";
+  String profilePicture = "";
+  List<String> posts = [];
+  List<String> savedPosts =[];
 
   late TabController _tabController;
 
@@ -48,57 +52,57 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _fetchUserProfile();
+
   }
 
+  Future<void> _fetchUserProfile() async {
+
+    DocumentSnapshot userDoc =
+    await FirebaseFirestore.instance.collection('users').doc(widget.username).get();
+
+    if (userDoc.exists) {
+      setState(() {
+        username = userDoc['username'];
+        bio = userDoc['bio'];
+        profilePicture = userDoc['profilePicture'].isNotEmpty
+            ? userDoc['profilePicture']
+            : "assets/images/no_profile_pic.png";
+        posts = List<String>.from(userDoc['posts'] ?? []);
+        savedPosts = List<String>.from(userDoc['savedPosts'] ?? []);
+      });
+    }
+
+
+  }
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
   }
 
-  void showProfilePicture() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: InteractiveViewer(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Image.asset(
-                  profilePicture,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
+
 
   void editProfile() {
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => EditProfilePage(
-            username: username,
-            bio: bio,
-            profilePicture: profilePicture,
-            onSave: (newUsername, newBio, newProfilePic) {
-              setState(() {
-                username = newUsername;
-                bio = newBio;
-                profilePicture = newProfilePic;
-              });
-            },
-          ),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditProfilePage(
+          username: username,
+          bio: bio,
+          profilePicture: profilePicture,
+          onSave: (newUsername, newBio, newProfilePic) {
+            setState(() {
+              username = newUsername;
+              bio = newBio;
+              profilePicture = newProfilePic;
+            });
+          },
         ),
-      );
-    }
+      ),
+    );
+  }
 
   void addPost() {
     Navigator.push(
@@ -115,9 +119,8 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
         backgroundColor: Colors.yellow[100],
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-          },
+          onPressed: () => Navigator.pop(context),
+
         ),
       ),
       body: Column(
@@ -127,10 +130,12 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             child: Column(
               children: [
                 InkWell(
-                  onTap: showProfilePicture,
+                  onTap:  () {
+                    ProfilePictureViewer.show(context, profilePicture);
+                  },
                   child: CircleAvatar(
                     radius: 60,
-                    backgroundImage: AssetImage(profilePicture),
+                    backgroundImage: NetworkImage(profilePicture),
                   ),
                 ),
                 SizedBox(height: 10),
@@ -183,6 +188,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
           ),
         ],
       ),
+      bottomNavigationBar: buildBottomNavigationBar(context, 4),
       floatingActionButton: FloatingActionButton(
         onPressed: addPost,
         backgroundColor: Colors.orange[100],

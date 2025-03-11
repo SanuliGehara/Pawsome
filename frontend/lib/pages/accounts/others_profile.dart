@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pawsome/pages/community/new_post.dart';
 import 'package:pawsome/pages/home/home.dart';
 import '../../reusable_widgets/CommunityWidgets.dart';
+import '../../reusable_widgets/reusable_widget.dart';
 import '../chats/Chat.dart';
 import 'post_detail_screen.dart';
 
@@ -84,30 +85,6 @@ class _ProfilePageState extends State<ProfilePage>  {
       MaterialPageRoute(builder: (context) => Chat()),
     );
   }
-
-  void showProfilePicture() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: InteractiveViewer(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Image(image: profilePicture.startsWith('http')
-                    ? NetworkImage(profilePicture)
-                    : AssetImage ("assets/images/no_profile_pic.png") as ImageProvider,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
   void addPost() {
     Navigator.push(
       context,
@@ -138,12 +115,14 @@ class _ProfilePageState extends State<ProfilePage>  {
             child: Column(
               children: [
                 InkWell(
-                  onTap: showProfilePicture,
+                  onTap:  () {
+                    ProfilePictureViewer.show(context, profilePicture);
+                  },
                   child: CircleAvatar(
                     radius: 50,
                     backgroundImage: profilePicture.startsWith('http')
-                      ? NetworkImage(profilePicture)
-                    : AssetImage ("assets/images/no_profile_pic.png"),
+                        ? NetworkImage(profilePicture)
+                        : AssetImage ("assets/images/no_profile_pic.png"),
                   ),
                 ),
                 SizedBox(height: 10),
@@ -194,12 +173,12 @@ class _ProfilePageState extends State<ProfilePage>  {
               ],
             ),
           ),
-    Expanded(
-    child: Container(
-    color: Colors.grey[100],
-    child: _buildGrid(posts),
-    ),
-    ),
+          Expanded(
+            child: Container(
+              color: Colors.grey[100],
+              child: _buildGrid(posts),
+            ),
+          ),
 
         ],
       ),

@@ -71,3 +71,29 @@ Container firebaseUIButton(BuildContext context, String title, Function onTap) {
   );
 }
 
+//view profile pic
+class ProfilePictureViewer {
+  static void show(BuildContext context, String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: InteractiveViewer(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: imageUrl.isNotEmpty
+                    ? (imageUrl.startsWith("http")
+                    ? Image.network(imageUrl, fit: BoxFit.contain)
+                    : Image.asset(imageUrl, fit: BoxFit.contain))
+                    : Image.asset("assets/images/no_profile_pic.png", fit: BoxFit.contain),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}

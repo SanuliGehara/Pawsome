@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/settings/About.dart';
+import 'package:pawsome/pages/settings/Help.dart';
 import 'package:pawsome/pages/settings/Privacy.dart';
 import 'package:pawsome/pages/settings/Terms.dart';
 
@@ -95,6 +96,14 @@ class _SettingState extends State<Setting> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => Privacy(),
+                          ),
+                        );
+                      }
+                      if (items[index]['title'] == 'Help & Support') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Help(),
                           ),
                         );
                       }

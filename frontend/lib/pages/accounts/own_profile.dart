@@ -3,14 +3,17 @@ import 'package:pawsome/pages/community/new_post.dart';
 import 'package:pawsome/pages/home/home.dart';
 import '../../reusable_widgets/CommunityWidgets.dart';
 import '../../reusable_widgets/reusable_widget.dart';
-import '../chats/Chat.dart';
 import 'edit_profile.dart';
 import 'post_detail_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
-void main() {
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -30,10 +33,10 @@ class MyApp extends StatelessWidget {
 }
 
 class ProfilePage extends StatefulWidget {
-  final String username;
+  final String userid;
   final bool isOwnProfile;
 
-  const ProfilePage({super.key, required this.username, this.isOwnProfile = false});
+  const ProfilePage({super.key, required this.userid, this.isOwnProfile = true});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -56,22 +59,26 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
 
   }
 
+
+
   Future<void> _fetchUserProfile() async {
 
+    try {
     DocumentSnapshot userDoc =
-    await FirebaseFirestore.instance.collection('users').doc(widget.username).get();
+    await FirebaseFirestore.instance.collection('users').doc(widget.userid).get();
 
-    if (userDoc.exists) {
+
       setState(() {
-        username = userDoc['username'];
+        username = userDoc['name'];
         bio = userDoc['bio'];
-        profilePicture = userDoc['profilePicture'].isNotEmpty
-            ? userDoc['profilePicture']
-            : "assets/images/no_profile_pic.png";
+        profilePicture = userDoc['profilePicture'] ?? "assets/images/no_profile_pic.png";
         posts = List<String>.from(userDoc['posts'] ?? []);
         savedPosts = List<String>.from(userDoc['savedPosts'] ?? []);
       });
+    } catch (e) {
+      print("Error fetching user data: $e");
     }
+
 
 
   }
@@ -135,7 +142,9 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                   },
                   child: CircleAvatar(
                     radius: 60,
-                    backgroundImage: NetworkImage(profilePicture),
+                    backgroundImage: profilePicture.startsWith('http')
+                        ? NetworkImage(profilePicture)
+                        : AssetImage ("assets/images/no_profile_pic.png"),
                   ),
                 ),
                 SizedBox(height: 10),
@@ -157,7 +166,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                     ? ElevatedButton(
                   onPressed: editProfile,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange[100],
+                    backgroundColor: Colors.orange[200],
                     padding: EdgeInsets.symmetric(horizontal: 35, vertical: 5),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
@@ -191,7 +200,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       bottomNavigationBar: buildBottomNavigationBar(context, 4),
       floatingActionButton: FloatingActionButton(
         onPressed: addPost,
-        backgroundColor: Colors.orange[100],
+        backgroundColor: Colors.yellow[200],
         child: Icon(Icons.add),
       ),
 
@@ -230,7 +239,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                 MaterialPageRoute(
                   builder: (context) => PostDetailPage(
                     imageUrl: images[index],
-                    username: widget.username,
+                    username: username,
                     profileImage: profilePicture,
                   ),
                 ),

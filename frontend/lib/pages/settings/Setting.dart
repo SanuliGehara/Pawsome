@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/settings/About.dart';
+import 'package:pawsome/pages/settings/Terms.dart';
 
 class Setting extends StatefulWidget {
   @override
@@ -77,6 +78,14 @@ class _SettingState extends State<Setting> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => About(),
+                          ),
+                        );
+                      }
+                      if (items[index]['title'] == 'Terms & Conditions') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Terms(),
                           ),
                         );
                       }

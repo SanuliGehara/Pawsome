@@ -166,9 +166,8 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                     ? ElevatedButton(
                   onPressed: editProfile,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange[200],
-                    padding: EdgeInsets.symmetric(horizontal: 35, vertical: 5),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 3),
                   ),
                   child: Text("Edit Profile"),
                 )
@@ -176,7 +175,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                 SizedBox(height: 10),
                 TabBar(
                   controller: _tabController,
-                  indicatorColor: Colors.yellow[200],
+                  indicatorColor: Colors.orange,
                   labelColor: Colors.black,
                   tabs: [
                     Tab(text: "   Posts   "),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/settings/About.dart';
+import 'package:pawsome/pages/settings/Privacy.dart';
 import 'package:pawsome/pages/settings/Terms.dart';
 
 class Setting extends StatefulWidget {
@@ -86,6 +87,14 @@ class _SettingState extends State<Setting> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => Terms(),
+                          ),
+                        );
+                      }
+                      if (items[index]['title'] == 'Privacy & Security') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Privacy(),
                           ),
                         );
                       }

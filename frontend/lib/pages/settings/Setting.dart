@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/settings/About.dart';
+import 'package:pawsome/pages/settings/Help.dart';
+import 'package:pawsome/pages/settings/Privacy.dart';
+import 'package:pawsome/pages/settings/Terms.dart';
 
 class Setting extends StatefulWidget {
   @override
@@ -77,6 +80,30 @@ class _SettingState extends State<Setting> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => About(),
+                          ),
+                        );
+                      }
+                      if (items[index]['title'] == 'Privacy & Security') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Privacy(),
+                          ),
+                        );
+                      }
+                      if (items[index]['title'] == 'Terms & Conditions') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Terms(),
+                          ),
+                        );
+                      }
+                      if (items[index]['title'] == 'Help & Support') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Help(),
                           ),
                         );
                       }

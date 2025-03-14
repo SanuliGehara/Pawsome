@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:pawsome/pages/chatbot/AiBot.dart';
+import 'package:pawsome/pages/community/Adopt.dart';
+import 'package:pawsome/pages/home/home.dart';
 import 'DM.dart'; // Import the DM.dart file
 
+// Stateful widget for the chat screen
 class Chat extends StatefulWidget {
   @override
   _ChatState createState() => _ChatState();
 }
 
 class _ChatState extends State<Chat> {
+  // Sample chat data with user details
   List<Map<String, String>> chatData = [
     {"name": "Ron", "time": "14.23 PM", "messages": "2", "avatar": "assets/images/avatar5.png"},
     {"name": "Cho", "time": "12.30 PM", "messages": "8", "avatar": "assets/images/avatar2.jpg"},
@@ -15,10 +20,10 @@ class _ChatState extends State<Chat> {
     {"name": "Harry", "time": "01.25 AM", "messages": "4", "avatar": "assets/images/avatar3.png"},
   ];
 
-  bool _isSearching = false;
-  final TextEditingController _searchController = TextEditingController();
+  bool _isSearching = false;  // Flag to track search state
+  final TextEditingController _searchController = TextEditingController();  // Controller for search input
 
-  // Function to add a new chat dynamically
+  // Function to dynamically add a new chat
   void addChat(String name, String time, String messages, String avatar) {
     setState(() {
       chatData.add({
@@ -33,23 +38,23 @@ class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200], // Light background
+      backgroundColor: Colors.grey[200], // Light background color
       appBar: AppBar(
-        backgroundColor: Colors.amber[100], // Light yellow background
-        elevation: 0,
+        backgroundColor: Colors.amber[100], // Light yellow background color
+        elevation: 0, // No shadow
         title: _isSearching
             ? TextField(
           controller: _searchController,
           decoration: const InputDecoration(
-            hintText: "Search chats...",
+            hintText: "Search chats...",  // Placeholder text for search
             border: InputBorder.none,
           ),
           style: const TextStyle(color: Colors.black, fontSize: 18),
         )
             : Padding(
-          padding: const EdgeInsets.only(left: 20), // Adjust indentation as needed
+          padding: const EdgeInsets.only(left: 20), // Adjust left padding
           child: const Text(
-            "Chats",
+            "Chats",  // Screen title
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -62,19 +67,19 @@ class _ChatState extends State<Chat> {
             icon: Icon(_isSearching ? Icons.close : Icons.search, color: Colors.black),
             onPressed: () {
               setState(() {
-                _isSearching = !_isSearching;
-                if (!_isSearching) _searchController.clear();
+                _isSearching = !_isSearching; // Toggle search state
+                if (!_isSearching) _searchController.clear(); // Clear search input
               });
             },
           ),
           IconButton(
             icon: const Icon(Icons.settings, color: Colors.black),
-            onPressed: () {},
+            onPressed: () {}, // Placeholder for settings functionality
           ),
         ],
       ),
       body: ListView.builder(
-        itemCount: chatData.length,
+        itemCount: chatData.length, // Number of chat items
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
@@ -93,22 +98,22 @@ class _ChatState extends State<Chat> {
               margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.amber[50], // Chat background
-                borderRadius: BorderRadius.circular(10),
+                color: Colors.amber[50],  // Chat item background color
+                borderRadius: BorderRadius.circular(10),  // Rounded corners
               ),
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundImage: AssetImage(chatData[index]["avatar"]!), // ✅ Loads local profile image
+                  backgroundImage: AssetImage(chatData[index]["avatar"]!), // Load user profile image
                   radius: 25,
                 ),
                 title: Text(
-                  chatData[index]["name"]!,
+                  chatData[index]["name"]!, // Display user name
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text(chatData[index]["time"]!),
+                subtitle: Text(chatData[index]["time"]!), // Display last message time
                 trailing: chatData[index]["messages"]!.isNotEmpty
                     ? CircleAvatar(
-                  backgroundColor: Colors.green,
+                  backgroundColor: Colors.green,  // Unread messages indicator
                   child: Text(
                     chatData[index]["messages"]!,
                     style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -120,45 +125,61 @@ class _ChatState extends State<Chat> {
           );
         },
       ),
-      bottomNavigationBar: CustomBottomNavBar(currentIndex: 1), // Custom bottom nav bar
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          addChat("New User", "03.45 PM", "5", "assets/images/avatar3.png");
-        },
-        child: const Icon(Icons.add, color: Colors.black), // ✅ Black color for the plus sign
-        backgroundColor: Colors.amber[700],
-      ),
+
+      bottomNavigationBar: CustomBottomNavBar(currentIndex: 1), // Index for current page
+
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     // Adds a new chat when floating action button is pressed
+      //     addChat("New User", "03.45 PM", "5", "assets/images/avatar3.png");
+      //   },
+      //   child: const Icon(Icons.add, color: Colors.black), // Black plus sign icon
+      //   backgroundColor: Colors.amber[700], // Amber background color
+      // ),
     );
   }
 }
 
-// Separate Bottom Navigation Bar Widget for reuse
+// Custom Bottom Navigation Bar Widget for easier navigation
 class CustomBottomNavBar extends StatelessWidget {
-  final int currentIndex;
+  final int currentIndex; // Index to track selected tab
 
   const CustomBottomNavBar({Key? key, required this.currentIndex}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      currentIndex: currentIndex,
-      selectedItemColor: Colors.orange,
-      unselectedItemColor: Colors.grey,
+      currentIndex: currentIndex, // Sets active tab
+      selectedItemColor: Colors.orange, // Active tab color
+      unselectedItemColor: Colors.grey,  // Inactive tab color
       showUnselectedLabels: true,
-      type: BottomNavigationBarType.fixed, // Ensures even spacing
+      type: BottomNavigationBarType.fixed, // Ensures even spacing between tabs
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-        BottomNavigationBarItem(icon: Icon(Icons.chat), label: ""),
-        BottomNavigationBarItem(icon: Icon(Icons.emoji_emotions), label: ""),
+        BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: ""),
+        BottomNavigationBarItem(icon: Icon(Icons.smart_toy_outlined), label: ""),
         BottomNavigationBarItem(icon: Icon(Icons.people), label: ""),
-        BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: ""),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
       ],
       onTap: (index) {
+        // Handles navigation to different pages based on index
+        if (index == 0) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
+        }
         if (index == 2) {
-          Navigator.pushNamed(context, "/bot");
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AiBot()),
+          );
         }
         if (index == 3) {
-          Navigator.pushNamed(context, "/adopt");
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Adopt()),
+          );
         }
       },
     );

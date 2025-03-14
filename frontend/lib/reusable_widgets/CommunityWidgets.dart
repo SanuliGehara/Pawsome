@@ -1,4 +1,14 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:pawsome/pages/accounts/pet_sitter/pet_sitter_profile.dart';
+import 'package:pawsome/pages/accounts/pet_sitter/pet_sitter_profile_owner.dart';
+import 'package:pawsome/pages/chatbot/AiBot.dart';
+import 'package:pawsome/pages/chats/Chat.dart';
+import 'package:pawsome/pages/community/Adopt.dart';
+import 'package:pawsome/pages/home/home.dart';
+
+import '../pages/accounts/own_profile.dart';
 
 AppBar buildAppBar(String title) {
   return AppBar(
@@ -82,18 +92,43 @@ Widget buildBottomNavigationBar(BuildContext context, int currentIndex) {
     type: BottomNavigationBarType.fixed,
     items: const [
       BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-      BottomNavigationBarItem(icon: Icon(Icons.chat), label: ""),
-      BottomNavigationBarItem(icon: Icon(Icons.emoji_emotions), label: ""),
+      BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: ""),
+      BottomNavigationBarItem(icon: Icon(Icons.smart_toy_outlined), label: ""),
       BottomNavigationBarItem(icon: Icon(Icons.people), label: ""),
-      BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: ""),
+      BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
     ],
     onTap: (index) {
+      if (index == 0) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      }
       if (index == 1) {
-        Navigator.pushNamed(context, "/chat");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Chat()),
+        );
       }
       if (index == 2) {
-        Navigator.pushNamed(context, "/bot");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AiBot()),
+        );
       }
+      if (index == 4) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Adopt()),
+        );
+      }
+
+      if (index == 4) {
+       Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PetSitterProfileOwnerPage()),
+         );
+       }
     },
   );
 }

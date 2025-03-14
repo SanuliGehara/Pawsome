@@ -1,121 +1,109 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/status.dart' as status;
 
 class AiBot extends StatefulWidget {
-  const AiBot({Key? key}) : super(key: key);
+  const AiBot({super.key});
 
   @override
-  _AiBotState createState() => _AiBotState();
+  _ChatState createState() => _ChatState();
 }
 
-class _AiBotState extends State<AiBot> {
-  List<Map<String, dynamic>> messages = [
-    {"isMe": false, "text": "Hello! How can I assist you today?"},
-  ];
+class _ChatState extends State<AiBot> {
+  final TextEditingController _controller = TextEditingController();
+  late WebSocketChannel _channel;
+  List<Map<String, String>> _messages = [];
 
-  final TextEditingController _messageController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _connectWebSocket();
+  }
 
-  void sendMessage() {
-    if (_messageController.text.trim().isNotEmpty) {
+  void _connectWebSocket() {
+    _channel = WebSocketChannel.connect(
+      Uri.parse("ws://10.0.2.2:8000/ws/chat/1/"), // Adjust for your backend
+    );
+
+    _channel.stream.listen(
+          (data) {
+        final response = json.decode(data);
+        setState(() {
+          _messages.add({"type": "bot", "message": response['message']});
+        });
+      },
+      onDone: () {
+        print("WebSocket closed");
+      },
+      onError: (error) {
+        print("WebSocket error: $error");
+      },
+    );
+  }
+
+  void _sendMessage() {
+    if (_controller.text.isNotEmpty) {
       setState(() {
-        messages.add({"isMe": true, "text": _messageController.text.trim()});
-        messages.add({"isMe": false, "text": "This is the chatbot's response."});
+        _messages.add({"type": "user", "message": _controller.text});
       });
-      _messageController.clear();
+
+      _channel.sink.add(json.encode({'message': _controller.text}));
+      _controller.clear();
     }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _channel.sink.close(status.goingAway);
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.amber[100],
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Row(
-          children: [
-            CircleAvatar(
-              backgroundImage: AssetImage('assets/images/chatbot.png'), // Chatbot icon
-              radius: 20,
-            ),
-            const SizedBox(width: 10),
-            const Text(
-              "Chatbot",
-              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-      ),
-      body: Stack(
+      appBar: AppBar(title: const Text("AI Chatbot")),
+      body: Column(
         children: [
-          // Background Image
-          Positioned.fill(
-            child: Opacity(
-              opacity: 0.3, // Transparency level
-              child: Image.asset(
-                "assets/images/background.png", // Ensure this file exists
-                fit: BoxFit.cover,
-              ),
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.all(10.0),
+              itemCount: _messages.length,
+              itemBuilder: (context, index) {
+                final msg = _messages[index];
+                final isUser = msg["type"] == "user";
+                return Align(
+                  alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: isUser ? Colors.blue[200] : Colors.grey[300],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(msg["message"] ?? ""),
+                  ),
+                );
+              },
             ),
           ),
-
-          Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(10),
-                  itemCount: messages.length,
-                  itemBuilder: (context, index) {
-                    bool isMe = messages[index]["isMe"];
-                    return Align(
-                      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 5),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: isMe ? Colors.amber[200] : Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                            ),
-                          ],
-                        ),
-                        child: Text(messages[index]["text"]),
-                      ),
-                    );
-                  },
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    decoration: const InputDecoration(hintText: 'Type a message'),
+                  ),
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border(top: BorderSide(color: Colors.grey.shade300)),
+                IconButton(
+                  icon: const Icon(Icons.send),
+                  onPressed: _sendMessage,
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _messageController,
-                        decoration: const InputDecoration(
-                          hintText: "Type a message...",
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.send, color: Colors.amber),
-                      onPressed: sendMessage,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

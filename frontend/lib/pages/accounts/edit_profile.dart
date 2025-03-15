@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
+
 
 class EditProfilePage extends StatefulWidget {
   final String username;
@@ -22,6 +26,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   late TextEditingController _usernameController;
   late TextEditingController _bioController;
   String updatedProfilePicture = "";
+  final ImagePicker _picker = ImagePicker();
+
 
   @override
   void initState() {
@@ -30,6 +36,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _bioController = TextEditingController(text: widget.bio);
     updatedProfilePicture = widget.profilePicture;
   }
+
+  
 
   @override
   void dispose() {
@@ -47,8 +55,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
     Navigator.pop(context);
   }
 
-  void _changeProfilePicture() {
-    // TODO: Implement image picker functionality to select a new profile picture
+  Future<void> _pickImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        updatedProfilePicture = image.path;
+      });
+    }
   }
 
   @override
@@ -59,14 +72,38 @@ class _EditProfilePageState extends State<EditProfilePage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            GestureDetector(
-              onTap: _changeProfilePicture,
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: AssetImage(updatedProfilePicture),
-              ),
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: updatedProfilePicture.isNotEmpty
+                      ? FileImage(File(updatedProfilePicture))
+                      : AssetImage(widget.profilePicture) as ImageProvider,
+                ),
+                Positioned(
+                  right: -4,
+                  bottom: 10,
+                  child: GestureDetector(
+                    onTap: _pickImage,
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: const Icon(
+                        Icons.camera_alt,
+                        color: Colors.white,
+                        size: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 30),
             TextField(
               controller: _usernameController,
               decoration: const InputDecoration(labelText: "Username"),
@@ -74,7 +111,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
             TextField(
               controller: _bioController,
               decoration: const InputDecoration(labelText: "Bio"),
-              maxLines: 3,
+              maxLength: 150,
+
             ),
             const SizedBox(height: 20),
             ElevatedButton(

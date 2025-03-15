@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 
@@ -46,12 +49,26 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.dispose();
   }
 
-  void _saveProfile() {
+  void _saveProfile() async{
+
+    //try {
+     //User? user = FirebaseAuth.instance.currentUser;
+
+    //if (user ==null){return}
+
+    String userId = "s1tJsaeEjKSHPNnq5efT";//user.uid
     widget.onSave(
       _usernameController.text,
       _bioController.text,
       updatedProfilePicture,
     );
+
+    await FirebaseFirestore.instance.collection('users').doc(userId).update({
+      'username': _usernameController.text,
+      'bio': _bioController.text,
+      'profilePicture': updatedProfilePicture,
+    });
+
     Navigator.pop(context);
   }
 

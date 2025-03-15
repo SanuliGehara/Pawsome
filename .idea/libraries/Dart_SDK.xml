@@ -3,6 +3,7 @@
     <CLASSES>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       <root url="file://$PROJECT_DIR$/../../../../../../flutter/bin/cache/dart-sdk/lib/async" />
       <root url="file://$PROJECT_DIR$/../../../../../../flutter/bin/cache/dart-sdk/lib/cli" />
       <root url="file://$PROJECT_DIR$/../../../../../../flutter/bin/cache/dart-sdk/lib/collection" />
@@ -26,6 +27,8 @@
       <root url="file://$PROJECT_DIR$/../../../../../../flutter/bin/cache/dart-sdk/lib/web_audio" />
       <root url="file://$PROJECT_DIR$/../../../../../../flutter/bin/cache/dart-sdk/lib/web_gl" />
 =======
+=======
+>>>>>>> 2a74a8b0e0dec37b4debd4055399fffd15a3951a
       <root url="file://$USER_HOME$/flutterFolder/flutter/bin/cache/dart-sdk/lib/async" />
       <root url="file://$USER_HOME$/flutterFolder/flutter/bin/cache/dart-sdk/lib/cli" />
       <root url="file://$USER_HOME$/flutterFolder/flutter/bin/cache/dart-sdk/lib/collection" />
@@ -48,6 +51,7 @@
       <root url="file://$USER_HOME$/flutterFolder/flutter/bin/cache/dart-sdk/lib/typed_data" />
       <root url="file://$USER_HOME$/flutterFolder/flutter/bin/cache/dart-sdk/lib/web_audio" />
       <root url="file://$USER_HOME$/flutterFolder/flutter/bin/cache/dart-sdk/lib/web_gl" />
+<<<<<<< HEAD
 >>>>>>> 1df9f10a90cf7428a9cd84a06d7f69672ac6d1af
 =======
       <root url="file://C:/Flutter/src/flutter/bin/cache/dart-sdk/lib/async" />
@@ -73,6 +77,8 @@
       <root url="file://C:/Flutter/src/flutter/bin/cache/dart-sdk/lib/web_audio" />
       <root url="file://C:/Flutter/src/flutter/bin/cache/dart-sdk/lib/web_gl" />
 >>>>>>> d604d13ccc12d456c5be41521bd9a33b0932b718
+=======
+>>>>>>> 2a74a8b0e0dec37b4debd4055399fffd15a3951a
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class DatabaseService {
   // firestore database reference
@@ -20,15 +22,19 @@ class DatabaseService {
     }
   }
 
-  //method to create a new document(new post) to locate post collection
-  Future createLocatePost() async {
+  /// Function to create a new post and save it in Firestore.
+  Future<void> createPost({required String description, required String location, String? imageUrl, required String postType}) async {
     try {
-       await _firestore.collection('locate_posts').add({"name":"helani lavanya", "email":"helani@gmail.com", "description": "I am a trained pet sitter with 8 years of experience. Feel free to reach out to me for your pet sitting", "likes": 60});
+      await _firestore.collection('posts').add({
+        "description": description,
+        "location": location,
+        "imageUrl": imageUrl ?? "", // If no image, store an empty string
+        "postType": postType, // Store post type
+        "timestamp": FieldValue.serverTimestamp(), // Store creation time
+      });
+    } catch (error) {
+      log("Error creating post: $error");
     }
-    catch(error) {
-      log(error.toString());
-    }
-        
   }
   
 }

@@ -83,19 +83,19 @@ class _SettingState extends State<Setting> {
                           ),
                         );
                       }
-                      if (items[index]['title'] == 'Terms & Conditions') {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Terms(),
-                          ),
-                        );
-                      }
                       if (items[index]['title'] == 'Privacy & Security') {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => Privacy(),
+                          ),
+                        );
+                      }
+                      if (items[index]['title'] == 'Terms & Conditions') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Terms(),
                           ),
                         );
                       }

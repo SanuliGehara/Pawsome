@@ -3,6 +3,7 @@ import 'package:pawsome/pages/chatbot/AiBot.dart';
 import 'package:pawsome/pages/chats/Chat.dart';
 import 'package:pawsome/pages/community/Adopt.dart';
 import 'package:pawsome/pages/settings/Setting.dart';
+import '../accounts/own_profile.dart';
 import 'search.dart';
 //import 'chatbot.dart';
 import 'package:http/http.dart' as http;
@@ -42,6 +43,13 @@ class _HomePageState extends State<HomePage> {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Adopt()),
+      );
+    }
+    if (index == 4) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ProfilePage(userid: 's1tJsaeEjKSHPNnq5efT')),
       );
     }
   }

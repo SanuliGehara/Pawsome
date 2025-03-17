@@ -6,14 +6,24 @@ import 'package:pawsome/reusable_widgets/CommunityWidgets.dart';
 import 'package:pawsome/reusable_widgets/reusable_widget.dart';
 import 'package:pawsome/services/database_service.dart';
 
+/// A stateful widget that allows users to create a new post.
+/// Users can add a description, location, and optionally an image placeholder.
 class NewPostPage extends StatefulWidget {
   @override
   _NewPostPageState createState() => _NewPostPageState();
 }
 
+
+/// State class for [NewPostPage].
+/// Manages the user input for the new post and handles the post submission.
 class _NewPostPageState extends State<NewPostPage> {
+  // Controller for the description text field.
   final TextEditingController _descriptionController = TextEditingController();
+
+  // Controller for the location text field.
   final TextEditingController _locationController = TextEditingController();
+
+  // Instance of DatabaseService for handling post creation.
   final _databaseService = DatabaseService();
 
   @override
@@ -23,6 +33,8 @@ class _NewPostPageState extends State<NewPostPage> {
       appBar: AppBar(
         backgroundColor: const Color(0xFFFFF0CC), // Light yellow background
         elevation: 0,
+
+        // Back button to navigate to the previous screen.
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
@@ -34,11 +46,13 @@ class _NewPostPageState extends State<NewPostPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
+
+        // Main column that contains the post creation UI.
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 30),
-            // Image Placeholder
+            // Image Placeholder for post.
             Container(
               height: 200,
               width: double.infinity,
@@ -52,7 +66,7 @@ class _NewPostPageState extends State<NewPostPage> {
             ),
             const SizedBox(height: 30),
 
-            // Description Field
+            // Post Description Field
             TextField(
               controller: _descriptionController,
               decoration: InputDecoration(
@@ -68,7 +82,7 @@ class _NewPostPageState extends State<NewPostPage> {
             ),
             const SizedBox(height: 20),
 
-            // Location Field
+            // Post's Location Field
             TextField(
               controller: _locationController,
               decoration: InputDecoration(
@@ -83,9 +97,10 @@ class _NewPostPageState extends State<NewPostPage> {
               ),
             ),
             const SizedBox(height: 20),
-            // Post Button
+
+            // Button to submit the new post.
             firebaseUIButton(context, 'POST', () {
-              // Add Post logic (to be implemented later with firebase)
+              // Placeholder for adding post logic with Firebase.
               _databaseService.createLocatePost();
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => Sitter()));  // SHOULD NAVIGATE TO Adopt OR Locate PAGE

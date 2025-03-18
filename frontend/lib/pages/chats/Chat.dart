@@ -3,6 +3,7 @@ import 'package:pawsome/pages/chatbot/AiBot.dart';
 import 'package:pawsome/pages/community/Adopt.dart';
 import 'package:pawsome/pages/home/home.dart';
 import 'DM.dart'; // Import the DM.dart file
+// import 'package:cloud_firestore/cloud_firestore.dart';
 
 // Stateful widget for the chat screen
 class Chat extends StatefulWidget {

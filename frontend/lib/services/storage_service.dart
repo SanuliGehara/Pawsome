@@ -8,10 +8,15 @@ class StorageService {
   /// Uploads an image to Firebase Storage and returns the image URL.
   Future<String?> uploadImage(File imageFile) async {
     try {
-      String fileName = "post_images/${DateTime.now().millisecondsSinceEpoch}.jpg";
-      Reference ref = _storage.ref().child(fileName);
-      await ref.putFile(imageFile);
-      return await ref.getDownloadURL();
+      String filePath = 'post_images/${DateTime.now().millisecondsSinceEpoch}.jpg';
+      Reference ref = _storage.ref().child(filePath);
+      UploadTask uploadTask = ref.putFile(imageFile);
+      TaskSnapshot snapshot = await uploadTask;
+      return await snapshot.ref.getDownloadURL();
+      // String fileName = "post_images/${DateTime.now().millisecondsSinceEpoch}.jpg";
+      // Reference ref = _storage.ref().child(fileName);
+      // await ref.putFile(imageFile);
+      // return await ref.getDownloadURL();
     } catch (error) {
       return null;
     }

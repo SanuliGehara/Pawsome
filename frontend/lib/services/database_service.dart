@@ -36,5 +36,26 @@ class DatabaseService {
       log("Error creating post: $error");
     }
   }
+
+  /// Fetch posts from Firestore based on the type (normal/ Locate/ Adopt)
+  Stream<List<Map<String, dynamic>>> getPostsByType(String postType) {
+    return _firestore
+        .collection('posts')
+        .where('postType', isEqualTo: postType)
+        .orderBy('timestamp', descending: true) // Order by latest posts
+        .snapshots()
+        .map((snapshot) =>
+        snapshot.docs.map((doc) => {"id": doc.id, ...doc.data()}).toList());
+  }
+
+  /// Fetch posts that belong only to the "Locate" type
+  Stream<List<Map<String, dynamic>>> getLocatePosts() {
+    return _firestore
+        .collection('posts')
+        .where('postType', isEqualTo: 'Locate')
+        .orderBy('timestamp', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+  }
   
 }

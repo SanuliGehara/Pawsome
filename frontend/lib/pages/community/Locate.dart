@@ -19,6 +19,9 @@ class _LocateState extends State<Locate> {
   // List to track the save state of pet posts, initialized with false (unsaved)
   List<bool> savedStates = List.generate(2, (index) => false);
 
+  // Instance of DatabaseService for fetch posts.
+  final DatabaseService _databaseService = DatabaseService();
+
   // Function to show a comment dialog box for user input
   void _showCommentBox(BuildContext context) {
     TextEditingController commentController = TextEditingController();  // Controller to manage comment text input
@@ -83,47 +86,47 @@ class _LocateState extends State<Locate> {
 
           // Expanded widget to allow the ListView to take available screen space
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(8), // Padding for spacing
-              children: [
-                // Lost pet post 1: Labrador Retriever
-                buildPetCard(
-                  "Lost Labrador Retriever near Downtown",  // Description text
-                  "assets/images/puppy.jpg",  // Image asset path
-                  likedStates[0], // Whether the post is liked
-                      () {
-                    setState(() {
-                      likedStates[0] = !likedStates[0]; // Toggle like state
-                    });
-                  },
-                  savedStates[0],
-                      () {
-                    setState(() {
-                      savedStates[0] = !savedStates[0]; // Toggle save state
-                    });
-                  },
-                  context,  // Passing context for comment box
-                ),
+            child: StreamBuilder<List<Map<String, dynamic>>>(
+              stream: _databaseService.getLocatePosts(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text("No Locate posts found"));
+                }
 
-                // Lost pet post 2: Missing cat
-                buildPetCard(
-                  "Missing Cat last seen at Park Avenue", // Description text
-                  "assets/images/kitten.jpg", // Image asset path
-                  likedStates[1], // Whether the post is liked
-                      () {
-                    setState(() {
-                      likedStates[1] = !likedStates[1]; // Toggle like state
-                    });
+                List<Map<String, dynamic>> posts = snapshot.data!;
+                return ListView.builder(
+                  itemCount: posts.length,
+                  itemBuilder: (context, index) {
+                    var post = posts[index];
+                    return buildPetCard(
+                      post["description"] ?? "No Description",
+                      post["imageUrl"]?.isNotEmpty == true ? post["imageUrl"] : "assets/images/puppy.jpg",
+
+                      likedStates[0], // Whether the post is liked
+                          () {
+                        setState(() {
+                          likedStates[0] = !likedStates[0]; // Toggle like state
+                        });
+                        },
+                      savedStates[0],
+                          () {
+                        setState(() {
+                          savedStates[0] = !savedStates[0]; // Toggle save state
+                        });
+                        },
+                      context,  // Passing context for comment box
+                      // false,
+                      //     () {},
+                      // false,
+                      //     () {},
+                      // context,
+                    );
                   },
-                  savedStates[1],
-                      () {
-                    setState(() {
-                      savedStates[1] = !savedStates[1]; // Toggle save state
-                    });
-                  },
-                  context,  // Passing context for comment box
-                ),
-              ],
+                );
+              },
             ),
           ),
         ],
@@ -157,7 +160,19 @@ class _LocateState extends State<Locate> {
           // Displaying the pet image with rounded top corners
           ClipRRect(
             borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-            child: Image.asset(imagePath, fit: BoxFit.cover, height: 150, width: double.infinity),
+            child: Image.network(
+              imagePath,
+              fit: BoxFit.cover,
+              height: 150,
+              width: double.infinity,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return const Center(child: CircularProgressIndicator());
+              },
+              errorBuilder: (context, error, stackTrace) {
+                return const Center(child: Text('Image not available'));
+              },
+            ),
           ),
 
           // Pet description text

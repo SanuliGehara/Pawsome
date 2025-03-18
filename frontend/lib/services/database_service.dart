@@ -57,5 +57,15 @@ class DatabaseService {
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
   }
+
+  /// Fetch posts that belong only to the "Adopt" type
+  Stream<List<Map<String, dynamic>>> getAdoptPosts() {
+    return _firestore
+        .collection('posts')
+        .where('postType', isEqualTo: 'Adopt')
+        .orderBy('timestamp', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+  }
   
 }

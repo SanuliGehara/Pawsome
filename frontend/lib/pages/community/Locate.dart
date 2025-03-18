@@ -118,11 +118,6 @@ class _LocateState extends State<Locate> {
                         });
                         },
                       context,  // Passing context for comment box
-                      // false,
-                      //     () {},
-                      // false,
-                      //     () {},
-                      // context,
                     );
                   },
                 );
@@ -137,7 +132,7 @@ class _LocateState extends State<Locate> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => NewPostPage()), // Creating new pet sitter profile
+            MaterialPageRoute(builder: (context) => NewPostPage()), // Creating new post for locate pes
           );
         },
         child: const Icon(Icons.add, color: Colors.black),
@@ -204,8 +199,6 @@ class _LocateState extends State<Locate> {
                 onPressed : onSavePressed,
               ),
 
-              // Share button (currently not functional)
-              //IconButton(icon: const Icon(Icons.upload), onPressed: () {}),
             ],
           ),
         ],

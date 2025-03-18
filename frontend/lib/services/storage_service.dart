@@ -13,10 +13,6 @@ class StorageService {
       UploadTask uploadTask = ref.putFile(imageFile);
       TaskSnapshot snapshot = await uploadTask;
       return await snapshot.ref.getDownloadURL();
-      // String fileName = "post_images/${DateTime.now().millisecondsSinceEpoch}.jpg";
-      // Reference ref = _storage.ref().child(fileName);
-      // await ref.putFile(imageFile);
-      // return await ref.getDownloadURL();
     } catch (error) {
       return null;
     }

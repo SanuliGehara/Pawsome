@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pawsome/pages/community/new_post.dart';
 import 'package:pawsome/services/database_service.dart';
 import 'Adopt.dart';
@@ -58,6 +61,58 @@ class _LocateState extends State<Locate> {
     );
   }
 
+  // Function to show the update post dialog
+  void _showUpdateDialog(BuildContext context, String postId, String oldDescription, String oldPostType, String? oldImageUrl) {
+    TextEditingController descController = TextEditingController(text: oldDescription);
+    TextEditingController typeController = TextEditingController(text: oldPostType);
+    File? newImageFile;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Update Post"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(controller: descController, decoration: InputDecoration(labelText: "Description")),
+              TextField(controller: typeController, decoration: InputDecoration(labelText: "Post Type")),
+              ElevatedButton(
+                child: Text("Change Image"),
+                onPressed: () async {
+                  // Use Image Picker to select a new image
+                  final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+                  if (pickedFile != null) {
+                    newImageFile = File(pickedFile.path);
+                  }
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(child: Text("Cancel"), onPressed: () => Navigator.pop(context)),
+            TextButton(
+              child: Text("Update"),
+              onPressed: () async {
+                await _databaseService.updatePost(
+                  postId: postId,
+                  newDescription: descController.text.trim(),
+                  newPostType: typeController.text.trim(),
+                  newImageFile: newImageFile,
+                  oldImageUrl: oldImageUrl,
+                );
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Post updated successfully"), backgroundColor: Colors.green),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,9 +147,10 @@ class _LocateState extends State<Locate> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                if (!snapshot.hasData || snapshot.data == null || snapshot.data!.isEmpty) {
                   return const Center(child: Text("No Locate posts found"));
                 }
+
 
                 List<Map<String, dynamic>> posts = snapshot.data!;
                 return ListView.builder(
@@ -118,6 +174,8 @@ class _LocateState extends State<Locate> {
                         });
                         },
                       context,  // Passing context for comment box
+                      post["id"],
+                      post["imageUrl"],
                     );
                   },
                 );
@@ -145,7 +203,17 @@ class _LocateState extends State<Locate> {
   }
 
   // Function to build a pet card widget for displaying lost pet posts
-  Widget buildPetCard(String description, String imagePath, bool isLiked, VoidCallback onLikePressed, bool isSaved, VoidCallback onSavePressed, BuildContext context) {
+  Widget buildPetCard(
+      String description,
+      String imagePath,
+      bool isLiked,
+      VoidCallback onLikePressed,
+      bool isSaved,
+      VoidCallback onSavePressed,
+      BuildContext context,
+      String postId, // Add postId
+      String? imageUrl, // Add imageUrl
+      ){
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 10), // Adds spacing between cards
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)), // Rounded corners
@@ -199,6 +267,21 @@ class _LocateState extends State<Locate> {
                 onPressed : onSavePressed,
               ),
 
+              // Delete and Update Buttons
+              IconButton(
+                icon: Icon(Icons.edit, color: Colors.blue),
+                onPressed: () => _showUpdateDialog(context, postId, description, "Locate", imageUrl),
+              ),
+
+              IconButton(
+                icon: Icon(Icons.delete, color: Colors.red),
+                onPressed: () async {
+                  await _databaseService.deletePost(postId, imageUrl);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Post deleted successfully"), backgroundColor: Colors.red),
+                  );
+                },
+              ),
             ],
           ),
         ],

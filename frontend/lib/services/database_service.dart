@@ -23,6 +23,17 @@ class DatabaseService {
     }
   }
 
+  /// Fetch pet sitters from Firestore
+  Stream<List<Map<String, dynamic>>> getPetSitters() {
+    return _firestore
+        .collection('users')
+        .where('category', isEqualTo: 'pet sitter') // Filter only pet sitters
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+        .map((doc) => {"id": doc.id, ...doc.data()})
+        .toList());
+  }
+
   /// Function to create a new post and save it in Firestore.
   Future<void> createPost({required String description, required String location, String? imageUrl, required String postType}) async {
     try {

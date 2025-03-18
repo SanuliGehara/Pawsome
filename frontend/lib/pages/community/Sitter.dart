@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/accounts/pet_sitter/pet_sitter_profile.dart';
 import 'package:pawsome/pages/community/new_post.dart';
+import '../../services/database_service.dart';
 import 'Adopt.dart';
 import 'Locate.dart';
 import '../../reusable_widgets/CommunityWidgets.dart';
@@ -16,6 +17,9 @@ class Sitter extends StatefulWidget {
 class _SitterState extends State<Sitter> {
   // List to track liked states for sitters (not currently used in UI but can be extended)
   List<bool> likedStates = List.generate(4, (index) => false);
+
+  // Instance of DatabaseService for fetch pet sitters.
+  final DatabaseService _databaseService = DatabaseService();
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +50,21 @@ class _SitterState extends State<Sitter> {
               ),
               const SizedBox(height: 10), // Spacing between elements
 
+              /// Fetch pet sitters dynamically from Firestore
+              StreamBuilder<List<Map<String, dynamic>>>(
+              stream: _databaseService.getPetSitters(), // Get pet sitters
+              builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator()); // Show loading indicator
+              }
+              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text("No pet sitters available."));
+              }
+
+              List<Map<String, dynamic>> petSitters = snapshot.data!;
+
               // Grid layout for displaying available pet sitters
-              Padding(
+              return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: GridView.builder(
                   physics: const NeverScrollableScrollPhysics(), // Disables GridView's internal scrolling
@@ -58,25 +75,30 @@ class _SitterState extends State<Sitter> {
                     mainAxisSpacing: 10,  // Space between rows
                     childAspectRatio: 0.8,  // Adjust height to width ratio of the cards
                   ),
-                  itemCount: 4, // Placeholder count, could be dynamic based on API response
+                  itemCount: petSitters.length,
                   itemBuilder: (context, index) {
+                    var sitter = petSitters[index];
                     return buildPetSitterCard(
-                      name: ["Oshadha", "Harry", "Sanjay", "Krish"][index],
-                      location: ["Kandy", "Colombo", "Galle", "Colombo"][index],
-                      rating: 5,
+                    name: sitter["username"] ?? "Unknown",
+                    profilePicture: sitter["profilePicture"] ,
+                    description: sitter["description"] ?? "No description",
+                    rating: sitter["rating"] ?? 0, // Rating
                       onTap: () {Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => PetSitterProfilePage()),
-                      );}, // Navigate to pet sitter profile
+                        MaterialPageRoute(builder: (context) => PetSitterProfilePage(),
+                        ),
+                      );
+                      },
                     );
-                  },
+                    },
                 ),
+              );
+              },
               ),
             ],
           ),
         ),
       ),
-
       bottomNavigationBar: buildBottomNavigationBar(context, 3),  // Custom bottom nav bar
     );
   }
@@ -84,7 +106,8 @@ class _SitterState extends State<Sitter> {
   // Widget for displaying a pet sitter card in the grid
   Widget buildPetSitterCard({
     required String name,
-    required String location,
+    required String? profilePicture,
+    required String description,
     required int rating,
     required VoidCallback onTap,
   }) {
@@ -98,10 +121,12 @@ class _SitterState extends State<Sitter> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Placeholder profile picture
+            // Profile picture with default fallback
             CircleAvatar(
               radius: 40,
-              backgroundImage: AssetImage("assets/images/avatar3.png"),
+              backgroundImage: (profilePicture != null && profilePicture.isNotEmpty)
+                  ? NetworkImage(profilePicture)
+                  : const AssetImage("assets/images/avatar3.png") as ImageProvider,
             ),
             const SizedBox(height: 10), // Spacing
 
@@ -114,11 +139,15 @@ class _SitterState extends State<Sitter> {
               ),
             ),
 
-            // Display location
-            Text(
-              location,
-              style: const TextStyle(
-                color: Colors.grey,
+            // Display description
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                description,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.grey),
               ),
             ),
             const SizedBox(height: 5),

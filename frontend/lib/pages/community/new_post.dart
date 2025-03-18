@@ -67,7 +67,19 @@ class _NewPostPageState extends State<NewPostPage> {
       postType: _postType, // Stores the selected post type
     );
 
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Post created successfully!")));
+    // Descriptive and User Friendly Confirmation message for successful post creation
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Post created successfully!',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.green,
+        behavior: SnackBarBehavior.floating,
+        margin: EdgeInsets.all(20),
+        duration: Duration(seconds: 3),
+      ),
+    );
     Navigator.pop(context);
   }
 

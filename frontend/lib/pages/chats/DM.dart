@@ -21,17 +21,16 @@ class _DMState extends State<DM> {
   void initState() {
     super.initState();
     _webSocketService.connect(widget.userName); // Connect to WebSocket server with username
-    _webSocketService.stream.listen((data) {  // Listen for incoming messages from the WebSocket stream
-      setState(() {
-        messages.add({"isMe": false, "text": data});  // Add received message to the chat
-      });
-    });
+    // _webSocketService.stream.listen((data) {  // Listen for incoming messages from the WebSocket stream
+    //   setState(() {
+    //     messages.add({"isMe": false, "text": data});  // Add received message to the chat
+    //   });
+    // });
   }
-
   // Function to send a message
   void sendMessage() {
     if (_messageController.text.trim().isNotEmpty) {
-      _webSocketService.sendMessage(_messageController.text); // Send message via WebSocket
+      //_webSocketService.sendMessage(_messageController.text); // Send message via WebSocket
       setState(() {
         messages.add({"isMe": true, "text": _messageController.text.trim()}); // Add sent message to chat
       });

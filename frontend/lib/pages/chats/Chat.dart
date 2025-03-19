@@ -3,7 +3,7 @@ import 'package:pawsome/pages/chatbot/AiBot.dart';
 import 'package:pawsome/pages/community/Adopt.dart';
 import 'package:pawsome/pages/home/home.dart';
 import 'DM.dart'; // Import the DM.dart file
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 // Stateful widget for the chat screen
 class Chat extends StatefulWidget {
@@ -13,18 +13,29 @@ class Chat extends StatefulWidget {
 
 class _ChatState extends State<Chat> {
   // Sample chat data with user details
-  List<Map<String, String>> chatData = [
+  /*
+    List<Map<String, String>> chatData = [
     {"name": "Ron", "time": "14.23 PM", "messages": "2", "avatar": "assets/images/avatar5.png"},
     {"name": "Cho", "time": "12.30 PM", "messages": "8", "avatar": "assets/images/avatar2.jpg"},
     {"name": "Cedric", "time": "11.00 AM", "messages": "", "avatar": "assets/images/avatar4.png"},
     {"name": "Emma", "time": "10.58 AM", "messages": "", "avatar": "assets/images/avatar1.jpg"},
     {"name": "Harry", "time": "01.25 AM", "messages": "4", "avatar": "assets/images/avatar3.png"},
   ];
+   */
 
   bool _isSearching = false;  // Flag to track search state
   final TextEditingController _searchController = TextEditingController();  // Controller for search input
 
+  // Function to handle the search bar toggle
+  void _toggleSearch() {
+    setState(() {
+      _isSearching = !_isSearching;
+      if (!_isSearching) _searchController.clear(); // Clear search input when search is closed
+    });
+  }
+
   // Function to dynamically add a new chat
+  /*
   void addChat(String name, String time, String messages, String avatar) {
     setState(() {
       chatData.add({
@@ -35,6 +46,7 @@ class _ChatState extends State<Chat> {
       });
     });
   }
+   */
 
   @override
   Widget build(BuildContext context) {
@@ -45,24 +57,24 @@ class _ChatState extends State<Chat> {
         elevation: 0, // No shadow
         title: _isSearching
             ? TextField(
-          controller: _searchController,
-          decoration: const InputDecoration(
-            hintText: "Search chats...",  // Placeholder text for search
-            border: InputBorder.none,
-          ),
-          style: const TextStyle(color: Colors.black, fontSize: 18),
-        )
+                controller: _searchController,
+                decoration: const InputDecoration(
+                  hintText: "Search chats...",  // Placeholder text for search
+                  border: InputBorder.none,
+                ),
+                style: const TextStyle(color: Colors.black, fontSize: 18),
+              )
             : Padding(
-          padding: const EdgeInsets.only(left: 20), // Adjust left padding
-          child: const Text(
-            "Chats",  // Screen title
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-            ),
-          ),
-        ),
+                padding: const EdgeInsets.only(left: 20), // Adjust left padding
+                child: const Text(
+                  "Chats",  // Screen title
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
         actions: [
           IconButton(
             icon: Icon(_isSearching ? Icons.close : Icons.search, color: Colors.black),

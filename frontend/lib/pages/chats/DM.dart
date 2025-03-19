@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import '../../services/websocket_service.dart';
+import 'DM.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DM extends StatefulWidget {
   final String userName;  // Name of the chat recipient

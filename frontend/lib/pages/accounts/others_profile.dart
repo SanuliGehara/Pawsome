@@ -26,14 +26,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ProfilePage(userId:"s1tJsaeEjKSHPNnq5efT"),
+      home:HomePage(),
     );
   }
 }
 class ProfilePage extends StatefulWidget {
   final String userId;
-  const ProfilePage({super.key, required this.userId});
+  final bool isOwnProfile;
 
+  const ProfilePage({super.key, required this.userId, this.isOwnProfile = false});
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }

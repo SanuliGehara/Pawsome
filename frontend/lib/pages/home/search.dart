@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import '../accounts/others_profile.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -6,43 +10,15 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  final List<String> profileNames = [
-    'John Doe',
-    'Jane Smith',
-    'Michael Johnson',
-    'Emily Davis',
-    'Chris Brown',
-    'Sophia Wilson',
-    'Daniel Lee',
-    'Olivia Martinez',
-  ];
+  String query = "";
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  List<String> profileImages = [
-    "images/s1.jpg",
-    "images/s2.jpg",
-    "images/s3.jpg",
-    "images/s4.jpg",
-    "images/s5.jpg",
-    "images/s6.jpg",
-    "images/s7.jpg",
-    "images/s8.jpg",
-  ];
-
-  String query = ""; // Search query
+  Stream<QuerySnapshot> _fetchUsers() {
+    return _firestore.collection('users').snapshots();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Filtered list of profiles based on the search query
-    final filteredProfiles = profileNames
-        .asMap()
-        .entries
-        .where((entry) => entry.value.toLowerCase().contains(query.toLowerCase()))
-        .map((entry) => {
-      'name': entry.value,
-      'image': profileImages[entry.key],
-    })
-        .toList();
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -50,19 +26,19 @@ class _SearchState extends State<Search> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context); // Go back to the previous page
+            Navigator.pop(context);
           },
         ),
         title: Container(
           height: 40,
           decoration: BoxDecoration(
-            color: Colors.grey[200], // Light grey background
-            borderRadius: BorderRadius.circular(10), // Rounded edges
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(10),
           ),
           child: TextField(
             onChanged: (value) {
               setState(() {
-                query = value; // Update the query when the user types
+                query = value.toLowerCase();
               });
             },
             decoration: InputDecoration(
@@ -74,43 +50,69 @@ class _SearchState extends State<Search> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: filteredProfiles.map((profile) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 25,
-                        backgroundImage: AssetImage(profile['image']!), // Profile image
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        profile['name']!,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Spacer(),
-                      IconButton(
-                        onPressed: () {
-                          // Add action for more options
-                        },
-                        icon: Icon(Icons.more_vert),
-                      ),
-                    ],
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _fetchUsers(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          var users = snapshot.data!.docs.map((doc) {
+            return {
+              'username': doc['username'],
+              'image': doc['profilePicture'],
+            };
+          }).toList();
+
+          var filteredUsers = users.where((user) {
+            return user['username'].toLowerCase().contains(query);
+          }).toList();
+
+          return filteredUsers.isEmpty
+              ? Center(child: Text("No users found", style: TextStyle(color: Colors.grey)))
+              : ListView.builder(
+            itemCount: filteredUsers.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                  onTap: () {
+                // Navigate to ProfilePage with the Firestore user ID
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfilePage(userId: filteredUsers[index]['id']),
                   ),
-                ),
-                Divider(),
-              ],
-            );
-          }).toList(),
-        ),
+                );
+              },
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 25,
+                          backgroundImage: NetworkImage(filteredUsers[index]['image']),
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          filteredUsers[index]['username'],
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                        Spacer(),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.more_vert),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(),
+                ],
+              ),
+              );
+            },
+          );
+        },
       ),
     );
   }

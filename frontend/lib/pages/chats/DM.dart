@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'DM.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../services/websocket_service.dart';
 
 class DM extends StatefulWidget {
-  final String userName;  // Name of the chat recipient
-  final String profilePic;  // Profile picture of the chat recipient
+  final String userName;
+  final String profilePic;
 
   const DM({Key? key, required this.userName, required this.profilePic}) : super(key: key);
 
@@ -13,34 +12,41 @@ class DM extends StatefulWidget {
 }
 
 class _DMState extends State<DM> {
-  final WebSocketService _webSocketService = WebSocketService();  // WebSocket service for real-time chat
-  final TextEditingController _messageController = TextEditingController(); // Controller for text input field
-  List<Map<String, dynamic>> messages = [];  // List to store chat messages
+  final WebSocketService _webSocketService = WebSocketService();
+  final TextEditingController _messageController = TextEditingController();
+  List<Map<String, dynamic>> messages = [];
 
   @override
   void initState() {
     super.initState();
-    _webSocketService.connect(widget.userName); // Connect to WebSocket server with username
-    // _webSocketService.stream.listen((data) {  // Listen for incoming messages from the WebSocket stream
-    //   setState(() {
-    //     messages.add({"isMe": false, "text": data});  // Add received message to the chat
-    //   });
-    // });
+    _webSocketService.connect(widget.userName);
+
+    _webSocketService.stream.listen((data) {
+      setState(() {
+        messages.add({"isMe": false, "text": data});
+      });
+    });
   }
-  // Function to send a message
+
   void sendMessage() {
     if (_messageController.text.trim().isNotEmpty) {
-      //_webSocketService.sendMessage(_messageController.text); // Send message via WebSocket
+      _webSocketService.sendMessage(
+        _messageController.text.trim(),
+        widget.userName, // Assuming the sender is the logged-in user
+        "receiver_username", // Replace with actual receiver username
+      );
+
       setState(() {
-        messages.add({"isMe": true, "text": _messageController.text.trim()}); // Add sent message to chat
+        messages.add({"isMe": true, "text": _messageController.text.trim()});
       });
-      _messageController.clear(); // Clear input field after sending
+
+      _messageController.clear();
     }
   }
 
   @override
   void dispose() {
-    _webSocketService.disconnect(); // Disconnect WebSocket when widget is disposed
+    _webSocketService.disconnect();
     super.dispose();
   }
 
@@ -48,21 +54,21 @@ class _DMState extends State<DM> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber[100], // Light amber background
-        elevation: 0, // Remove shadow
+        backgroundColor: Colors.amber[100],
+        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),  // Back button
-          onPressed: () => Navigator.pop(context),  // Navigate back on top
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
         ),
         title: Row(
           children: [
             CircleAvatar(
-              backgroundImage: AssetImage(widget.profilePic), // Display profile picture
+              backgroundImage: AssetImage(widget.profilePic),
               radius: 20,
             ),
             const SizedBox(width: 10),
             Text(
-              widget.userName,  // Display username
+              widget.userName,
               style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             ),
           ],
@@ -72,52 +78,52 @@ class _DMState extends State<DM> {
         children: [
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.all(10),  // Add padding around chat messages
-              itemCount: messages.length, // Count of messages
+              padding: const EdgeInsets.all(10),
+              itemCount: messages.length,
               itemBuilder: (context, index) {
-                bool isMe = messages[index]["isMe"];   // Determine if the message is sent by the user
+                bool isMe = messages[index]["isMe"];
                 return Align(
-                  alignment: isMe ? Alignment.centerRight : Alignment.centerLeft, // Align messages accordingly
+                  alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 5),  // Add vertical spacing between messages
-                    padding: const EdgeInsets.all(12),  // Padding inside the message bubble
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: isMe ? Colors.amber[200] : Colors.white,  // Different colors for user and recipient messages
-                      borderRadius: BorderRadius.circular(15),  // Rounded corners
+                      color: isMe ? Colors.amber[200] : Colors.white,
+                      borderRadius: BorderRadius.circular(15),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),  // Light shadow for depth
+                          color: Colors.grey.withOpacity(0.2),
                           spreadRadius: 2,
                           blurRadius: 5,
                         ),
                       ],
                     ),
-                    child: Text(messages[index]["text"]), // Display message text
+                    child: Text(messages[index]["text"]),
                   ),
                 );
               },
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5), // Padding for input area
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
               color: Colors.white,
-              border: Border(top: BorderSide(color: Colors.grey.shade300)), // Thin border for separation
+              border: Border(top: BorderSide(color: Colors.grey.shade300)),
             ),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
-                    controller: _messageController, // Connect text field to controller
+                    controller: _messageController,
                     decoration: const InputDecoration(
-                      hintText: "Type a message...",  // Placeholder text
-                      border: InputBorder.none, // No border
+                      hintText: "Type a message...",
+                      border: InputBorder.none,
                     ),
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.send, color: Colors.amber),  // Send button
-                  onPressed: sendMessage, // Call sendMessage function on tap
+                  icon: const Icon(Icons.send, color: Colors.amber),
+                  onPressed: sendMessage,
                 ),
               ],
             ),

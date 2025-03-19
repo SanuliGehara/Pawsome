@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pawsome/pages/chats/Chat.dart';
 import 'package:pawsome/reusable_widgets/CommunityWidgets.dart';
 
+/// A stateful widget representing the pet sitter's profile page.
+/// This page displays the pet sitter's profile picture, name, description,
+/// rating system, and provides options for liking the profile and starting a chat.
 class PetSitterProfilePage extends StatefulWidget {
   const PetSitterProfilePage({super.key});
 
@@ -9,6 +12,8 @@ class PetSitterProfilePage extends StatefulWidget {
   _PetSitterProfilePageState createState() => _PetSitterProfilePageState();
 }
 
+/// State class for [PetSitterProfilePage].
+/// Manages UI state such as the like count and the rating, and handles interactions.
 class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
   int likes = 40; // Initial like count
   double rating = 4; // Default rating
@@ -26,11 +31,14 @@ class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
           style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         ),
         centerTitle: false,
+
+        // Back button to navigate to the previous screen
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
       ),
+
       body: Stack(
         children: [
           // Full-Screen Background Image with Reduced Opacity
@@ -44,7 +52,7 @@ class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
             ),
           ),
 
-          // Main Content
+          // Main content area wrapped in a scrollable column
           Column(
             children: [
               Expanded(
@@ -56,12 +64,14 @@ class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
                       children: [
                         const SizedBox(height: 20),
 
-                        // Profile Image with Orange Border
+                        // Profile Image with an interactive orange-bordered circle.
                         Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.orange, width: 4),
                           ),
+
+                          // Tapping the image opens a dialog to view it in full size.
                           child: InkWell(
                             onTap: showProfilePicture,
                             child: const CircleAvatar(
@@ -73,16 +83,16 @@ class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
                         ),
                         const SizedBox(height: 30),
 
-                        // Username
+                        // Custom input field for the pet sitter's name
                         inputField("pet sitter name"),
                         const SizedBox(height: 25),
 
-                        // Description Box
+                        // Description container
                         Container(
                           width: MediaQuery.of(context).size.width * 0.85,
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFFD9A5), // Light orange
+                            color: const Color(0xFFFFD9A5),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: const Text(
@@ -106,7 +116,10 @@ class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
                                 likes++; // Increment likes on tap
                               });
                             }),
+
                             const SizedBox(width: 40),
+
+                            // Chat icon to navigate to chat page
                             iconButton(Icons.chat_bubble_outline, "Chat", () {
                               Navigator.push(context, MaterialPageRoute(builder: (context) => Chat()));
                             }),
@@ -122,18 +135,19 @@ class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
         ],
       ),
 
-      // Bottom Navigation Bar
+      // Bottom Navigation Bar from reusable widgets
       bottomNavigationBar: buildBottomNavigationBar(context, 3),
     );
   }
 
-  // Styled Input Field (for Name)
+  /// Returns a styled input field widget with a centered text field.
+  /// [hint] provides the placeholder text
   Widget inputField(String hint) {
     return Container(
       width: 280,
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFD9A5), // Light orange
+        color: const Color(0xFFFFD9A5),
         borderRadius: BorderRadius.circular(20),
       ),
       child: TextField(
@@ -147,7 +161,8 @@ class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
     );
   }
 
-  // Star Rating Widget
+  /// Creates a row of star icons for the rating system.
+  /// Tapping a star sets the rating dynamically.
   Widget starRating() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -155,10 +170,11 @@ class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
         return IconButton(
           onPressed: () {
             setState(() {
-              rating = index + 1.0; // Update rating dynamically
+              rating = index + 1.0; // Update the rating based on the star tapped
             });
           },
           icon: Icon(
+            // Display a filled star if the index is less than the current rating
             index < rating ? Icons.star : Icons.star_border, // Filled or outlined star
             color: index < rating ? Colors.amber : Colors.grey, // Yellow for selected, grey for unselected
             size: 30,
@@ -168,7 +184,8 @@ class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
     );
   }
 
-  // Icon Button (Likes & Chat)
+  /// Creates a custom icon button with a label.
+  /// This widget handles its tap event via the [onTap] callback.
   Widget iconButton(IconData icon, String label, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
@@ -182,6 +199,8 @@ class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
     );
   }
 
+  /// Displays the profile picture in a dialog.
+  /// The dialog allows the user to interactively view the image and dismiss it by tapping.
   void showProfilePicture() {
     showDialog(
       context: context,
@@ -189,7 +208,9 @@ class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
         return Dialog(
           backgroundColor: Colors.transparent,
           child: GestureDetector(
+            // Close the dialog on tap
             onTap: () => Navigator.pop(context),
+
             child: InteractiveViewer(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),

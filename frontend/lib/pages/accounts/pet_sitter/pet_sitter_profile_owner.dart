@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pawsome/reusable_widgets/CommunityWidgets.dart';
 
+/// Stateful widget for the pet sitter profile owner page.
+/// This page allows a pet sitter to view and update their profile details
+/// such as username, password, description, and profile picture.
 class PetSitterProfileOwnerPage extends StatefulWidget {
   const PetSitterProfileOwnerPage({super.key});
 
@@ -13,24 +16,39 @@ class PetSitterProfileOwnerPage extends StatefulWidget {
   _PetSitterProfileOwnerPageState createState() => _PetSitterProfileOwnerPageState();
 }
 
+/// State class for [PetSitterProfileOwnerPage].
+/// Manages user input, image selection, uploading, and profile updates
+/// using Firebase Authentication, Firestore, and Firebase Storage.
 class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
+  // Controllers for text fields.
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+
+  // Toggle for password visibility.
   bool _isPasswordVisible = false;
+
+  // Default profile image URL.
   String _profileImageUrl = "assets/images/default_user.jfif"; // Default image
+
+  // Selected image file from the gallery.
   File? _selectedImage;
+
+  // Instance for picking images.
   final ImagePicker _picker = ImagePicker();
+
+  // Firebase instances for auth and Firestore.
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
     super.initState();
-    _loadUserProfile();
+    _loadUserProfile(); // Load the user profile from Firestore on initialization.
   }
 
-  // Load User Profile from Firestore
+  /// Loads the user's profile data from Firestore.
+  /// It updates the controllers and profile image based on retrieved data.
   void _loadUserProfile() async {
     String userId = _auth.currentUser!.uid;
     DocumentSnapshot userDoc = await _firestore.collection('pet_sitters').doc(userId).get();
@@ -44,7 +62,8 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
     }
   }
 
-  // Pick Image from Gallery
+  /// Opens the image gallery to let the user pick an image.
+  /// Updates [_selectedImage] if an image is chosen.
   Future<void> _pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
@@ -54,7 +73,9 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
     }
   }
 
-  // Upload Image to Firebase Storage
+
+  /// Uploads the selected image to Firebase Storage.
+  /// Returns the download URL for the uploaded image.
   Future<String?> _uploadImage(File image) async {
     String userId = _auth.currentUser!.uid;
     Reference ref = FirebaseStorage.instance.ref().child("profile_pictures/$userId.jpg");
@@ -63,28 +84,31 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
     return await ref.getDownloadURL();
   }
 
-  // Update Profile in Firestore
+  /// Updates the user's profile in Firestore.
+  /// If a new image is selected, it is uploaded and its URL is updated.
   void _updateProfile() async {
     String userId = _auth.currentUser!.uid;
     String? imageUrl = _profileImageUrl;
 
-    // Upload new image if selected
+    // If a new image has been selected, upload it and get the new URL.
     if (_selectedImage != null) {
       imageUrl = await _uploadImage(_selectedImage!);
     }
 
-    // Update Firestore
-    await _firestore.collection('pet_sitters').doc(userId).update({
+    // Update the user's profile information in Firestore.
+    await _firestore.collection('users').doc(userId).update({
       'username': _usernameController.text.trim(),
       'password': _passwordController.text.trim(), // Hash password in real use!
       'description': _descriptionController.text.trim(),
       'profileImage': imageUrl,
     });
 
+    // Update local state with the new profile image URL.
     setState(() {
       _profileImageUrl = imageUrl!;
     });
 
+    // Show a confirmation message upon successful update.
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Profile Updated Successfully!")));
   }
 
@@ -93,13 +117,15 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFFF0CC), // Light yellow
+        backgroundColor: const Color(0xFFFFF0CC),
         elevation: 0,
         title: const Text(
           "Pet Sitter Profile",
           style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         ),
         centerTitle: false,
+
+        // Back button to return to the previous screen.
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
@@ -134,7 +160,7 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
                       children: [
                         const SizedBox(height: 10),
 
-                        // Profile Image with Camera Icon
+                        // Profile image with an overlay camera icon for changing the image.
                         Stack(
                           alignment: Alignment.bottomRight,
                           children: [
@@ -153,7 +179,8 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
                                     : AssetImage(_profileImageUrl)) as ImageProvider,
                               ),
                             ),
-                            // Camera Icon
+
+                            // Camera icon for image selection.
                             Positioned(
                               bottom: 0,
                               right: 0,
@@ -173,24 +200,25 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
                         ),
                         const SizedBox(height: 30),
 
-                        // Username Field
+                        // Username input field.
                         inputField("pet sitter name", _usernameController),
                         const SizedBox(height: 20),
 
-                        // Password Field with Show/Hide
+                        // Password  input field with show/hide toggle.
                         inputField("password", _passwordController, isPassword: true),
                         const SizedBox(height: 20),
 
-                        // Description Box
+                        // Description input field.
                         inputField("I am an experienced pet sitter with 4 years of experience.", _descriptionController),
                         const SizedBox(height: 30),
 
+                        // Button to update the profile.
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.orange,
-                              padding: const EdgeInsets.symmetric(vertical: 16), // ✅ Increased Padding
+                              padding: const EdgeInsets.symmetric(vertical: 16),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                             ),
                             onPressed: _updateProfile,
@@ -215,7 +243,8 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
     );
   }
 
-  // Styled Input Field
+  /// Returns a styled input field widget with the given [hint] and [controller].
+  /// If [isPassword] is true, the text field obscures the text and shows a toggle icon.
   Widget inputField(String hint, TextEditingController controller, {bool isPassword = false}) {
     return Container(
       width: 280,
@@ -231,6 +260,8 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
         decoration: InputDecoration(
           hintText: hint,
           border: InputBorder.none,
+
+          // For password fields, include a toggle for visibility.
           suffixIcon: isPassword
               ? IconButton(
             icon: Icon(_isPasswordVisible ? Icons.visibility : Icons.visibility_off),

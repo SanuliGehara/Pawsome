@@ -264,17 +264,17 @@ class _AdoptState extends State<Adopt> {
 
               // Update post Button
               IconButton(
-                icon: Icon(Icons.edit, color: Colors.blue),
+                icon: Icon(Icons.edit, color: Colors.black),
                 onPressed: () => _showUpdateDialog(context, postId, description, "Locate", imageUrl),
               ),
 
               // Delete Post Button
               IconButton(
-                icon: Icon(Icons.delete, color: Colors.red),
+                icon: Icon(Icons.delete, color: Colors.black),
                 onPressed: () async {
                   await _databaseService.deletePost(postId, imageUrl);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Post deleted successfully"), backgroundColor: Colors.red),
+                    SnackBar(content: Text("Post deleted successfully"), backgroundColor: Colors.orangeAccent),
                   );
                 },
               ),

@@ -269,16 +269,16 @@ class _LocateState extends State<Locate> {
 
               // Delete and Update Buttons
               IconButton(
-                icon: Icon(Icons.edit, color: Colors.blue),
+                icon: Icon(Icons.edit, color: Colors.black),
                 onPressed: () => _showUpdateDialog(context, postId, description, "Locate", imageUrl),
               ),
 
               IconButton(
-                icon: Icon(Icons.delete, color: Colors.red),
+                icon: Icon(Icons.delete, color: Colors.black),
                 onPressed: () async {
                   await _databaseService.deletePost(postId, imageUrl);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Post deleted successfully"), backgroundColor: Colors.red),
+                    SnackBar(content: Text("Post deleted successfully"), backgroundColor: Colors.orangeAccent),
                   );
                 },
               ),

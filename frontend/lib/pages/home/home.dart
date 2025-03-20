@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ProfilePage(userid: 's1tJsaeEjKSHPNnq5efT')),
+            builder: (context) => ProfilePage()),
       );
     }
   }

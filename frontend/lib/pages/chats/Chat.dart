@@ -7,13 +7,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 // Stateful widget for the chat screen
 class Chat extends StatefulWidget {
+
+
+  const Chat();
   @override
   _ChatState createState() => _ChatState();
 }
 
 class _ChatState extends State<Chat> {
   // Sample chat data with user details
-  /*
+
     List<Map<String, String>> chatData = [
     {"name": "Ron", "time": "14.23 PM", "messages": "2", "avatar": "assets/images/avatar5.png"},
     {"name": "Cho", "time": "12.30 PM", "messages": "8", "avatar": "assets/images/avatar2.jpg"},
@@ -21,7 +24,7 @@ class _ChatState extends State<Chat> {
     {"name": "Emma", "time": "10.58 AM", "messages": "", "avatar": "assets/images/avatar1.jpg"},
     {"name": "Harry", "time": "01.25 AM", "messages": "4", "avatar": "assets/images/avatar3.png"},
   ];
-   */
+
 
   bool _isSearching = false;  // Flag to track search state
   final TextEditingController _searchController = TextEditingController();  // Controller for search input

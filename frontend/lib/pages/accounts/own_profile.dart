@@ -33,10 +33,10 @@ class MyApp extends StatelessWidget {
 }
 
 class ProfilePage extends StatefulWidget {
-  final String userid;
+
   final bool isOwnProfile;
 
-  const ProfilePage({super.key, required this.userid, this.isOwnProfile = true});
+  const ProfilePage({super.key,this.isOwnProfile = true});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -64,13 +64,15 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   Future<void> _fetchUserProfile() async {
 
     try {
-    DocumentSnapshot userDoc =
-    await FirebaseFirestore.instance.collection('users').doc(widget.userid).get();
+      String currentUserId = FirebaseAuth.instance.currentUser?.uid??"s1tJsaeEjKSHPNnq5efT";
+
+      DocumentSnapshot userDoc =
+    await FirebaseFirestore.instance.collection('users').doc(currentUserId).get();
 
 
       setState(() {
-        username = userDoc['name'];
-        bio = userDoc['bio'];
+        username = userDoc['username'];
+        bio = userDoc['description'];
         profilePicture = userDoc['profilePicture'] ?? "assets/images/no_profile_pic.png";
         posts = List<String>.from(userDoc['posts'] ?? []);
         savedPosts = List<String>.from(userDoc['savedPosts'] ?? []);

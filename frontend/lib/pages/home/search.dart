@@ -59,8 +59,9 @@ class _SearchState extends State<Search> {
 
           var users = snapshot.data!.docs.map((doc) {
             return {
+              'userId': doc.id,
               'username': doc['username'],
-              'image': doc['profilePicture'],
+              'image': doc['profilePicture'] ?? "assets/images/no_profile_pic.png",
             };
           }).toList();
 
@@ -79,7 +80,7 @@ class _SearchState extends State<Search> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfilePage(userId: filteredUsers[index]['id']),
+                    builder: (context) => ProfilePage(userId: filteredUsers[index]['userId']),
                   ),
                 );
               },

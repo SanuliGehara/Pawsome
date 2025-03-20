@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../services/websocket_service.dart';
 import 'DM.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -57,7 +58,9 @@ class _DMState extends State<DM> {
         title: Row(
           children: [
             CircleAvatar(
-              backgroundImage: AssetImage(widget.profilePic), // Display profile picture
+              backgroundImage: widget.profilePic.startsWith('http')
+                  ? NetworkImage(widget.profilePic) // Use network image for URLs
+                  : AssetImage(widget.profilePic) as ImageProvider, // Display profile picture
               radius: 20,
             ),
             const SizedBox(width: 10),

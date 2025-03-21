@@ -133,7 +133,7 @@ Widget buildBottomNavigationBar(BuildContext context, int currentIndex) {
       if (index == 4) {
        Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => PetSitterProfileOwnerPage()), // Currently navigates to Pet sitter profile
+          MaterialPageRoute(builder: (context) => ProfilePage()), // Currently navigates to Pet sitter profile
          );
        }
     },

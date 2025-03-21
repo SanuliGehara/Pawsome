@@ -74,12 +74,13 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       List<String> savedPostImages = [];
 
       //iterating through saved post ids
-      for (String postId in savedPostIds) {
-        DocumentSnapshot postDoc = await FirebaseFirestore.instance.collection('posts').doc(postId).get();
-        //getting the image url of the post with the relevant id
-        if (postDoc.exists) {
-          savedPostImages.add(postDoc['imageUrl']);
-        }
+      if (savedPostIds.isNotEmpty) {
+        QuerySnapshot postsSnapshot = await FirebaseFirestore.instance
+            .collection('posts')
+            .where(FieldPath.documentId, whereIn: savedPostIds)
+            .get();
+
+        savedPostImages = postsSnapshot.docs.map((doc) => doc['imageUrl'] as String).toList();
       }
 
       setState(() {

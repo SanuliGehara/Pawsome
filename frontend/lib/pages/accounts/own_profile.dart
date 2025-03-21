@@ -214,7 +214,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       bottomNavigationBar: buildBottomNavigationBar(context, 4),
       floatingActionButton: FloatingActionButton(
         onPressed: addPost,
-        backgroundColor: Colors.yellow[200],
+        backgroundColor: Colors.orange[200],
         child: Icon(Icons.add),
       ),
 

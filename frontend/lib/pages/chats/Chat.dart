@@ -54,7 +54,7 @@ class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200], // Light background color
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.amber[100], // Light yellow background color
         elevation: 0, // No shadow
@@ -120,9 +120,10 @@ class _ChatState extends State<Chat> {
                 ),
                 title: Text(
                   chatData[index]["name"]!, // Display user name
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                 ),
-                subtitle: Text(chatData[index]["time"]!), // Display last message time
+                subtitle: Text(chatData[index]["time"]!,
+                  style: const TextStyle(color: Colors.black),), // Display last message time
                 trailing: chatData[index]["messages"]!.isNotEmpty
                     ? CircleAvatar(
                   backgroundColor: Colors.green,  // Unread messages indicator

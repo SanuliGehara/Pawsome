@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pawsome/pages/community/new_post.dart';
@@ -117,7 +116,7 @@ class _AdoptState extends State<Adopt> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],  // Light grey background
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: buildAppBar("Adopt Community"), // Custom app bar with title
       body: Column(
         children: [
@@ -127,14 +126,14 @@ class _AdoptState extends State<Adopt> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // // Current page button (Adopt) highlighted in orange
+              // Current page button (Adopt) highlighted in orange
               buildFeatureButton("Adopt", Colors.orange, Colors.white, () {}),
               // Button to navigate to the Locate page
-              buildFeatureButton("Locate", Colors.grey, Colors.black, () {
+              buildFeatureButton("Locate", Theme.of(context).cardColor, Theme.of(context).textTheme.bodyLarge!.color!, () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const Locate()));
               }),
               // Button to navigate to the Sitter page
-              buildFeatureButton("Sitter", Colors.grey, Colors.black, () {
+              buildFeatureButton("Sitter", Theme.of(context).cardColor, Theme.of(context).textTheme.bodyLarge!.color!, () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const Sitter()));
               }),
             ],
@@ -258,19 +257,19 @@ class _AdoptState extends State<Adopt> {
 
               // Save button to toggle between marked and unmarked states
               IconButton(
-                icon: Icon( isSaved ? Icons.bookmark : Icons.bookmark_border, color : isSaved ? Colors.black : null),
+                icon: Icon( isSaved ? Icons.bookmark : Icons.bookmark_border, color : isSaved ? Colors.orange : null),
                 onPressed : onSavePressed,
               ),
 
               // Update post Button
               IconButton(
-                icon: Icon(Icons.edit, color: Colors.black),
+                icon: Icon(Icons.edit),
                 onPressed: () => _showUpdateDialog(context, postId, description, "Locate", imageUrl),
               ),
 
               // Delete Post Button
               IconButton(
-                icon: Icon(Icons.delete, color: Colors.black),
+                icon: Icon(Icons.delete),
                 onPressed: () async {
                   await _databaseService.deletePost(postId, imageUrl);
                   ScaffoldMessenger.of(context).showSnackBar(

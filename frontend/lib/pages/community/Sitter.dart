@@ -24,7 +24,7 @@ class _SitterState extends State<Sitter> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],  // Light grey background
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: buildAppBar("Reliable Pet Sitters"),  // Custom app bar with title
       body: SafeArea(
         child: SingleChildScrollView( // Wrap the entire body in a SingleChildScrollView
@@ -36,11 +36,11 @@ class _SitterState extends State<Sitter> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  buildFeatureButton("Adopt", Colors.grey, Colors.black, () {
+                  buildFeatureButton("Adopt", Theme.of(context).cardColor, Theme.of(context).textTheme.bodyLarge!.color!, () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => const Adopt()));
                   }),
-                  buildFeatureButton("Locate", Colors.grey, Colors.black, () {
+                  buildFeatureButton("Locate", Theme.of(context).cardColor, Theme.of(context).textTheme.bodyLarge!.color!, () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => const Locate()));
                   }),

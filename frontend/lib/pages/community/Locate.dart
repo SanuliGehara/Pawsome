@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pawsome/pages/community/new_post.dart';
@@ -116,7 +115,7 @@ class _LocateState extends State<Locate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],  // Light grey background
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: buildAppBar("Locate Lost Pets"),  // Custom app bar with title
       body: Column(
         children: [
@@ -127,13 +126,13 @@ class _LocateState extends State<Locate> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Button to navigate to the Adopt page
-              buildFeatureButton("Adopt", Colors.grey, Colors.black, () {
+              buildFeatureButton("Adopt", Theme.of(context).cardColor, Theme.of(context).textTheme.bodyLarge!.color!, () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const Adopt()));
               }),
               // Current page button (Locate) highlighted in orange
               buildFeatureButton("Locate", Colors.orange, Colors.white, () {}),
               // Button to navigate to the Sitter page
-              buildFeatureButton("Sitter", Colors.grey, Colors.black, () {
+              buildFeatureButton("Sitter", Theme.of(context).cardColor, Theme.of(context).textTheme.bodyLarge!.color!, () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const Sitter()));
               }),
             ],
@@ -263,18 +262,18 @@ class _LocateState extends State<Locate> {
 
               // Save button to toggle between marked and unmarked states
               IconButton(
-                icon: Icon( isSaved ? Icons.bookmark : Icons.bookmark_border, color : isSaved ? Colors.black : null),
+                icon: Icon( isSaved ? Icons.bookmark : Icons.bookmark_border, color : isSaved ? Colors.orange : null),
                 onPressed : onSavePressed,
               ),
 
               // Delete and Update Buttons
               IconButton(
-                icon: Icon(Icons.edit, color: Colors.black),
+                icon: Icon(Icons.edit),
                 onPressed: () => _showUpdateDialog(context, postId, description, "Locate", imageUrl),
               ),
 
               IconButton(
-                icon: Icon(Icons.delete, color: Colors.black),
+                icon: Icon(Icons.delete),
                 onPressed: () async {
                   await _databaseService.deletePost(postId, imageUrl);
                   ScaffoldMessenger.of(context).showSnackBar(

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/community/new_post.dart';
 import 'package:pawsome/pages/home/home.dart';
@@ -67,15 +68,26 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       String currentUserId = FirebaseAuth.instance.currentUser?.uid??"s1tJsaeEjKSHPNnq5efT";
 
       DocumentSnapshot userDoc =
-    await FirebaseFirestore.instance.collection('users').doc(currentUserId).get();
+      await FirebaseFirestore.instance.collection('users').doc(currentUserId).get();
 
+      List<String> savedPostIds = List<String>.from(userDoc['savedPosts'] ?? []);//getting the saved posts ids
+      List<String> savedPostImages = [];
+
+      //iterating through saved post ids
+      for (String postId in savedPostIds) {
+        DocumentSnapshot postDoc = await FirebaseFirestore.instance.collection('posts').doc(postId).get();
+        //getting the image url of the post with the relevant id
+        if (postDoc.exists) {
+          savedPostImages.add(postDoc['imageUrl']);
+        }
+      }
 
       setState(() {
         username = userDoc['username'];
         bio = userDoc['description'];
         profilePicture = userDoc['profilePicture'] ?? "assets/images/no_profile_pic.png";
         posts = List<String>.from(userDoc['posts'] ?? []);
-        savedPosts = List<String>.from(userDoc['savedPosts'] ?? []);
+        savedPosts = savedPostImages;
       });
     } catch (e) {
       print("Error fetching user data: $e");
@@ -191,8 +203,8 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             child: TabBarView(
               controller: _tabController,
               children: [
-                _buildGrid(posts),
-                _buildGrid(savedPosts),
+                _buildGrid(posts),//displaying all posts
+                _buildGrid(savedPosts),//displaying all saved posts
               ],
             ),
           ),

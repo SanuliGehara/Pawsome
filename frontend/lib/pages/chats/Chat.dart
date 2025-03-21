@@ -79,19 +79,15 @@ class _ChatState extends State<Chat> {
                 ),
               ),
         actions: [
-          IconButton(
-            icon: Icon(_isSearching ? Icons.close : Icons.search, color: Colors.black),
-            onPressed: () {
-              setState(() {
-                _isSearching = !_isSearching; // Toggle search state
-                if (!_isSearching) _searchController.clear(); // Clear search input
-              });
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.settings, color: Colors.black),
-            onPressed: () {}, // Placeholder for settings functionality
-          ),
+          // IconButton(
+          //   icon: Icon(_isSearching ? Icons.close : Icons.search, color: Colors.black),
+          //   onPressed: () {
+          //     setState(() {
+          //       _isSearching = !_isSearching; // Toggle search state
+          //       if (!_isSearching) _searchController.clear(); // Clear search input
+          //     });
+          //   },
+          // ),
         ],
       ),
       body: ListView.builder(

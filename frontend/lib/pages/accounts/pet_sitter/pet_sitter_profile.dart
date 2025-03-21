@@ -1,12 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/chats/Chat.dart';
 import 'package:pawsome/reusable_widgets/CommunityWidgets.dart';
+
+import '../../chats/DM.dart';
 
 /// A stateful widget representing the pet sitter's profile page.
 /// This page displays the pet sitter's profile picture, name, description,
 /// rating system, and provides options for liking the profile and starting a chat.
 class PetSitterProfilePage extends StatefulWidget {
-  const PetSitterProfilePage({super.key});
+  final String userId;
+
+  const PetSitterProfilePage({super.key,required this.userId});
 
   @override
   _PetSitterProfilePageState createState() => _PetSitterProfilePageState();
@@ -15,22 +20,51 @@ class PetSitterProfilePage extends StatefulWidget {
 /// State class for [PetSitterProfilePage].
 /// Manages UI state such as the like count and the rating, and handles interactions.
 class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
-  int likes = 40; // Initial like count
-  double rating = 4; // Default rating
-  String profilePicture = "assets/images/default_user.jfif";
+  String name = "";
+  String description = "";
+  String profilePicture = "";
+  String email = "";
+  int likes = 0;
+  double rating = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPetSitterData();
+  }
+
+
+  Future<void> fetchPetSitterData() async {
+    try {
+      DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.userId)
+          .get();
+
+      if (doc.exists) {
+        setState(() {
+          name = doc['username'];
+          description = doc['description'];
+          profilePicture = doc['profilePicture'];
+          email = doc['email'];
+          likes = doc['likes'];
+          rating = doc['rating'].toDouble();
+        });
+      }
+    } catch (e) {
+      print("Error fetching data: $e");
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        title: Text(name, style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         backgroundColor: const Color(0xFFFFF0CC), // Light yellow
         elevation: 0,
-        title: const Text(
-          "Pet sitter name",
-          style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: false,
 
         // Back button to navigate to the previous screen
         leading: IconButton(
@@ -74,17 +108,19 @@ class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
                           // Tapping the image opens a dialog to view it in full size.
                           child: InkWell(
                             onTap: showProfilePicture,
-                            child: const CircleAvatar(
+                            child:  CircleAvatar(
                               radius: 50,
                               backgroundColor: Colors.white,
-                              backgroundImage: AssetImage("assets/images/default_user.jfif"), // Profile Picture
+                              backgroundImage: profilePicture.startsWith("http")
+                                  ? NetworkImage(profilePicture)
+                                  : AssetImage("assets/images/no_profile_pic.png") as ImageProvider, // Profile Picture
                             ),
                           ),
                         ),
                         const SizedBox(height: 30),
 
                         // Custom input field for the pet sitter's name
-                        inputField("pet sitter name"),
+                        inputField(name),
                         const SizedBox(height: 25),
 
                         // Description container
@@ -95,8 +131,8 @@ class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
                             color: const Color(0xFFFFD9A5),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Text(
-                            "I am an experienced pet sitter with 4 years of experience.",
+                          child:  Text(
+                            description,
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
                           ),
@@ -111,17 +147,26 @@ class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            iconButton(Icons.favorite_border, "$likes Likes", () {
+                            iconButton(Icons.favorite_border, "$likes Likes", () async {
                               setState(() {
                                 likes++; // Increment likes on tap
                               });
+                              await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(widget.userId)
+                                  .update({'likes': likes});
                             }),
 
                             const SizedBox(width: 40),
 
                             // Chat icon to navigate to chat page
                             iconButton(Icons.chat_bubble_outline, "Chat", () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Chat()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => DM(
+                                userName: name, // Pass the profile user's name
+                                profilePic: profilePicture, // Pass the profile picture URL
+                              ),
+                              )
+                              );
                             }),
                           ],
                         ),
@@ -214,13 +259,13 @@ class _PetSitterProfilePageState extends State<PetSitterProfilePage> {
             child: InteractiveViewer(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                child: Image.asset(
-                  profilePicture,
-                  fit: BoxFit.contain,
+                child: profilePicture.startsWith("http")
+                    ? Image.network(profilePicture, fit: BoxFit.contain)
+                    : Image.asset(profilePicture, fit: BoxFit.contain),
                 ),
               ),
             ),
-          ),
+
         );
       },
     );

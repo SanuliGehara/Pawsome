@@ -7,6 +7,7 @@ import 'package:pawsome/pages/community/Adopt.dart';
 import 'package:pawsome/pages/settings/Setting.dart';
 import '../accounts/own_profile.dart';
 import '../accounts/pet_sitter/pet_sitter_profile.dart';
+import '../accounts/pet_sitter/pet_sitter_profile_owner.dart';
 import 'search.dart';
 //import 'chatbot.dart';
 import 'package:http/http.dart' as http;
@@ -50,7 +51,7 @@ class _HomePageState extends State<HomePage> {
     }
     if (index == 4) {
       // Get the current user
-      String userId = FirebaseAuth.instance.currentUser?.uid??"s1tJsaeEjKSHPNnq5efT";
+      String userId = FirebaseAuth.instance.currentUser?.uid??"CJcHnkxI1GZY04aAYTmy";
 
       // Fetch user data from Firestore
       DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
@@ -62,7 +63,7 @@ class _HomePageState extends State<HomePage> {
       if (userType == 'pet sitter') {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => PetSitterProfilePage()), // Navigate to pet sitter profile
+          MaterialPageRoute(builder: (context) => PetSitterProfileOwnerPage()), // Navigate to pet sitter profile
         );
       } else {
         Navigator.push(

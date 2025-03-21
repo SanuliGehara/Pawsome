@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import '../accounts/others_profile.dart';
+import '../accounts/pet_sitter/pet_sitter_profile.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -62,6 +63,7 @@ class _SearchState extends State<Search> {
               'userId': doc.id,
               'username': doc['username'],
               'image': doc['profilePicture'] ?? "assets/images/no_profile_pic.png",
+              'category': doc['category']
             };
           }).toList();
 
@@ -76,14 +78,28 @@ class _SearchState extends State<Search> {
             itemBuilder: (context, index) {
               return GestureDetector(
                   onTap: () {
-                // Navigate to ProfilePage with the Firestore user ID
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfilePage(userId: filteredUsers[index]['userId']),
-                  ),
-                );
-              },
+                    String category = filteredUsers[index]['category'];
+                    // Navigate to ProfilePage with the Firestore user ID
+                    if (category == 'normal') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ProfilePage(
+                                  userId: filteredUsers[index]['userId']),
+                        ),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              PetSitterProfilePage(
+                                  userId: filteredUsers[index]['userId']), // Navigate to Pet Sitter Profile
+                        ),
+                      );
+                    }
+                  },
               child: Column(
                 children: [
                   Padding(

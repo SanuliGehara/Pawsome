@@ -16,7 +16,13 @@ class _SignupPageState extends State<SignupPage> {
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _userNameTextController = TextEditingController();
-  TextEditingController _categoryTextController = TextEditingController();
+
+  /// The currently selected user type.
+  String? _selectedUserType;
+
+  /// Dropdown menu options for user types.
+  final List<String> _userTypes = ['normal', 'pet sitter'];
+
   final _databaseService = DatabaseService();
 
   @override
@@ -64,35 +70,104 @@ class _SignupPageState extends State<SignupPage> {
                       height: 20,
                     ),
 
-                    // ADD A DROP DOWN. NOT A TEXT FIELD
-                    reusableTextField("Account type (Normal User/Pet Sitter)", Icons.lock_outlined, false,
-                        _categoryTextController),
-                    const SizedBox(
-                      height: 20,
+                    /// Dropdown to select account type.
+                    /// Dropdown to select account type
+                    DropdownButtonFormField<String>(
+                      /// Make text white to match the other fields
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.9),
+                        fontSize: 16,
+                      ),
+
+                      /// Set the dropdown menu background color
+                      dropdownColor: Colors.white.withOpacity(0.3),
+
+                      /// Icon color matches the text field icons
+                      iconEnabledColor: Colors.white70,
+
+                      /// Expand to match parent width
+                      isExpanded: true,
+
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.list,
+                          color: Colors.white70,
+                        ),
+                        labelText: 'Select Account Type',
+                        labelStyle: TextStyle(color: Colors.white.withOpacity(0.9)),
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.3),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          borderSide: const BorderSide(width: 0, style: BorderStyle.none),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 16,
+                        ),
+                      ),
+                      value: _selectedUserType,
+                      items: _userTypes.map((type) {
+                        return DropdownMenuItem(
+                          value: type,
+                          child: Text(
+                            type,
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.9),
+                              fontSize: 16,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedUserType = value;
+                        });
+                      },
                     ),
+                    const SizedBox(height: 20),
+
                     firebaseUIButton(context, "Sign Up", () {
+                      if (_selectedUserType == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Please select an account type")),
+                        );
+                        return;
+                      }
+
                       // Create a firebase Auth instance for user account
                       FirebaseAuth.instance
                           .createUserWithEmailAndPassword(
                           email: _emailTextController.text,
                           password: _passwordTextController.text)
-                          .then((value) {
+                          .then((value) { // if the user created with successful auth,
 
-                            // CREATE USER BASED ON THE TYPE - CALL CORRESPONDING FUNCTION FROM SERVICE
-                        // Store user details in database
-                        _databaseService.createUser(
-                            _userNameTextController.text.trim(),
-                            _emailTextController.text.trim(),
-                            _categoryTextController.text.trim());
+                        final username = _userNameTextController.text.trim();
+                        final email = _emailTextController.text.trim();
 
-                        print("Created New Account");
+                        // CREATE USER BASED ON THE TYPE - CALL CORRESPONDING FUNCTION FROM SERVICE
+                        if (_selectedUserType == 'pet sitter') {
+                          // Create a Pet Sitter Account
+                          _databaseService.createPetSitterUser(username, email).then((_) {
+                            print("Created Pet Sitter account in DB");
 
+                          });
+                        } else {
+                          // Create a Normal User Account
+                          _databaseService.createNormalUser(username, email).then((_) {
+                            print("Created Normal User account in DB");
+
+                          });
+                        }
 
                         //Navigate to Login Page
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => LoginPage()));
+
                       }).onError((error, stackTrace) {
-                        print("Error ${error.toString()}");
+                        print("Error creating user: ${error.toString()}");
+
                       });
                     }),
 
@@ -101,6 +176,7 @@ class _SignupPageState extends State<SignupPage> {
               ))),
     );
   }
+
 
 
 }

@@ -55,7 +55,7 @@ class DatabaseService {
         "description":"Your Description",
         "profilePicture":"",
         "likes":0,
-        "ratings":1,
+        "rating":1,
       });
     }
     catch (error) {

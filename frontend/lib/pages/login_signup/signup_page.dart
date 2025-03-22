@@ -71,7 +71,6 @@ class _SignupPageState extends State<SignupPage> {
                     ),
 
                     /// Dropdown to select account type.
-                    /// Dropdown to select account type
                     DropdownButtonFormField<String>(
                       /// Make text white to match the other fields
                       style: TextStyle(
@@ -130,9 +129,7 @@ class _SignupPageState extends State<SignupPage> {
 
                     firebaseUIButton(context, "Sign Up", () {
                       if (_selectedUserType == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Please select an account type")),
-                        );
+                        showCustomSnackBar(context, "Please select an account type", Colors.grey);
                         return;
                       }
 
@@ -150,12 +147,14 @@ class _SignupPageState extends State<SignupPage> {
                         if (_selectedUserType == 'pet sitter') {
                           // Create a Pet Sitter Account
                           _databaseService.createPetSitterUser(username, email).then((_) {
+                            showCustomSnackBar(context, "Created Pet Sitter account in DB", Colors.green);
                             print("Created Pet Sitter account in DB");
 
                           });
                         } else {
                           // Create a Normal User Account
                           _databaseService.createNormalUser(username, email).then((_) {
+                            showCustomSnackBar(context, "Created Normal User account in DB", Colors.green);
                             print("Created Normal User account in DB");
 
                           });
@@ -166,6 +165,7 @@ class _SignupPageState extends State<SignupPage> {
                             MaterialPageRoute(builder: (context) => LoginPage()));
 
                       }).onError((error, stackTrace) {
+                        showCustomSnackBar(context, "Error creating user: ${error.toString()}", Colors.red);
                         print("Error creating user: ${error.toString()}");
 
                       });

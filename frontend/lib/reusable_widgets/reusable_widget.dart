@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// Image widget to reuse in anywhere of the application
+/// Image widget to reuse in anywhere of the application
 Image logoWidget (String imageName) {
   return Image.asset(
     imageName,
@@ -12,7 +12,19 @@ Image logoWidget (String imageName) {
   );
 }
 
-// Reusable widget - Text field
+/// Reusable method to show a SnackBar with custom background color
+void showCustomSnackBar(BuildContext context, String message, Color bgColor) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+      backgroundColor: bgColor,
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 3),
+    ),
+  );
+}
+
+/// Reusable widget for Text field
 TextField reusableTextField(String text, IconData icon, bool isPasswordType,
     TextEditingController controller) {
   return TextField(
@@ -42,7 +54,7 @@ TextField reusableTextField(String text, IconData icon, bool isPasswordType,
   );
 }
 
-// Reusable widget - Button
+/// Reusable widget for Button
 Container firebaseUIButton(BuildContext context, String title, Function onTap) {
   return Container(
     width: MediaQuery.of(context).size.width,
@@ -71,7 +83,7 @@ Container firebaseUIButton(BuildContext context, String title, Function onTap) {
   );
 }
 
-//view profile pic
+/// view profile pic
 class ProfilePictureViewer {
   static void show(BuildContext context, String imageUrl) {
     showDialog(

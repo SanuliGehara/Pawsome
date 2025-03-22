@@ -65,9 +65,8 @@ class _LoginPageState extends State<LoginPage> {
                       MaterialPageRoute(builder: (context) => HomePage()));})
                     .catchError((error) {
                   print("Error: ${error.toString()}");
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(error.toString())),
-                  );
+                  showCustomSnackBar(context, "Error login user: ${error.toString()}", Colors.red);
+
                 });
               }),
               const SizedBox(

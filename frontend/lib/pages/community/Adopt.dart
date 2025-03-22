@@ -116,7 +116,14 @@ class _AdoptState extends State<Adopt> {
 
   AppBar buildAppBar(String title) {
     return AppBar(
-      title: Text(title),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.deepOrange,
+          fontSize: 26,
+        ),
+      ),
       backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.grey[200],
       centerTitle: true,
       automaticallyImplyLeading: false,

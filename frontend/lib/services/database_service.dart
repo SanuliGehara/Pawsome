@@ -24,6 +24,45 @@ class DatabaseService {
     }
   }
 
+  /// Function to Create a normal user and save it in Firestore
+  Future createNormalUser(String username, String email) async{
+    try {
+      await _firestore.collection('users').add({
+        "username":username,
+        "email":email,
+        "category":"normal",
+        "bio":"Your Bio",
+        "profilePicture":"",
+        "savedPosts":[],
+        "posts":[],
+        "unreadCount":0,
+        "lastMessage":"",
+        "timeStamp":FieldValue.serverTimestamp(), // Store creation time
+      });
+    }
+    catch (error) {
+      log(error.toString());
+    }
+  }
+
+  /// Function to Create a pet sitter user and save it in Firestore
+  Future createPetSitterUser(String username, String email) async{
+    try {
+      await _firestore.collection('users').add({
+        "username":username,
+        "email":email,
+        "category":"pet sitter",
+        "description":"Your Description",
+        "profilePicture":"",
+        "likes":0,
+        "ratings":1,
+      });
+    }
+    catch (error) {
+      log(error.toString());
+    }
+  }
+
   /// Fetch pet sitters from Firestore
   Stream<List<Map<String, dynamic>>> getPetSitters() {
     return _firestore

@@ -63,6 +63,8 @@ class _SignupPageState extends State<SignupPage> {
                     const SizedBox(
                       height: 20,
                     ),
+
+                    // ADD A DROP DOWN. NOT A TEXT FIELD
                     reusableTextField("Account type (Normal User/Pet Sitter)", Icons.lock_outlined, false,
                         _categoryTextController),
                     const SizedBox(
@@ -76,6 +78,7 @@ class _SignupPageState extends State<SignupPage> {
                           password: _passwordTextController.text)
                           .then((value) {
 
+                            // CREATE USER BASED ON THE TYPE - CALL CORRESPONDING FUNCTION FROM SERVICE
                         // Store user details in database
                         _databaseService.createUser(
                             _userNameTextController.text.trim(),

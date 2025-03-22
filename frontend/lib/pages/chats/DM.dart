@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../services/websocket_service.dart';
 
@@ -28,17 +29,25 @@ class _DMState extends State<DM> {
     });
   }
 
-  void sendMessage() {
-    if (_messageController.text.trim().isNotEmpty) {
-      _webSocketService.sendMessage(
-        _messageController.text.trim(),
-        widget.userName, // Assuming the sender is the logged-in user
-        "receiver_username", // Replace with actual receiver username
-      );
+  void sendMessage() async {
+    String messageText = _messageController.text.trim();
+    if (messageText.isNotEmpty) {
+      _webSocketService.sendMessage(messageText, widget.userName, "receiver_username");
 
       setState(() {
-        messages.add({"isMe": true, "text": _messageController.text.trim()});
+        messages.add({"isMe": true, "text": messageText});
       });
+
+      // **Update Firestore Chat List**
+      DocumentReference chatDoc = FirebaseFirestore.instance.collection('chats').doc(widget.userName);
+
+      await chatDoc.set({
+        "userName": widget.userName,
+        "avatar": widget.profilePic,
+        "lastMessage": messageText,
+        "timestamp": FieldValue.serverTimestamp(),
+        "unreadCount": FieldValue.increment(1),
+      }, SetOptions(merge: true));
 
       _messageController.clear();
     }

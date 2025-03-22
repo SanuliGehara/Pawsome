@@ -4,25 +4,13 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:pawsome/reusable_widgets/reusable_widget.dart';
 import 'package:pawsome/services/storage_service.dart';
 
 class DatabaseService {
   // firestore database reference
   final _firestore = FirebaseFirestore.instance;
-
-  /// Function to Create a user and save it in Firestore
-  Future createUser(String username, String email, String category) async{
-    try {
-      await _firestore.collection('users').add({
-        "name":username,
-        "email":email,
-        "category":category
-      });
-    }
-    catch (error) {
-      log(error.toString());
-    }
-  }
 
   /// Function to Create a normal user and save it in Firestore
   Future createNormalUser(String username, String email) async{
@@ -60,6 +48,51 @@ class DatabaseService {
     }
     catch (error) {
       log(error.toString());
+    }
+  }
+
+  /// Deletes the currently signed-in user's data from Firestore
+  /// and then deletes the user from Firebase Authentication.
+  Future<void> deleteCurrentUser(BuildContext context) async {
+    try {
+      // Get the current user from Firebase Auth
+      User? currentUser = FirebaseAuth.instance.currentUser;
+
+      if (currentUser == null) {
+        log("No user is currently signed in.");
+        showCustomSnackBar(context, "No user is currently signed in.", Colors.red);
+        return;
+      }
+
+      final email = currentUser.email;
+      if (email == null) {
+        log("Current user has no email associated.");
+        showCustomSnackBar(context, "Current user has no email associated.", Colors.red);
+        return;
+      }
+
+      // Query Firestore to find documents matching the user's email
+      QuerySnapshot userDocs = await _firestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+
+      //Delete each matching document in Firestore
+      for (var doc in userDocs.docs) {
+        await doc.reference.delete();
+        log("Deleted Firestore document: ${doc.id}");
+        showCustomSnackBar(context, "Deleted Firestore document: ${doc.id}", Colors.transparent);
+      }
+
+      // Delete the user from Firebase Auth
+      await currentUser.delete();
+      log("User deleted from Firebase Auth successfully.");
+
+    } catch (error) {
+      log("Error deleting user: $error");
+      showCustomSnackBar(context, "Error deleting user: $error", Colors.red);
+
+      rethrow;
     }
   }
 

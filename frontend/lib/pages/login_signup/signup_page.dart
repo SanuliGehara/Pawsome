@@ -129,7 +129,7 @@ class _SignupPageState extends State<SignupPage> {
 
                     firebaseUIButton(context, "Sign Up", () {
                       if (_selectedUserType == null) {
-                        showCustomSnackBar(context, "Please select an account type", Colors.grey);
+                        showCustomSnackBar(context, "Please select an account type", Colors.transparent);
                         return;
                       }
 

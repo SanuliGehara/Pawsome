@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/community/new_post.dart';
 import 'package:pawsome/pages/home/home.dart';
@@ -33,10 +34,10 @@ class MyApp extends StatelessWidget {
 }
 
 class ProfilePage extends StatefulWidget {
-  final String userid;
+
   final bool isOwnProfile;
 
-  const ProfilePage({super.key, required this.userid, this.isOwnProfile = true});
+  const ProfilePage({super.key,this.isOwnProfile = true});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -64,16 +65,30 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   Future<void> _fetchUserProfile() async {
 
     try {
-    DocumentSnapshot userDoc =
-    await FirebaseFirestore.instance.collection('users').doc(widget.userid).get();
+      String currentUserId = FirebaseAuth.instance.currentUser?.uid??"s1tJsaeEjKSHPNnq5efT";
 
+      DocumentSnapshot userDoc =
+      await FirebaseFirestore.instance.collection('users').doc(currentUserId).get();
+
+      List<String> savedPostIds = List<String>.from(userDoc['savedPosts'] ?? []);//getting the saved posts ids
+      List<String> savedPostImages = [];
+
+      //iterating through saved post ids
+      if (savedPostIds.isNotEmpty) {
+        QuerySnapshot postsSnapshot = await FirebaseFirestore.instance
+            .collection('posts')
+            .where(FieldPath.documentId, whereIn: savedPostIds)
+            .get();
+
+        savedPostImages = postsSnapshot.docs.map((doc) => doc['imageUrl'] as String).toList();
+      }
 
       setState(() {
-        username = userDoc['name'];
-        bio = userDoc['bio'];
+        username = userDoc['username'];
+        bio = userDoc['description'];
         profilePicture = userDoc['profilePicture'] ?? "assets/images/no_profile_pic.png";
         posts = List<String>.from(userDoc['posts'] ?? []);
-        savedPosts = List<String>.from(userDoc['savedPosts'] ?? []);
+        savedPosts = savedPostImages;
       });
     } catch (e) {
       print("Error fetching user data: $e");
@@ -189,8 +204,8 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             child: TabBarView(
               controller: _tabController,
               children: [
-                _buildGrid(posts),
-                _buildGrid(savedPosts),
+                _buildGrid(posts),//displaying all posts
+                _buildGrid(savedPosts),//displaying all saved posts
               ],
             ),
           ),
@@ -199,7 +214,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       bottomNavigationBar: buildBottomNavigationBar(context, 4),
       floatingActionButton: FloatingActionButton(
         onPressed: addPost,
-        backgroundColor: Colors.yellow[200],
+        backgroundColor: Colors.orange[200],
         child: Icon(Icons.add),
       ),
 

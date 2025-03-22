@@ -51,12 +51,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   void _saveProfile() async{
 
-    //try {
-     //User? user = FirebaseAuth.instance.currentUser;
 
-    //if (user ==null){return}
+    String userId = FirebaseAuth.instance.currentUser?.uid??"s1tJsaeEjKSHPNnq5efT";
 
-    String userId = "s1tJsaeEjKSHPNnq5efT";//user.uid
+
     widget.onSave(
       _usernameController.text,
       _bioController.text,
@@ -74,10 +72,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Future<void> _pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      setState(() {
-        updatedProfilePicture = image.path;
+    if (image == null) return;
+    try {
+      String userId = FirebaseAuth.instance.currentUser?.uid??"s1tJsaeEjKSHPNnq5efT";
+      String fileName = "profile_pictures/profile_$userId.jpg";
+      Reference ref = FirebaseStorage.instance.ref().child(fileName);
+
+      // Upload image and get URL
+      String downloadUrl = await (await ref.putFile(File(image.path))).ref.getDownloadURL();
+
+      // Update Firestore
+      await FirebaseFirestore.instance.collection('users').doc(userId).update({
+        'profilePicture': downloadUrl,
       });
+
+      setState(() => updatedProfilePicture = downloadUrl);
+    } catch (e) {
+      print("Error uploading image: $e");
     }
   }
 
@@ -94,9 +105,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
               children: [
                 CircleAvatar(
                   radius: 50,
-                  backgroundImage: updatedProfilePicture.isNotEmpty
-                      ? FileImage(File(updatedProfilePicture))
-                      : AssetImage(widget.profilePicture) as ImageProvider,
+                  backgroundImage: (updatedProfilePicture.isNotEmpty
+                      ? NetworkImage(updatedProfilePicture)  // Show updated profile picture
+                      : (widget.profilePicture.isNotEmpty
+                      ? NetworkImage(widget.profilePicture)  // Show old profile picture from Firestore
+                      : const AssetImage("assets/images/no_profile_pic.png") // Default asset image
+                  )
+                  ) as ImageProvider,
                 ),
                 Positioned(
                   right: -4,

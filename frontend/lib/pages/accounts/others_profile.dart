@@ -7,6 +7,7 @@ import 'package:pawsome/pages/home/home.dart';
 import '../../reusable_widgets/CommunityWidgets.dart';
 import '../../reusable_widgets/reusable_widget.dart';
 import '../chats/Chat.dart';
+import '../chats/DM.dart';
 import 'post_detail_screen.dart';
 
 
@@ -26,14 +27,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ProfilePage(userId:"s1tJsaeEjKSHPNnq5efT"),
+      home:HomePage(),
     );
   }
 }
 class ProfilePage extends StatefulWidget {
   final String userId;
-  const ProfilePage({super.key, required this.userId});
+  final bool isOwnProfile;
 
+  const ProfilePage({super.key, required this.userId, this.isOwnProfile = false});
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
@@ -58,9 +60,9 @@ class _ProfilePageState extends State<ProfilePage>  {
       DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(widget.userId).get();
 
       setState(() {
-        username = userDoc['name'];
-        bio = userDoc['bio'];
-        profilePicture = userDoc['profilePic'];
+        username = userDoc['username'];
+        bio = userDoc['description'];
+        profilePicture = userDoc['profilePicture'];
         posts = List<String>.from(userDoc['posts']);
       });
     } catch (e) {
@@ -82,7 +84,11 @@ class _ProfilePageState extends State<ProfilePage>  {
   void openChat() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Chat()),
+      MaterialPageRoute(builder: (context) => DM(
+        userName: username, // Pass the profile user's name
+        profilePic: profilePicture, // Pass the profile picture URL
+      ),
+      ),
     );
   }
   void addPost() {

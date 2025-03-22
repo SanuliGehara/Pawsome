@@ -1,5 +1,7 @@
 import 'dart:ffi';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/accounts/pet_sitter/pet_sitter_profile.dart';
 import 'package:pawsome/pages/accounts/pet_sitter/pet_sitter_profile_owner.dart';
@@ -104,7 +106,7 @@ Widget buildBottomNavigationBar(BuildContext context, int currentIndex) {
       BottomNavigationBarItem(icon: Icon(Icons.people), label: ""),
       BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
     ],
-    onTap: (index) {
+    onTap: (index) async {
       if (index == 0) {
         Navigator.push(
           context,
@@ -131,11 +133,28 @@ Widget buildBottomNavigationBar(BuildContext context, int currentIndex) {
       }
 
       if (index == 4) {
-       Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => PetSitterProfileOwnerPage()), // Currently navigates to Pet sitter profile
-         );
-       }
+        // Get the current user
+        String userId = FirebaseAuth.instance.currentUser?.uid??"CJcHnkxI1GZY04aAYTmy";
+
+        // Fetch user data from Firestore
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+
+        // Check user type (Pet Sitter or Normal User)
+        String userType = userDoc['category']; // Assuming 'userType' field exists
+
+        // Navigate to the appropriate profile page based on userType
+        if (userType == 'pet sitter') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PetSitterProfileOwnerPage()), // Navigate to pet sitter profile
+          );
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage()), // Navigate to normal user profile
+          );
+        }
+      }
     },
   );
 }

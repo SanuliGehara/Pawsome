@@ -55,7 +55,7 @@ class _ChatState extends State<Chat> {
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('chats').snapshots(),
+        stream: FirebaseFirestore.instance.collection('chats').orderBy('timestamp', descending: true).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
@@ -69,7 +69,6 @@ class _ChatState extends State<Chat> {
               var chat = chatDocs[index];
               String userName = chat["userName"];
               String lastMessage = chat["lastMessage"] ?? "No messages yet";
-              String time = chat["timestamp"] ?? "";
               String avatar = chat["avatar"] ?? "assets/images/default_avatar.png";
               int unreadMessages = chat["unreadCount"] ?? 0;
 

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:pawsome/services/storage_service.dart';
 
@@ -156,4 +157,34 @@ class DatabaseService {
     }
   }
 
+
+  Future<void> savePost(String postId,bool isSaved) async {
+    try {
+      // Get current user ID
+      String currentUserId = FirebaseAuth.instance.currentUser?.uid??"s1tJsaeEjKSHPNnq5efT";
+
+
+      // Reference to user's document
+      DocumentReference userDoc = FirebaseFirestore.instance.collection('users').doc(currentUserId);
+
+      //if post is aldready saved remove post id from the saved posts in user document
+      if (isSaved) {
+        await userDoc.update({
+          'savedPosts': FieldValue.arrayRemove([postId])
+        });
+        //if post isnt saved add post id to the saved posts field in user document
+      } else {
+        await userDoc.update({
+          'savedPosts': FieldValue.arrayUnion([postId])
+        });
+      }
+    } catch (e) {
+      print("Error saving post: $e");
+    }
+  }
+
 }
+
+
+
+

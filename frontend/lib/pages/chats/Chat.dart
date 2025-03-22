@@ -13,10 +13,11 @@ class _ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: isDarkMode ? Colors.black : Colors.grey[200],
       appBar: AppBar(
-        backgroundColor: Colors.amber[100],
+        backgroundColor: isDarkMode ? Colors.grey[900] : Colors.amber[100],
         elevation: 0,
         title: _isSearching
             ? TextField(
@@ -25,14 +26,14 @@ class _ChatState extends State<Chat> {
             hintText: "Search chats...",
             border: InputBorder.none,
           ),
-          style: const TextStyle(color: Colors.black, fontSize: 18),
+          style: TextStyle(color: isDarkMode ? Colors.white : Colors.black, fontSize: 18),
         )
-            : const Padding(
+            : Padding(
           padding: EdgeInsets.only(left: 20),
           child: Text(
             "Chats",
             style: TextStyle(
-              color: Colors.black,
+              color: isDarkMode ? Colors.white : Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 24,
             ),
@@ -40,17 +41,13 @@ class _ChatState extends State<Chat> {
         ),
         actions: [
           IconButton(
-            icon: Icon(_isSearching ? Icons.close : Icons.search, color: Colors.black),
+            icon: Icon(_isSearching ? Icons.close : Icons.search, color: isDarkMode ? Colors.white : Colors.black,),
             onPressed: () {
               setState(() {
                 _isSearching = !_isSearching;
                 if (!_isSearching) _searchController.clear();
               });
             },
-          ),
-          IconButton(
-            icon: const Icon(Icons.settings, color: Colors.black),
-            onPressed: () {},
           ),
         ],
       ),
@@ -92,7 +89,7 @@ class _ChatState extends State<Chat> {
                   margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: Colors.amber[50],
+                    color: isDarkMode ? Colors.grey[800] : Colors.amber[50],
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: ListTile(
@@ -102,9 +99,14 @@ class _ChatState extends State<Chat> {
                     ),
                     title: Text(
                       userName,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(color: isDarkMode ? Colors.white : Colors.black, fontWeight: FontWeight.bold),
                     ),
-                    subtitle: Text(lastMessage),
+                    subtitle: Text(
+                        lastMessage,
+                        style: TextStyle(
+                          color: isDarkMode ? Colors.grey[300] : Colors.black, // Change last message color
+                        ),
+                    ),
                     trailing: unreadMessages > 0
                         ? CircleAvatar(
                       backgroundColor: Colors.green,

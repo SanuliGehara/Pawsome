@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawsome/pages/login_signup/reset_password.dart';
 import 'package:pawsome/pages/settings/Terms.dart';
 
 class Privacy extends StatefulWidget {
@@ -59,6 +60,8 @@ class _PrivacyState extends State<Privacy> {
               title: Text("Change Password", style: TextStyle(color: Colors.black)),
               onTap: () {
                 // Navigate to change password screen
+                Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ResetPassword())); // Navigate to Login after logging out
               },
             ),
             SizedBox(height: 16),

@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pawsome/pages/login_signup/login_page.dart';
+import 'package:pawsome/reusable_widgets/reusable_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:pawsome/pages/settings/About.dart';
 import 'package:pawsome/pages/settings/Help.dart';
@@ -107,6 +110,14 @@ class _SettingState extends State<Setting> {
                 ListTile(
                   leading: Icon(Icons.logout),
                   title: Text('Logout'),
+                  onTap: () {
+                    FirebaseAuth.instance.signOut().then((value) {
+                     showCustomSnackBar(context, "User Logged Out Successfully!", Colors.green);
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => LoginPage())); // Navigate to Login after logging out
+                    }
+                    );
+                  },
                 ),
               ],
             ),

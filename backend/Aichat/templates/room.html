@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>room</title>
+</head>
+<body>
+    Room number - {{room_name}}
+    <div class="message"></div>
+    <textarea name="textarea" id="chat" cols = "80" rows = "30" ></textarea>
+    <br>
+    <input type="text" id="input" placeholder="Type your message here" size="80">
+    <br>
+    <input type="submit" id="submit" value="Send">
+
+    {{room_name|json_script:"room_name"}}
+    <script>
+        const room_name = JSON.parse(document.getElementById('room_name').textContent);
+        const socket = new WebSocket(
+            'ws://' +
+            window.location.host +
+            '/ws/chat/' +
+            room_name +
+            '/'
+        );
+
+        socket.onopen = function (event) {
+            console.log("WebSocket connection established.");
+            socket.send(JSON.stringify({ message: "Hello from the client!" }));
+        };
+
+        socket.onmessage = function(e){
+            const data = JSON.parse(e.data);
+            console.log(data);
+            //document.querySelector('.message').innerHTML += (data.message + '<br><br>');
+            document.getElementById('chat').value += data.message + '\n';
+
+        }
+
+        document.getElementById('submit').onclick = function(e){
+            let message = document.getElementById('input').value;
+            socket.send(JSON.stringify({"message": message}))
+            document.getElementById('input').value = '';
+        }
+    </script>
+</body>
+</html>

@@ -20,8 +20,8 @@ class _ResetPasswordState extends State<ResetPassword> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
-          "Reset Password",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          "Reset Password Via Email",
+          style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
         ),
       ),
       body: Container(
@@ -29,9 +29,9 @@ class _ResetPasswordState extends State<ResetPassword> {
           height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
-                hexStringToColor("CB2B93"),
-                hexStringToColor("9546C4"),
-                hexStringToColor("5E61F4")
+                hexStringToColor('FF6D00'),
+                hexStringToColor('ffa31a'),
+                hexStringToColor('ffb84d')
               ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
           child: SingleChildScrollView(
               child: Padding(
@@ -41,7 +41,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     const SizedBox(
                       height: 20,
                     ),
-                    reusableTextField("Enter Email Id", Icons.person_outline, false,
+                    reusableTextField("Enter Email Address", Icons.person_outline, false,
                         _emailTextController),
                     const SizedBox(
                       height: 20,

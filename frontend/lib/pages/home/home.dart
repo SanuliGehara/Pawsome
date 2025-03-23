@@ -9,10 +9,7 @@ import '../accounts/own_profile.dart';
 import '../accounts/pet_sitter/pet_sitter_profile.dart';
 import '../accounts/pet_sitter/pet_sitter_profile_owner.dart';
 import 'search.dart';
-//import 'chatbot.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
+import 'package:pawsome/services/database_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,79 +19,44 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   int _selectedIndex = 0; // Tracks the selected icon index
 
-  // Function to handle icon selection
+  // Instance of DatabaseService to fetch posts.
+  final DatabaseService _databaseService = DatabaseService();
+
+  /// Function to handle icon selection.
   Future<void> _onIconTapped(int index) async {
     setState(() {
-      _selectedIndex = index; // Updates the selected index
+      _selectedIndex = index; // Update the selected index.
     });
 
     if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Chat()),
-      );
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Chat()));
     }
     if (index == 2) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => AiBot()),
-      );
+      Navigator.push(context, MaterialPageRoute(builder: (context) => AiBot()));
     }
     if (index == 3) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Adopt()),
-      );
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Adopt()));
     }
     if (index == 4) {
-      // Get the current user
-      String userId = FirebaseAuth.instance.currentUser?.uid??"CJcHnkxI1GZY04aAYTmy";
+      // Get the current user ID.
+      String userId = FirebaseAuth.instance.currentUser?.uid ?? "CJcHnkxI1GZY04aAYTmy";
 
-      // Fetch user data from Firestore
+      // Fetch user data from Firestore.
       DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
 
-      // Check user type (Pet Sitter or Normal User)
-      String userType = userDoc['category']; // Assuming 'userType' field exists
+      // Check user type (Pet Sitter or Normal User).
+      String userType = userDoc['category']; // Assuming the field 'category' exists.
 
-      // Navigate to the appropriate profile page based on userType
+      // Navigate to the appropriate profile page based on user type.
       if (userType == 'pet sitter') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => PetSitterProfileOwnerPage()), // Navigate to pet sitter profile
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) => PetSitterProfileOwnerPage()));
       } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ProfilePage()), // Navigate to normal user profile
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
       }
     }
   }
-
-  List<String> profileImages = [
-    "assets/images/s1.jpg",
-    "assets/images/s2.jpg",
-    "assets/images/s3.jpg",
-    "assets/images/s4.jpg",
-    "assets/images/s5.jpg",
-    "assets/images/s6.jpg",
-    "assets/images/s7.jpg",
-    "assets/images/s8.jpg",
-  ];
-
-  List<String> posts = [
-    "assets/images/p1.jpg",
-    "assets/images/p2.png",
-    "assets/images/p3.jpg",
-    "assets/images/p4.jpg",
-    "assets/images/p5.png",
-    "assets/images/p6.jpg",
-    "assets/images/p7.jpg",
-    "assets/images/p8.jpg"
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -102,10 +64,10 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomAppBar(
         child: Padding(
           padding: const EdgeInsets.only(right: 20.0),
-          // Shift icons slightly to the right
+          // Shift icons slightly to the right.
           child: Row(
             children: [
-              Spacer(),
+              const Spacer(),
               IconButton(
                 onPressed: () => _onIconTapped(0), // Home
                 icon: Icon(
@@ -113,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                   color: _selectedIndex == 0 ? Colors.orange : Colors.grey,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               IconButton(
                 onPressed: () => _onIconTapped(1), // Chat
                 icon: Icon(
@@ -121,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                   color: _selectedIndex == 1 ? Colors.orange : Colors.grey,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               IconButton(
                 onPressed: () => _onIconTapped(2), // Bot
                 icon: Icon(
@@ -129,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                   color: _selectedIndex == 2 ? Colors.orange : Colors.grey,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               IconButton(
                 onPressed: () => _onIconTapped(3), // Community
                 icon: Icon(
@@ -137,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                   color: _selectedIndex == 3 ? Colors.orange : Colors.grey,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               IconButton(
                 onPressed: () => _onIconTapped(4), // Profile
                 icon: Icon(
@@ -149,38 +111,31 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-
       appBar: AppBar(
-        backgroundColor: Colors.white70, // Sets the app bar color
+        backgroundColor: Colors.white70, // App bar color.
         title: Row(
-          children: [
+          children: const [
             Text(
               "Pawsome",
               style: TextStyle(
-                color: Colors.deepOrange, // Sets the font color
-                fontWeight: FontWeight.bold, // Makes the text bold
-                fontSize: 34, // Sets the font size
+                color: Colors.deepOrange,
+                fontWeight: FontWeight.bold,
+                fontSize: 34,
               ),
             ),
           ],
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.search, color: Colors.black54),
+            icon: const Icon(Icons.search, color: Colors.black54),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Search()),
-              ); // Navigates to the Search page
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
             },
           ),
           IconButton(
-            icon: Icon(Icons.settings, color: Colors.black54),
+            icon: const Icon(Icons.settings, color: Colors.black54),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Setting()),
-              );
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Setting()));
             },
           ),
         ],
@@ -188,88 +143,95 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Story bar
+            // Story bar.
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: List.generate(
                   7,
                       (index) => Container(
-                    margin: EdgeInsets.symmetric(horizontal: 8),
-                    // Adds margin around each avatar
-                    child: CircleAvatar(
-                      radius: 30, // Makes the circle avatar bigger
-                      backgroundImage: AssetImage(profileImages[index]),
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    child: const CircleAvatar(
+                      radius: 30,
+                      // For demonstration, a placeholder image is used.
+                      backgroundImage: AssetImage( "assets/images/s2.jpg"),
                     ),
                   ),
                 ),
               ),
             ),
-            Divider(),
-            Column(
-              children: List.generate(
-                  8,
-                      (index) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Header Post
-                      Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            child: CircleAvatar(
-                              radius: 15, // Makes the circle avatar bigger
-                              backgroundImage:
-                              AssetImage(profileImages[index]),
-                            ),
-                          ),
-                          Text("Profile Name"),
-                          Spacer(),
-                          IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.more_vert)),
-                        ],
-                      ),
-                      //Image Posts
-                      Image.asset(posts[index]),
-                      // image footer
-                      Row(
-                        children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.favorite_border)),
-                          IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.message_outlined)),
-                          IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.ios_share_outlined)),
-                        ],
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+            const Divider(),
+            // Posts section: Display only "normal" posts from the database.
+            StreamBuilder<List<Map<String, dynamic>>>(
+              stream: _databaseService.getPostsByType("Normal"),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Center(child: Text("Error: ${snapshot.error}"));
+                }
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                final postsData = snapshot.data!;
+                if (postsData.isEmpty) {
+                  return const Center(child: Text("No posts available."));
+                }
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: postsData.length,
+                  itemBuilder: (context, index) {
+                    final post = postsData[index];
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Post Header: Displays a placeholder avatar and username.
+                        Row(
                           children: [
-                            RichText(
-                              text: TextSpan(
-                                style: TextStyle(color: Colors.black),
-                                children: [
-                                  TextSpan(text: "Liked by "),
-                                  TextSpan(
-                                      text: "Profile Name",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  TextSpan(text: "  and Others "),
-                                ],
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              child: CircleAvatar(
+                                radius: 15,
+                                // Check for a profile picture; if not present, use a default asset.
+                                backgroundImage: (post["profilePicture"] != null &&
+                                    (post["profilePicture"] as String).isNotEmpty)
+                                    ? NetworkImage(post["profilePicture"])
+                                    : const AssetImage( "assets/images/s1.jpg")
+                                as ImageProvider,
                               ),
-                            )
+                            ),
+                            // Display username if available.
+                            Text(post["username"] ?? "Unknown User"),
+                            const Spacer(),
+                            IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.more_vert),
+                            ),
                           ],
                         ),
-                      )
-                    ],
-                  )),
-            )
+                        // Post Image: If an image URL is provided, display the image.
+                        post["imageUrl"] != null && (post["imageUrl"] as String).isNotEmpty
+                            ? Image.network(post["imageUrl"])
+                            : Container(),
+                        // Post Footer: For actions like liking, commenting, and sharing.
+                        Row(
+                          children: [
+                            IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_border)),
+                            IconButton(onPressed: () {}, icon: const Icon(Icons.message_outlined)),
+                            IconButton(onPressed: () {}, icon: const Icon(Icons.ios_share_outlined)),
+                          ],
+                        ),
+                        // Post Description.
+                        Container(
+                          padding: const EdgeInsets.all(15),
+                          child: Text(post["description"] ?? ""),
+                        ),
+                        const Divider(),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),

@@ -27,8 +27,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_group_name = f'chat_{self.room_name}'
 
         # Initialize API key
-        self.openai_api_key = os.getenv("OPENAI_API_KEY",
-                                        "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")
+        self.openai_api_key = os.getenv("OPENAI_API_KEY")
 
         await self.accept()
 

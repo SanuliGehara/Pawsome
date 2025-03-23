@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../services/websocket_service.dart';
 
@@ -23,31 +22,25 @@ class _DMState extends State<DM> {
     _webSocketService.connect(widget.userName);
 
     _webSocketService.stream.listen((data) {
+      print("Received message: $data"); // Debugging print
       setState(() {
         messages.add({"isMe": false, "text": data});
       });
     });
   }
 
-  void sendMessage() async {
+  void sendMessage() {
     String messageText = _messageController.text.trim();
     if (messageText.isNotEmpty) {
-      _webSocketService.sendMessage(messageText, widget.userName, "receiver_username");
+      _webSocketService.sendMessage(
+        messageText,
+        widget.userName, // Assuming sender is logged-in user
+        "receiver_username", // Replace with actual receiver username
+      );
 
       setState(() {
         messages.add({"isMe": true, "text": messageText});
       });
-
-      // **Update Firestore Chat List**
-      DocumentReference chatDoc = FirebaseFirestore.instance.collection('chats').doc(widget.userName);
-
-      await chatDoc.set({
-        "userName": widget.userName,
-        "avatar": widget.profilePic,
-        "lastMessage": messageText,
-        "timestamp": FieldValue.serverTimestamp(),
-        "unreadCount": FieldValue.increment(1),
-      }, SetOptions(merge: true));
 
       _messageController.clear();
     }
@@ -56,6 +49,7 @@ class _DMState extends State<DM> {
   @override
   void dispose() {
     _webSocketService.disconnect();
+    _messageController.dispose();
     super.dispose();
   }
 
@@ -101,13 +95,13 @@ class _DMState extends State<DM> {
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
+                          color: Colors.grey.withAlpha(50), // Replaced withAlpha()
                           spreadRadius: 2,
                           blurRadius: 5,
                         ),
                       ],
                     ),
-                    child: Text(messages[index]["text"]),
+                    child: Text(messages[index]["text"] ?? "No message"),
                   ),
                 );
               },

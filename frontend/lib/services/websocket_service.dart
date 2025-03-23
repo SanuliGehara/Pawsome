@@ -1,38 +1,36 @@
-import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:web_socket_channel/status.dart' as status;
+import 'dart:async';
+import 'dart:convert';
+import 'package:web_socket_channel/io.dart';
 
 class WebSocketService {
-  late WebSocketChannel _channel;
+  late IOWebSocketChannel _channel;
+  final StreamController<String> _controller = StreamController.broadcast();
 
-  /// Connect to WebSocket
-  void connect(String username) {
-    _channel = WebSocketChannel.connect(
-      Uri.parse('ws://127.0.0.1:8000/ws/chat/$username/'),
-    );
+  Stream<String> get stream => _controller.stream;
 
-    // Listen for messages
+  void connect(String userName) {
+    _channel = IOWebSocketChannel.connect('ws://your-backend-url/ws/chat/$userName/');
+
     _channel.stream.listen(
           (message) {
-        print('Received: $message');
-      },
-      onError: (error) {
-        print('Error: $error');
+        _controller.add(message); // Add incoming messages to the stream
       },
       onDone: () {
-        print('Connection closed');
+        _controller.close(); // Close the stream if WebSocket disconnects
+      },
+      onError: (error) {
+        print("WebSocket error: $error");
       },
     );
   }
 
-  /// Send message
-  void sendMessage(String sender, String receiver, String text) {
-    _channel.sink.add(
-      '{"sender": "$sender", "receiver": "$receiver", "text": "$text"}',
-    );
+  void sendMessage(String message, String sender, String receiver) {
+    final msg = jsonEncode({"text": message, "sender": sender, "receiver": receiver});
+    _channel.sink.add(msg);
   }
 
-  /// Disconnect WebSocket
   void disconnect() {
-    _channel.sink.close(status.goingAway);
+    _channel.sink.close();
+    _controller.close();
   }
 }

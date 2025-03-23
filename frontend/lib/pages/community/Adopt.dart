@@ -7,7 +7,7 @@ import 'Locate.dart';
 import 'Sitter.dart';
 import '../../reusable_widgets/CommunityWidgets.dart';
 
-// Stateful widget to manage the Adopt Page
+/// Stateful widget to manage the Adopt Page
 class Adopt extends StatefulWidget {
   const Adopt({super.key});
 
@@ -16,17 +16,18 @@ class Adopt extends StatefulWidget {
 }
 
 class _AdoptState extends State<Adopt> {
-  // List to track the liked state of each pet post. Initially, both are set to false (unliked).
+  /// List to track the liked state of each pet post. Initially, both are set to false (unliked).
   List<bool> likedStates = [false, false];
-  // List to track the save state of pet posts, initialized with false (unsaved)
+  /// List to track the save state of pet posts, initialized with false (unsaved)
   List<bool> savedStates = List.generate(2, (index) => false);
 
-  // Instance of DatabaseService for fetch posts.
+  /// Instance of DatabaseService for fetch posts.
   final DatabaseService _databaseService = DatabaseService();
 
-  // Function to display a comment input dialog box
+  /// Function to display a comment input dialog box
   void _showCommentBox(BuildContext context) {
-    TextEditingController commentController = TextEditingController();  // Controller to capture user input
+    /// Controller to capture user input
+    TextEditingController commentController = TextEditingController();
 
     showDialog(
       context: context,
@@ -35,7 +36,7 @@ class _AdoptState extends State<Adopt> {
           content: TextField(
             controller: commentController,
             decoration: const InputDecoration(
-              hintText: "Write a comment...", // Placeholder text inside the text field
+              hintText: "Write a comment...", /// Placeholder text inside the text field
             ),
           ),
           actions: [
@@ -113,10 +114,27 @@ class _AdoptState extends State<Adopt> {
     );
   }
 
+  AppBar buildAppBar(String title) {
+    return AppBar(
+      title: Text(
+        title,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.deepOrange,
+          fontSize: 26,
+        ),
+      ),
+      backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.grey[200],
+      centerTitle: true,
+      automaticallyImplyLeading: false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: isDarkMode ? Colors.black : Colors.grey[200],
       appBar: buildAppBar("Adopt Community"), // Custom app bar with title
       body: Column(
         children: [

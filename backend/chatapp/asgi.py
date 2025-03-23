@@ -12,8 +12,7 @@ import os
 from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
-import Aichat.routing
-
+import backend.Aichat.routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'chatapp.settings')
 
@@ -21,7 +20,7 @@ application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "websocket": AuthMiddlewareStack(
         URLRouter(
-            Aichat.routing.websocket_urlpatterns
+            backend.Aichat.routing.websocket_urlpatterns
         )
     ),
 })

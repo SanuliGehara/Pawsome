@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pawsome/pages/home/home.dart';
 import 'package:pawsome/pages/login_signup/login_page.dart';
 import 'package:pawsome/reusable_widgets/reusable_widget.dart';
 import 'package:pawsome/services/database_service.dart';
+import 'package:pawsome/services/firebaseAuth_service.dart';
 import 'package:pawsome/utils/color_utils.dart';
 
 class SignupPage extends StatefulWidget {
@@ -171,13 +173,81 @@ class _SignupPageState extends State<SignupPage> {
                       });
                     }),
 
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    // google login
+                    ElevatedButton(
+                      onPressed: () async {
+                        UserCredential? userCred = await FirebaseServices().signInWithGoogleForSignup(context);
+                        if (userCred != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginPage()),
+                          );
+                        }
+                      },
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.resolveWith((states) {
+                            if (states.contains(MaterialState.pressed)) {
+                              return Colors.black26;
+                            }
+                            return Colors.white;
+                          })),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              "assets/images/google.png",
+                              height: 35,
+                              width: 35,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            const Text(
+                              "Sign In with Google",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    loginOption()
                   ],
                 ),
               ))),
     );
   }
 
-
+  Row loginOption() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text("Already have account?",
+            style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w700, fontSize: 15)),
+        GestureDetector(
+          onTap: () {
+            style: TextStyle(color: Colors.black);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => LoginPage()));
+          },
+          child: const Text(
+            " Log In",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16 ),
+          ),
+        )
+      ],
+    );
+  }
 
 }
 

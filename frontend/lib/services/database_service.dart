@@ -12,6 +12,20 @@ class DatabaseService {
   // firestore database reference
   final _firestore = FirebaseFirestore.instance;
 
+  /// Checks if a user document with the given [email] already exists in Firestore.
+  Future<bool> doesUserExist(String email) async {
+    try {
+      QuerySnapshot snapshot = await _firestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+      return snapshot.docs.isNotEmpty;
+    } catch (error) {
+      log("Error checking user existence: $error");
+      return false;
+    }
+  }
+
   /// Function to Create a normal user and save it in Firestore
   Future createNormalUser(String username, String email) async{
     try {

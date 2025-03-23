@@ -75,9 +75,13 @@ class _LoginPageState extends State<LoginPage> {
               // google login
           ElevatedButton(
             onPressed: () async {
-              await FirebaseServices().signInWithGoogle();
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => HomePage()));
+              UserCredential? userCred = await FirebaseServices().signInWithGoogleForLogin(context);
+              if (userCred != null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
+              }
             },
             style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.resolveWith((states) {
@@ -100,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                     width: 10,
                   ),
                   const Text(
-                    "Login with Google",
+                    "Sign In with Google",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

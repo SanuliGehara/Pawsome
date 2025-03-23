@@ -28,8 +28,8 @@ class DatabaseService {
 
   /// Function to Create a normal user and save it in Firestore
   Future createNormalUser(String username, String email) async{
-    try {
-      await _firestore.collection('users').add({
+    String uid = FirebaseAuth.instance.currentUser!.uid; // Get UID from Auth
+      await _firestore.collection('users').doc(uid).set({
         "username":username,
         "email":email,
         "category":"normal",
@@ -41,16 +41,14 @@ class DatabaseService {
         "lastMessage":"",
         "timeStamp":FieldValue.serverTimestamp(), // Store creation time
       });
-    }
-    catch (error) {
-      log(error.toString());
-    }
+
   }
 
   /// Function to Create a pet sitter user and save it in Firestore
   Future createPetSitterUser(String username, String email) async{
-    try {
-      await _firestore.collection('users').add({
+    String uid = FirebaseAuth.instance.currentUser!.uid; // Get UID from Auth
+
+    await _firestore.collection('users').doc(uid).set({
         "username":username,
         "email":email,
         "category":"pet sitter",
@@ -62,10 +60,7 @@ class DatabaseService {
         "lastMessage":"",
         "timeStamp":FieldValue.serverTimestamp(), // Store creation time
       });
-    }
-    catch (error) {
-      log(error.toString());
-    }
+
   }
 
   /// Deletes the currently signed-in user's data from Firestore

@@ -1,0 +1,2 @@
+C:/Users/User/OneDrive - University of Westminster/Documents/SDGP/New folder/Pawsome/frontend/android/app/.cxx/Debug/q4n4w605/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/User/OneDrive - University of Westminster/Documents/SDGP/New folder/Pawsome/frontend/android/app/.cxx/Debug/q4n4w605/armeabi-v7a/CMakeFiles/rebuild_cache.dir

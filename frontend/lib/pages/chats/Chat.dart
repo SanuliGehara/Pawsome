@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../chatbot/AiBot.dart';
+import '../community/Adopt.dart';
+import '../home/home.dart';
 import 'DM.dart';
 
 class Chat extends StatefulWidget {
@@ -10,14 +13,27 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   bool _isSearching = false;
   final TextEditingController _searchController = TextEditingController();
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      // Handle navigation based on index
+      if (index == 0) {
+        // Stay on chat page
+      } else if (index == 1) {
+        // Navigate to another page (e.g., Friends, Profile, etc.)
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => SomeOtherPage()));
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: isDarkMode ? Colors.black : Colors.grey[200],
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        backgroundColor: isDarkMode ? Colors.grey[900] : Colors.amber[100],
+        backgroundColor: Colors.amber[100],
         elevation: 0,
         title: _isSearching
             ? TextField(
@@ -26,14 +42,14 @@ class _ChatState extends State<Chat> {
             hintText: "Search chats...",
             border: InputBorder.none,
           ),
-          style: TextStyle(color: isDarkMode ? Colors.white : Colors.black, fontSize: 18),
+          style: const TextStyle(color: Colors.black, fontSize: 18),
         )
-            : Padding(
+            : const Padding(
           padding: EdgeInsets.only(left: 20),
           child: Text(
             "Chats",
             style: TextStyle(
-              color: isDarkMode ? Colors.white : Colors.black,
+              color: Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 24,
             ),
@@ -41,7 +57,7 @@ class _ChatState extends State<Chat> {
         ),
         actions: [
           IconButton(
-            icon: Icon(_isSearching ? Icons.close : Icons.search, color: isDarkMode ? Colors.white : Colors.black,),
+            icon: Icon(_isSearching ? Icons.close : Icons.search, color: Colors.black),
             onPressed: () {
               setState(() {
                 _isSearching = !_isSearching;
@@ -52,7 +68,7 @@ class _ChatState extends State<Chat> {
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('chats').orderBy('timestamp', descending: true).snapshots(),
+        stream: FirebaseFirestore.instance.collection('chats').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
@@ -89,7 +105,7 @@ class _ChatState extends State<Chat> {
                   margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: isDarkMode ? Colors.grey[800] : Colors.amber[50],
+                    color: Colors.amber[50],
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: ListTile(
@@ -99,14 +115,9 @@ class _ChatState extends State<Chat> {
                     ),
                     title: Text(
                       userName,
-                      style: TextStyle(color: isDarkMode ? Colors.white : Colors.black, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    subtitle: Text(
-                        lastMessage,
-                        style: TextStyle(
-                          color: isDarkMode ? Colors.grey[300] : Colors.black, // Change last message color
-                        ),
-                    ),
+                    subtitle: Text(lastMessage),
                     trailing: unreadMessages > 0
                         ? CircleAvatar(
                       backgroundColor: Colors.green,
@@ -126,3 +137,56 @@ class _ChatState extends State<Chat> {
     );
   }
 }
+
+// Custom Bottom Navigation Bar Widget for easier navigation
+class CustomBottomNavBar extends StatelessWidget {
+  final int currentIndex; // Index to track selected tab
+
+  const CustomBottomNavBar({Key? key, required this.currentIndex})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+      currentIndex: currentIndex,
+      // Sets active tab
+      selectedItemColor: Colors.orange,
+      // Active tab color
+      unselectedItemColor: Colors.grey,
+      // Inactive tab color
+      showUnselectedLabels: true,
+      // type: BottomNavigationBarType.fixed, // Ensures even spacing between tabs
+      items: [
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.chat_bubble_outline), label: ""),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.smart_toy_outlined), label: ""),
+        BottomNavigationBarItem(icon: Icon(Icons.people), label: ""),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
+      ],
+      onTap: (index) {
+        // Handles navigation to different pages based on index
+        if (index == 0) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
+        }
+        if (index == 2) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AiBot()),
+          );
+        }
+        if (index == 3) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Adopt()),
+          );
+        }
+      },
+    );
+  }
+}
+

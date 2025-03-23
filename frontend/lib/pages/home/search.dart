@@ -95,7 +95,7 @@ class _SearchState extends State<Search> {
                         MaterialPageRoute(
                           builder: (context) =>
                               PetSitterProfilePage(
-                                  userId: filteredUsers[index]['userId']), // Navigate to Pet Sitter Profile
+                                  userId: filteredUsers[index]['userId']),
                         ),
                       );
                     }

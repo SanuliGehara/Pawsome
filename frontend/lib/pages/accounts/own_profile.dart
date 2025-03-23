@@ -63,26 +63,19 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
 
 
   Future<void> _fetchUserProfile() async {
-
     try {
       String currentUserId = FirebaseAuth.instance.currentUser?.uid??"s1tJsaeEjKSHPNnq5efT";
-
-      DocumentSnapshot userDoc =
-      await FirebaseFirestore.instance.collection('users').doc(currentUserId).get();
-
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(currentUserId).get();
       List<String> savedPostIds = List<String>.from(userDoc['savedPosts'] ?? []);//getting the saved posts ids
       List<String> savedPostImages = [];
-
       //iterating through saved post ids
       if (savedPostIds.isNotEmpty) {
         QuerySnapshot postsSnapshot = await FirebaseFirestore.instance
             .collection('posts')
             .where(FieldPath.documentId, whereIn: savedPostIds)
             .get();
-
         savedPostImages = postsSnapshot.docs.map((doc) => doc['imageUrl'] as String).toList();
       }
-
       setState(() {
         username = userDoc['username'];
         bio = userDoc['description'];
@@ -93,10 +86,8 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
     } catch (e) {
       print("Error fetching user data: $e");
     }
-
-
-
   }
+
   @override
   void dispose() {
     _tabController.dispose();

@@ -60,10 +60,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
       _bioController.text,
       updatedProfilePicture,
     );
-
+    //updating user details
     await FirebaseFirestore.instance.collection('users').doc(userId).update({
       'username': _usernameController.text,
-      'bio': _bioController.text,
+      'description': _bioController.text,
       'profilePicture': updatedProfilePicture,
     });
 

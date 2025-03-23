@@ -33,7 +33,7 @@ class DatabaseService {
         "username":username,
         "email":email,
         "category":"normal",
-        "bio":"Your Bio",
+        "description":"Your Bio",
         "profilePicture":"",
         "savedPosts":[],
         "posts":[],

@@ -58,6 +58,9 @@ class DatabaseService {
         "profilePicture":"",
         "likes":0,
         "rating":1,
+        "unreadCount":0,
+        "lastMessage":"",
+        "timeStamp":FieldValue.serverTimestamp(), // Store creation time
       });
     }
     catch (error) {

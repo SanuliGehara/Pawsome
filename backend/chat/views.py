@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.http import JsonResponse
+from .models import Message
 
-# Create your views here.
+def get_chat_history(request, sender, receiver):
+    messages = Message.objects.filter(sender=sender, receiver=receiver) | \
+               Message.objects.filter(sender=receiver, receiver=sender)
+    messages = messages.order_by("timestamp")  # Order by time
 
-def index(request):
-    return render(request, 'index.html')
-
-def room(request, room_name): 
-    return render(request, 'room.html', {'room_name': room_name})
+    return JsonResponse({"messages": list(messages.values())})

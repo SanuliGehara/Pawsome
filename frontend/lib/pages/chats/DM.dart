@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../services/websocket_service.dart';
 
@@ -15,28 +16,53 @@ class _DMState extends State<DM> {
   final WebSocketService _webSocketService = WebSocketService();
   final TextEditingController _messageController = TextEditingController();
   List<Map<String, dynamic>> messages = [];
+  String receiverUserName = "receiver_username"; // Replace dynamically
 
   @override
   void initState() {
     super.initState();
     _webSocketService.connect(widget.userName);
 
+    // Listen for real-time WebSocket messages
     _webSocketService.stream.listen((data) {
       print("Received message: $data"); // Debugging print
       setState(() {
         messages.add({"isMe": false, "text": data});
       });
     });
+
+    // Fetch previous messages from Firestore
+    _loadPreviousMessages();
+  }
+
+  void _loadPreviousMessages() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('messages')
+        .where("participants", arrayContains: widget.userName) // Matches chats where the user is involved
+        .orderBy("timestamp", descending: false)
+        .get();
+
+    setState(() {
+      messages = querySnapshot.docs.map((doc) => {
+        "isMe": doc["sender"] == widget.userName,
+        "text": doc["text"],
+      }).toList();
+    });
   }
 
   void sendMessage() {
     String messageText = _messageController.text.trim();
     if (messageText.isNotEmpty) {
-      _webSocketService.sendMessage(
-        messageText,
-        widget.userName, // Assuming sender is logged-in user
-        "receiver_username", // Replace with actual receiver username
-      );
+      _webSocketService.sendMessage(messageText, widget.userName, receiverUserName);
+
+      // Save message to Firestore
+      FirebaseFirestore.instance.collection('messages').add({
+        "sender": widget.userName,
+        "receiver": receiverUserName,
+        "text": messageText,
+        "timestamp": FieldValue.serverTimestamp(),
+        "participants": [widget.userName, receiverUserName], // For efficient querying
+      });
 
       setState(() {
         messages.add({"isMe": true, "text": messageText});
@@ -95,7 +121,7 @@ class _DMState extends State<DM> {
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withAlpha(50), // Replaced withAlpha()
+                          color: Colors.grey.withAlpha(50), // Used withAlpha() instead of withOpacity()
                           spreadRadius: 2,
                           blurRadius: 5,
                         ),

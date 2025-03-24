@@ -1,11 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../services/websocket_service.dart';
 
-/// DM screen (Direct Message) that handles real-time chat with WebSocket support
 class DM extends StatefulWidget {
-  /// Name of the user being chatted with
   final String userName;
-  /// Profile picture of the chat user
   final String profilePic;
 
   const DM({Key? key, required this.userName, required this.profilePic}) : super(key: key);
@@ -15,56 +13,67 @@ class DM extends StatefulWidget {
 }
 
 class _DMState extends State<DM> {
-  /// Service to handle WebSocket connections
   final WebSocketService _webSocketService = WebSocketService();
-  /// Controller for the message input field
   final TextEditingController _messageController = TextEditingController();
-  /// List to store chat messages
   List<Map<String, dynamic>> messages = [];
+  String receiverUserName = "receiver_username"; // Replace dynamically
 
   @override
   void initState() {
     super.initState();
-    /// Establish WebSocket connection using the chat partner's username
     _webSocketService.connect(widget.userName);
 
-    /// Listen for incoming messages from the stream
+    // Listen for real-time WebSocket messages
     _webSocketService.stream.listen((data) {
-
-      /// Debug log for received messages
-      print("Received message: $data");
-
-      /// Add received message to UI as a "not me" message
+      print("Received message: $data"); // Debugging print
       setState(() {
         messages.add({"isMe": false, "text": data});
       });
     });
+
+    // Fetch previous messages from Firestore
+    _loadPreviousMessages();
   }
 
-  /// Handles sending a message
+  void _loadPreviousMessages() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('messages')
+        .where("participants", arrayContains: widget.userName) // Matches chats where the user is involved
+        .orderBy("timestamp", descending: false)
+        .get();
+
+    setState(() {
+      messages = querySnapshot.docs.map((doc) => {
+        "isMe": doc["sender"] == widget.userName,
+        "text": doc["text"],
+      }).toList();
+    });
+  }
+
   void sendMessage() {
     String messageText = _messageController.text.trim();
     if (messageText.isNotEmpty) {
-      /// Send message via WebSocket
-      _webSocketService.sendMessage(
-        messageText,
-        widget.userName, // Assuming sender is logged-in user
-        "receiver_username", // Replace with actual receiver username
-      );
+      _webSocketService.sendMessage(messageText, widget.userName, receiverUserName);
 
-      /// Add sent message to the local UI
+      // Save message to Firestore
+      FirebaseFirestore.instance.collection('messages').add({
+        "sender": widget.userName,
+        "receiver": receiverUserName,
+        "text": messageText,
+        "timestamp": FieldValue.serverTimestamp(),
+        "participants": [widget.userName, receiverUserName], // For efficient querying
+      });
+
       setState(() {
         messages.add({"isMe": true, "text": messageText});
       });
 
-      /// Clear input field after sending
       _messageController.clear();
     }
   }
 
   @override
   void dispose() {
-    /// Clean up WebSocket connection and controller
     _webSocketService.disconnect();
     _messageController.dispose();
     super.dispose();
@@ -78,7 +87,7 @@ class _DMState extends State<DM> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),  // Return to previous screen
+          onPressed: () => Navigator.pop(context),
         ),
         title: Row(
           children: [
@@ -94,11 +103,8 @@ class _DMState extends State<DM> {
           ],
         ),
       ),
-
-      /// Main chat UI body
       body: Column(
         children: [
-          /// Message list
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(10),
@@ -115,7 +121,7 @@ class _DMState extends State<DM> {
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withAlpha(50), // Replaced withAlpha()
+                          color: Colors.grey.withAlpha(50), // Used withAlpha() instead of withOpacity()
                           spreadRadius: 2,
                           blurRadius: 5,
                         ),
@@ -127,8 +133,6 @@ class _DMState extends State<DM> {
               },
             ),
           ),
-
-          /// Input field and send button
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
@@ -137,7 +141,6 @@ class _DMState extends State<DM> {
             ),
             child: Row(
               children: [
-                /// Message input field
                 Expanded(
                   child: TextField(
                     controller: _messageController,
@@ -147,7 +150,6 @@ class _DMState extends State<DM> {
                     ),
                   ),
                 ),
-                /// Send button
                 IconButton(
                   icon: const Icon(Icons.send, color: Colors.amber),
                   onPressed: sendMessage,

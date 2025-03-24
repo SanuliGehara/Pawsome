@@ -10,8 +10,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
-
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -60,8 +58,6 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
 
   }
 
-
-
   Future<void> _fetchUserProfile() async {
     try {
       String currentUserId = FirebaseAuth.instance.currentUser?.uid??"s1tJsaeEjKSHPNnq5efT";
@@ -94,10 +90,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
     super.dispose();
   }
 
-
-
   void editProfile() {
-
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -126,14 +119,19 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(username),
-        backgroundColor: Colors.yellow[100],
+        title: Text(username,
+          style: TextStyle(
+            color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+          ),
+        ),
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: Theme.of(context).iconTheme.color),
           onPressed: () => Navigator.pop(context),
-
         ),
       ),
       body: Column(
@@ -156,7 +154,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                 SizedBox(height: 10),
                 Text(
                   username,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 Container(
                   width: 300,
@@ -164,25 +162,26 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                   child: Text(
                     bio,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 widget.isOwnProfile
                     ? ElevatedButton(
-                  onPressed: editProfile,
-                  style: ElevatedButton.styleFrom(
-
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 3),
-                  ),
-                  child: Text("Edit Profile"),
-                )
-                    : Container(),
-                SizedBox(height: 10),
+                      onPressed: editProfile,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orangeAccent..withOpacity(0.8),
+                        foregroundColor: Colors.black,
+                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 3),
+                      ),
+                      child: Text("Edit Profile"),
+                    )
+                    : const SizedBox.shrink(),
+                const SizedBox(height: 10),
                 TabBar(
                   controller: _tabController,
                   indicatorColor: Colors.orange,
-                  labelColor: Colors.black,
+                  labelColor: Theme.of(context).textTheme.bodyLarge?.color,
                   tabs: [
                     Tab(text: "   Posts   "),
                     Tab(text: "Saved Posts"),
@@ -205,8 +204,8 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       bottomNavigationBar: buildBottomNavigationBar(context, 4),
       floatingActionButton: FloatingActionButton(
         onPressed: addPost,
-        backgroundColor: Colors.orange[200],
-        child: Icon(Icons.add),
+        backgroundColor: Colors.orange,
+        child: Icon(Icons.add, color: Colors.black),
       ),
 
 

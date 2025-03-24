@@ -62,4 +62,39 @@ class ThemeProvider extends ChangeNotifier {
   }
 }
 
+final ThemeData lightThemeData = ThemeData(
+  brightness: Brightness.light,
+  primarySwatch: Colors.amber,
+  scaffoldBackgroundColor: Colors.grey[100],
+  appBarTheme: const AppBarTheme(
+    backgroundColor: Colors.white,
+    elevation: 0,
+    iconTheme: IconThemeData(color: Colors.black),
+    titleTextStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+  ),
+  textTheme: const TextTheme(
+    bodyMedium: TextStyle(color: Colors.black87),
+  ),
+  inputDecorationTheme: const InputDecorationTheme(
+    hintStyle: TextStyle(color: Colors.grey),
+  ),
+);
 
+final ThemeData darkThemeData = ThemeData(
+  brightness: Brightness.dark,
+  primarySwatch: Colors.amber,
+  scaffoldBackgroundColor: const Color(0xFF121212),
+  cardColor: const Color(0xFF1E1E1E),
+  appBarTheme: const AppBarTheme(
+    backgroundColor: Color(0xFF1E1E1E),
+    elevation: 0,
+    iconTheme: IconThemeData(color: Colors.white),
+    titleTextStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+  ),
+  textTheme: const TextTheme(
+    bodyMedium: TextStyle(color: Colors.white70),
+  ),
+  inputDecorationTheme: const InputDecorationTheme(
+    hintStyle: TextStyle(color: Colors.grey),
+  ),
+);

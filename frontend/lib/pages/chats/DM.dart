@@ -81,12 +81,16 @@ class _DMState extends State<DM> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber[100],
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: Theme.of(context).iconTheme.color),
           onPressed: () => Navigator.pop(context),
         ),
         title: Row(
@@ -98,7 +102,7 @@ class _DMState extends State<DM> {
             const SizedBox(width: 10),
             Text(
               widget.userName,
-              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -111,23 +115,27 @@ class _DMState extends State<DM> {
               itemCount: messages.length,
               itemBuilder: (context, index) {
                 bool isMe = messages[index]["isMe"];
+                Color bubbleColor = isMe
+                    ? (isDark ? Colors.amber[300]! : Colors.amber[200]!)
+                    : Theme.of(context).cardColor;
+
                 return Align(
                   alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 5),
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: isMe ? Colors.amber[200] : Colors.white,
+                      color: bubbleColor,
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withAlpha(50), // Used withAlpha() instead of withOpacity()
-                          spreadRadius: 2,
-                          blurRadius: 5,
+                          color: Colors.black.withOpacity(0.05), // Used withAlpha() instead of withOpacity()
+                          spreadRadius: 1,
+                          blurRadius: 4,
                         ),
                       ],
                     ),
-                    child: Text(messages[index]["text"] ?? "No message"),
+                    child: Text(messages[index]["text"] ?? "No message", style: textTheme.bodyMedium,),
                   ),
                 );
               },
@@ -136,16 +144,20 @@ class _DMState extends State<DM> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(top: BorderSide(color: Colors.grey.shade300)),
+              color: Theme.of(context).scaffoldBackgroundColor,
+              border: Border(top: BorderSide(color: isDark ? Colors.grey.shade700 : Colors.grey.shade300,)),
             ),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: _messageController,
-                    decoration: const InputDecoration(
+                    style: textTheme.bodyMedium,
+                    decoration: InputDecoration(
                       hintText: "Type a message...",
+                      hintStyle: TextStyle(
+                        color: Theme.of(context).hintColor,
+                      ),
                       border: InputBorder.none,
                     ),
                   ),

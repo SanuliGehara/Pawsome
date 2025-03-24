@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pawsome/pages/accounts/own_profile.dart';
+import 'package:pawsome/pages/accounts/pet_sitter/pet_sitter_profile_owner.dart';
 import 'package:pawsome/pages/login_signup/login_page.dart';
 import 'package:pawsome/reusable_widgets/reusable_widget.dart';
 import 'package:provider/provider.dart';
@@ -74,6 +77,39 @@ class _SettingState extends State<Setting> {
                 ListTile(
                   leading: Icon(Icons.person),
                   title: Text('Account'),
+                  onTap: () async {
+                    try {
+                      /// Get current user ID
+                      String userId = FirebaseAuth.instance.currentUser?.uid ?? "CJcHnkxI1GZY04aAYTmy";
+
+                      /// Fetch user document from Firestore
+                      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(userId)
+                          .get();
+
+                      /// Get user category
+                      String userType = userDoc['category'];
+
+                      // Navigate based on category
+                      if (userType.toLowerCase() == 'pet sitter') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PetSitterProfileOwnerPage()),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ProfilePage()),
+                        );
+                      }
+                    } catch (e) {
+                      print('Error fetching user data: $e');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Failed to load account. Please try again.')),
+                      );
+                    }
+                  }
                 ),
                 ListTile(
                   leading: Icon(Icons.info),

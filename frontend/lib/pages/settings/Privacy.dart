@@ -32,7 +32,7 @@ class _PrivacyState extends State<Privacy> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Permissions", style: TextStyle(fontWeight: FontWeight.bold)),
+            Text("Permissions", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             SwitchListTile(
               title: Text("Notifications"),
               value: notifications,
@@ -52,9 +52,9 @@ class _PrivacyState extends State<Privacy> {
               onChanged: (value) => setState(() => location = value),
             ),
             SizedBox(height: 16),
-            Text("Manage Data", style: TextStyle(fontWeight: FontWeight.bold)),
+            Text("Manage Data", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             ListTile(
-              title: Text("Delete Account & Data", style: TextStyle(color: Colors.black)),
+              title: Text("Delete Account & Data", style: TextStyle(color: Theme.of(context).iconTheme.color)),
               onTap: () async {
                 // Show a confirmation dialog
                 bool? confirm = await showDialog<bool>(
@@ -113,9 +113,9 @@ class _PrivacyState extends State<Privacy> {
               },
             ),
             SizedBox(height: 16),
-            Text("Security Settings", style: TextStyle(fontWeight: FontWeight.bold)),
+            Text("Security Settings", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             ListTile(
-              title: Text("Change Password", style: TextStyle(color: Colors.black)),
+              title: Text("Change Password", style: TextStyle(color: Theme.of(context).iconTheme.color)),
               onTap: () {
                 // Navigate to change password screen
                 Navigator.push(context,
@@ -123,9 +123,9 @@ class _PrivacyState extends State<Privacy> {
               },
             ),
             SizedBox(height: 16),
-            Text("Read Privacy Policy", style: TextStyle(fontWeight: FontWeight.bold)),
+            Text("Read Privacy Policy", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             ListTile(
-              title: Text("Read Privacy Policy", style: TextStyle(color: Colors.black)),
+              title: Text("Read Privacy Policy", style: TextStyle(color: Theme.of(context).iconTheme.color)),
               onTap: () {
                 // Navigate to privacy policy screen
                 Navigator.push(

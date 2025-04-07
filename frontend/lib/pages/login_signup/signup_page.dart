@@ -131,7 +131,7 @@ class _SignupPageState extends State<SignupPage> {
 
                     firebaseUIButton(context, "Sign Up", () {
                       if (_selectedUserType == null) {
-                        showCustomSnackBar(context, "Please select an account type", Colors.transparent);
+                        showCustomSnackBar(context, "Please select an account type", Colors.deepOrangeAccent.shade200);
                         return;
                       }
 
@@ -149,14 +149,14 @@ class _SignupPageState extends State<SignupPage> {
                         if (_selectedUserType == 'pet sitter') {
                           // Create a Pet Sitter Account
                           _databaseService.createPetSitterUser(username, email).then((_) {
-                            showCustomSnackBar(context, "Created Pet Sitter account in DB", Colors.green);
+                            showCustomSnackBar(context, "Created Pet Sitter account!", Colors.green.shade400);
                             print("Created Pet Sitter account in DB");
 
                           });
                         } else {
                           // Create a Normal User Account
                           _databaseService.createNormalUser(username, email).then((_) {
-                            showCustomSnackBar(context, "Created Normal User account in DB", Colors.green);
+                            showCustomSnackBar(context, "Created Normal User account!", Colors.green.shade400);
                             print("Created Normal User account in DB");
 
                           });
@@ -167,7 +167,7 @@ class _SignupPageState extends State<SignupPage> {
                             MaterialPageRoute(builder: (context) => LoginPage()));
 
                       }).onError((error, stackTrace) {
-                        showCustomSnackBar(context, "Error creating user: ${error.toString()}", Colors.red);
+                        showCustomSnackBar(context, "Error creating user: Sorry! Account annot be created", Colors.red.shade400);
                         print("Error creating user: ${error.toString()}");
 
                       });
@@ -176,7 +176,7 @@ class _SignupPageState extends State<SignupPage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    // google login
+                    // google sign up button
                     ElevatedButton(
                       onPressed: () async {
                         UserCredential? userCred = await FirebaseServices().signInWithGoogleForSignup(context);
@@ -208,7 +208,7 @@ class _SignupPageState extends State<SignupPage> {
                               width: 10,
                             ),
                             const Text(
-                              "Sign In with Google",
+                              "Sign Up with Google",
                               style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,

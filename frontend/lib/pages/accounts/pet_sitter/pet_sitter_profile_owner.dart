@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pawsome/reusable_widgets/CommunityWidgets.dart';
+import 'package:pawsome/reusable_widgets/reusable_widget.dart';
 
 /// Stateful widget for the pet sitter profile owner page.
 /// This page allows a pet sitter to view and update their profile details
@@ -109,7 +110,7 @@ class _PetSitterProfileOwnerPageState extends State<PetSitterProfileOwnerPage> {
     });
 
     // Show a confirmation message upon successful update.
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Profile Updated Successfully!")));
+    showCustomSnackBar(context, "Profile Updated Successfully!", Colors.green.shade400);
   }
 
   @override

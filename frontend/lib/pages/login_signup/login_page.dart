@@ -15,6 +15,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // Controllers to track input fields
   TextEditingController _emailTextControler = TextEditingController();
   TextEditingController _passwordTextControler = TextEditingController();
 
@@ -46,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 30,
               ),
-              reusableTextField('Enter Username', Icons.person_outline, false, _emailTextControler),
+              reusableTextField('Enter Email Address', Icons.person_outline, false, _emailTextControler),
               const SizedBox(
                 height: 20,
               ),
@@ -65,18 +66,20 @@ class _LoginPageState extends State<LoginPage> {
                       MaterialPageRoute(builder: (context) => HomePage()));})
                     .catchError((error) {
                   print("Error: ${error.toString()}");
-                  showCustomSnackBar(context, "Error login user: ${error.toString()}", Colors.red);
+                  showCustomSnackBar(context, "Error login user: Invalid Credentials!", Colors.red.shade400);
 
                 });
               }),
               const SizedBox(
                 height: 10,
               ),
-              // google login
+
+              // google login button
           ElevatedButton(
             onPressed: () async {
               UserCredential? userCred = await FirebaseServices().signInWithGoogleForLogin(context);
               if (userCred != null) {
+                showCustomSnackBar(context, "Login Successful!", Colors.green.shade400);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => HomePage()),

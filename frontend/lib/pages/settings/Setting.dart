@@ -18,10 +18,12 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
+  // Local state for Notifications toggle
   bool _notificationsEnabled = false;
 
   @override
   Widget build(BuildContext context) {
+    // Access the current ThemeProvider to toggle light/dark mode
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
@@ -29,7 +31,7 @@ class _SettingState extends State<Setting> {
         title: Text('Settings'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(context),  // Navigate back
         ),
       ),
       body: Column(
@@ -49,10 +51,11 @@ class _SettingState extends State<Setting> {
               ),
             ),
           ),
+          /// Main content list
           Expanded(
             child: ListView(
               children: [
-                // Notifications Switch
+                /// Notifications Switch
                 SwitchListTile(
                   title: Text('Notifications'),
                   secondary: Icon(Icons.notifications),
@@ -64,7 +67,7 @@ class _SettingState extends State<Setting> {
                     });
                   },
                 ),
-                // Dark Mode Toggle
+                /// Dark Mode Toggle
                 SwitchListTile(
                   title: Text('Dark Mode'),
                   secondary: Icon(Icons.dark_mode),
@@ -111,6 +114,7 @@ class _SettingState extends State<Setting> {
                     }
                   }
                 ),
+                /// About Page
                 ListTile(
                   leading: Icon(Icons.info),
                   title: Text('About'),
@@ -119,6 +123,7 @@ class _SettingState extends State<Setting> {
                     MaterialPageRoute(builder: (context) => About()),
                   ),
                 ),
+                /// Privacy & Security Page
                 ListTile(
                   leading: Icon(Icons.security),
                   title: Text('Privacy & Security'),
@@ -127,6 +132,7 @@ class _SettingState extends State<Setting> {
                     MaterialPageRoute(builder: (context) => Privacy()),
                   ),
                 ),
+                /// Terms & Conditions Page
                 ListTile(
                   leading: Icon(Icons.description),
                   title: Text('Terms & Conditions'),
@@ -135,6 +141,7 @@ class _SettingState extends State<Setting> {
                     MaterialPageRoute(builder: (context) => Terms()),
                   ),
                 ),
+                /// Help & Support Page
                 ListTile(
                   leading: Icon(Icons.support),
                   title: Text('Help & Support'),
@@ -143,6 +150,7 @@ class _SettingState extends State<Setting> {
                     MaterialPageRoute(builder: (context) => Help()),
                   ),
                 ),
+                /// Logout & redirect to login screen
                 ListTile(
                   leading: Icon(Icons.logout),
                   title: Text('Logout'),

@@ -34,34 +34,42 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// A ChangeNotifier that manages the app's theme (light/dark)
 class ThemeProvider extends ChangeNotifier {
+  /// Holds the current theme mode (light or dark)
   ThemeMode _themeMode = ThemeMode.light;
 
+  /// Getter for the current theme mode
   ThemeMode get themeMode => _themeMode;
 
+  /// Constructor - loads the saved theme preference
   ThemeProvider() {
     _loadTheme();
   }
 
+  /// Toggles the theme based on isDark and persists it
   void toggleTheme(bool isDark) {
     _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
     _saveTheme(isDark);
-    notifyListeners();
+    notifyListeners();   // Notify all listeners to rebuild UI with the new theme
   }
 
+  /// Loads the saved theme preference from local storage
   Future<void> _loadTheme() async {
     final prefs = await SharedPreferences.getInstance();
     bool isDark = prefs.getBool('isDarkMode') ?? false;
     _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
-    notifyListeners();
+    notifyListeners();  // Important for initial theme setup on app startup
   }
 
+  /// Saves the theme preference to local storage
   Future<void> _saveTheme(bool isDark) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isDarkMode', isDark);
   }
 }
 
+/// Light Theme Configuration
 final ThemeData lightThemeData = ThemeData(
   brightness: Brightness.light,
   primarySwatch: Colors.amber,
@@ -80,6 +88,7 @@ final ThemeData lightThemeData = ThemeData(
   ),
 );
 
+/// Dark Theme Configuration
 final ThemeData darkThemeData = ThemeData(
   brightness: Brightness.dark,
   primarySwatch: Colors.amber,

@@ -4,7 +4,7 @@ import 'package:pawsome/pages/community/new_post.dart';
 import '../../services/database_service.dart';
 import 'Adopt.dart';
 import 'Locate.dart';
-import '../../reusable_widgets/CommunityWidgets.dart';
+import '../../reusable_widgets/community_widgets.dart';
 
 // Stateful widget to manage the Sitter page
 class Sitter extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/chats/Chat.dart';
-import 'package:pawsome/reusable_widgets/CommunityWidgets.dart';
+import 'package:pawsome/reusable_widgets/community_widgets.dart';
 
 import '../../chats/DM.dart';
 

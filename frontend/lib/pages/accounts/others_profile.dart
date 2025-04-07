@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/community/new_post.dart';
-import '../../reusable_widgets/CommunityWidgets.dart';
+import '../../reusable_widgets/community_widgets.dart';
 import '../../reusable_widgets/reusable_widget.dart';
 import '../chats/DM.dart';
 import 'post_detail_screen.dart';

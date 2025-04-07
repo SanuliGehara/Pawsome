@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pawsome/reusable_widgets/CommunityWidgets.dart';
+import 'package:pawsome/reusable_widgets/community_widgets.dart';
 import 'package:pawsome/reusable_widgets/reusable_widget.dart';
 
 /// Stateful widget for the pet sitter profile owner page.

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +7,9 @@ import 'package:pawsome/pages/chatbot/AiBot.dart';
 import 'package:pawsome/pages/chats/Chat.dart';
 import 'package:pawsome/pages/community/Adopt.dart';
 import 'package:pawsome/pages/home/home.dart';
-
 import '../pages/accounts/own_profile.dart';
 
-// Reusable App bar widget for community
+/// Reusable App bar widget for community
 AppBar buildAppBar(String title) {
   return AppBar(
     title: Text(title, style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
@@ -21,7 +18,7 @@ AppBar buildAppBar(String title) {
   );
 }
 
-// Reusable search bar widget for Adopt, Locate, and Sitter sections in community
+/// Reusable search bar widget for Adopt, Locate, and Sitter sections in community
 Widget buildSearchBar() {
   return Padding(
     padding: const EdgeInsets.all(8.0),
@@ -37,7 +34,7 @@ Widget buildSearchBar() {
   );
 }
 
-
+/// Custom button widget for feature selection
 Widget buildFeatureButton(String text, Color backgroundColor, Color textColor, VoidCallback onPressed) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -54,6 +51,7 @@ Widget buildFeatureButton(String text, Color backgroundColor, Color textColor, V
   );
 }
 
+/// Post Card widget to display pet information with like, comment, and share options
 Widget buildPetCard(String description, String imagePath, bool isLiked, Function() onLikePressed) {
   return Card(
     margin: const EdgeInsets.symmetric(vertical: 10),
@@ -88,7 +86,7 @@ Widget buildPetCard(String description, String imagePath, bool isLiked, Function
   );
 }
 
-// Reusable Bottom navigation bar widget for this app
+/// Reusable Bottom navigation bar widget for this app
 Widget buildBottomNavigationBar(BuildContext context, int currentIndex) {
   return BottomNavigationBar(
     currentIndex: currentIndex,

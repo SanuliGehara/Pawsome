@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:pawsome/pages/community/new_post.dart';
 import 'package:pawsome/pages/home/home.dart';
-import '../../reusable_widgets/CommunityWidgets.dart';
+import '../../reusable_widgets/community_widgets.dart';
 import '../../reusable_widgets/reusable_widget.dart';
 import 'edit_profile.dart';
 import 'post_detail_screen.dart';

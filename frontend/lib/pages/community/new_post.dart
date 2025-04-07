@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:pawsome/reusable_widgets/CommunityWidgets.dart';
+import 'package:pawsome/reusable_widgets/community_widgets.dart';
 import 'package:pawsome/services/database_service.dart';
 import 'package:pawsome/services/storage_service.dart';
 import '../../main.dart';

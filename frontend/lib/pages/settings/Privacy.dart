@@ -10,6 +10,7 @@ class Privacy extends StatefulWidget {
 }
 
 class _PrivacyState extends State<Privacy> {
+  // Toggles for permissions
   bool notifications = true;
   bool sms = true;
   bool location = false;

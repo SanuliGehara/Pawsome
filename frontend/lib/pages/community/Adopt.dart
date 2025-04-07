@@ -5,7 +5,7 @@ import 'package:pawsome/pages/community/new_post.dart';
 import 'package:pawsome/services/database_service.dart';
 import 'Locate.dart';
 import 'Sitter.dart';
-import '../../reusable_widgets/CommunityWidgets.dart';
+import '../../reusable_widgets/community_widgets.dart';
 
 /// Stateful widget to manage the Adopt Page
 class Adopt extends StatefulWidget {

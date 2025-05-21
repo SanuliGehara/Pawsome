@@ -34,4 +34,4 @@ cd frontend
 📧 Email: pawsome469@gmail.com  
 🌐 Website: [pawsome.kesug.com](https://pawsome.kesug.com/)  
 📷 Instagram: [@pawsome.lk.app](https://www.instagram.com/pawsome.lk.app)  
-🔗 LinkedIn: [[https://www.linkedin.com/company/pawsome-lk/?viewAsMember=true](https://marketing-website-eight-taupe.vercel.app/]([https://www.linkedin.com/company/pawsome-lk/?viewAsMember=true](https://marketing-website-eight-taupe.vercel.app/))  
+🔗 LinkedIn: [https://www.linkedin.com/company/pawsome-lk/?viewAsMember=true](https://marketing-website-eight-taupe.vercel.app/]([https://www.linkedin.com/company/pawsome-lk/?viewAsMember=true](https://marketing-website-eight-taupe.vercel.app/))  

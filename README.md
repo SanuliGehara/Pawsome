@@ -3,9 +3,9 @@
 Pawsome is a pet care platform that helps pet owners with AI-powered guidance, pet adoption, and community support.  
 
 ## 📌 Tech Stack  
-- **Frontend:** Flutter  
-- **Backend:** Django  
-- **Database:** Firebase Firestore  
+- **Mobile App:** Flutter  
+- **AI bot Backend:** Django  
+- **Data Storage:** Firebase Firestore  
 
 ## 📂 Project Structure  
 ```
@@ -34,4 +34,4 @@ cd frontend
 📧 Email: pawsome469@gmail.com  
 🌐 Website: [pawsome.kesug.com](https://pawsome.kesug.com/)  
 📷 Instagram: [@pawsome.lk.app](https://www.instagram.com/pawsome.lk.app)  
-🔗 LinkedIn: [https://www.linkedin.com/company/pawsome-lk/?viewAsMember=true](https://www.linkedin.com/company/pawsome-lk/?viewAsMember=true)  
+🔗 LinkedIn: [[https://www.linkedin.com/company/pawsome-lk/?viewAsMember=true](https://marketing-website-eight-taupe.vercel.app/)]([https://www.linkedin.com/company/pawsome-lk/?viewAsMember=true](https://marketing-website-eight-taupe.vercel.app/))  
